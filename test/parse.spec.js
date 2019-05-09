@@ -1,7 +1,7 @@
 const parse = require('../src/parse');
 
 it("parse", () => {
-  const input =`{
+  const input = `{
     "getModel": {
         "route": "GET /model/:id", // security=[]
         "req": {
@@ -15,15 +15,19 @@ it("parse", () => {
             "headers": {
                 "X-ORG-ID": 32432
             },
-            "body": { //
+            "body": {
                 "integer": 32, // format=int64
                 "number": 16.23, // format=float
                 "bool": true,
                 "null": null,
-                "array": [
-                    "1",
-                    "2",
-                ]
+                "array": [ // maxItems=10
+                  {
+                     "foo": 3 // maximum=8
+                  }, 
+                  {
+                     "bar": 4 // maximum=4 
+                  },
+                ],
                 "object": {
                     "foo": 3
                 }
@@ -34,10 +38,14 @@ it("parse", () => {
             "number": 16.23, // format=float
             "bool": true,
             "null": null,
-            "array": [
-                "1",
-                "2",
-            ]
+            "array": [ // maxItems=10
+                {
+                    "foo": 3 // maximum=8
+                }, 
+                {
+                    "bar": 4 // maximum=4 
+                },
+            ],
             "object": {
                 "password": "a234324" // minLength=6
             }
