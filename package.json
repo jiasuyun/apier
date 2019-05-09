@@ -1,7 +1,16 @@
 {
-  "name": "root",
-  "private": true,
-  "devDependencies": {
-    "lerna": "^3.13.3"
-  }
+  "name": "apier",
+  "version": "1.0.0",
+  "description": "## 开始使用",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@g.sigoden.com:2222/backend/apier.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
