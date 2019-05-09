@@ -12,5 +12,9 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "js-yaml": "^3.13.1",
+    "json5": "^2.1.0"
+  }
 }
