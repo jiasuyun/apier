@@ -23,3 +23,5 @@ function parse() {
  * @property {Object} [body]
  */
 
+
+ module.exports = parse;
