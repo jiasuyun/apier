@@ -55,12 +55,10 @@ it("parse", () => {
         query: {
           pageSize: {
             raw: 10,
-            type: 'number',
             maximum: 10,
           },
           pageNo: {
             raw: 1,
-            type: 'number',
           }
         },
         parmas: {
