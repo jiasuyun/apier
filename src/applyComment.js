@@ -1,2 +1,0 @@
-function applyComment(input, apis) {
-}

@@ -4,7 +4,7 @@
   "description": "## 开始使用",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -16,5 +16,9 @@
   "dependencies": {
     "js-yaml": "^3.13.1",
     "json5": "^2.1.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.12",
+    "jest": "^24.8.0"
   }
 }
