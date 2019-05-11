@@ -62,7 +62,7 @@ class Visitor {
   }
 
   exitScope(lineIndex) {
-    return parent.enterScope(parent.kind, lineIndex + 1);
+    return this.parent.enterScope(this.parent.kind, lineIndex + 1);
   }
 }
 
