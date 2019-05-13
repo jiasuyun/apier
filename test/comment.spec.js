@@ -14,7 +14,11 @@ it('getLineKind', () => {
     [`// foo`, { type: 'empty' }],
     [` `, { type: 'empty' }],
     [`}`, { type: 'exit' }],
+    [`}, `, { type: 'exit' }],
+    [`} ,`, { type: 'exit' }],
     [`]`, { type: 'exit' }],
+    [`],`, { type: 'exit' }],
+    [`] ,`, { type: 'exit' }],
     [`"foo": [`, { type: 'array', key: 'foo' }],
     [`  'foo': [  `, { type: 'array', key: 'foo' }],
   ].forEach(([input, output]) => {
@@ -27,6 +31,8 @@ it('getLineComment', () => {
     [` "integer": 32, // format=int64`, { format: 'int64' }],
     [` { // optional pattern=[abc]+ description="xx xx"`, { pattern: '[abc]+', optional: true, description: 'xx xx' }],
     [` { //description='xx"C" xx'`, { description: 'xx"C" xx' }],
+    [` "integer": 32, // `, undefined],
+    [` "integer": 32, `, undefined],
   ].forEach(([input, output]) => {
     expect(_getLineComment(input)).toEqual(output);
   });

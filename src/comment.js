@@ -1,7 +1,7 @@
 function parse(lines) {
   const comments = [];
   const root = new Visitor(lines, comments, []);
-  root.kind = { type: 'object', key: '$' };
+  root.kind = { type: 'object' };
   root.scopeObject(1);
   return comments;
 }
@@ -18,15 +18,15 @@ class Visitor {
     this.numChild = 0;
   }
   scopeArray(lineIndex) {
-    const kind = getLineKind(currentLine);
+    const kind = getLineKind(this.lines[lineIndex]);
     switch (kind.type) {
       case 'object':
         kind.key = this.numChild++;
         return this.enterScope(kind, lineIndex);
       case 'exit':
-        return this.exitScope(lineIndex++);
+        return this.exitScope(lineIndex + 1);
       default:
-        return this.scopeArray(lineIndex++);
+        return this.scopeArray(lineIndex + 1);
     }
   }
   scopeObject(lineIndex) {
@@ -38,22 +38,22 @@ class Visitor {
       case 'kv':
         const paths = [...this.paths, kind.name];
         this.resolveComment(paths, this.lines[lineIndex]);
-        return this.scopeObject(lineIndex++);
+        return this.scopeObject(lineIndex + 1);
       case 'exit':
-        return this.exitScope(lineIndex++);
+        return this.exitScope(lineIndex + 1);
       default:
-        return this.scopeObject(lineIndex++);
+        return this.scopeObject(lineIndex + 1);
     }
   }
   enterScope(kind, lineIndex) {
-    if (lineIndex >= lines.length) return;
     const { lines, comments } = this;
-    const paths = [...this.paths, kind.name];
+    if (lineIndex >= lines.length) return;
+    const paths = [...this.paths, kind.key];
     this.resolveComment(paths, this.lines[lineIndex]);
     const visitor = new Visitor(lines, comments, paths);
     visitor.kind = kind;
     visitor.parent = this;
-    return visitor.kind.type === 'array' ? visitor.scopeArray(lineIndex++) : visitor.scopeObject(lineIndex++);
+    return visitor.kind.type === 'array' ? visitor.scopeArray(lineIndex + 1) : visitor.scopeObject(lineIndex + 1);
   }
 
   resolveComment(paths, line) {
@@ -145,10 +145,14 @@ function getLineKind(line) {
  */
 function getLineComment(line) {
   let isComment = false;
-  const result = {};
+  let result;
   const reg1 = /(\S+=("[^"]*"|'[^']*'))|"[^"]*"|'[^"]*'|\S+/g;
   const reg2 = /'[^']*\/\/[^']*'|"[^"]*\/\/[^"]*"/;
   if (!line.includes("//")) return result;
+  const addToResult = (k, v) => {
+    if (!result) result = {};
+    result[k] = v;
+  }
   const textArr = line.match(reg1);
   for (let item of textArr) {
     if (!isComment && item.includes("//") && !reg2.test(item)) isComment = true;
@@ -161,9 +165,9 @@ function getLineComment(line) {
         let key = item.substring(0, subscript2);
         let value = item.substring(subscript2 + 1);
         if (/"[^"]*"|'[^"]*'/.test(value)) value = value.substring(1, value.length - 1);
-        result[key] = value;
+        addToResult(key, value);
       } else {
-        result[item] = true;
+        addToResult(item, true);
       }
     }
   }
