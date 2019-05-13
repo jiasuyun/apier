@@ -23,8 +23,9 @@ it('getLineKind', () => {
 
 it('getLineComment', () => {
   [
-    [` "integer": 32, // format=int64`, { format: 'int32' }],
-    [` { // optional pattern=[abc]+ description="xx xx"`, { pattern: '[abc]+', optional: true, description: "xx xx" }],
+    [` "integer": 32, // format=int64`, { format: 'int64' }],
+    [` { // optional pattern=[abc]+ description="xx xx"`, { pattern: '[abc]+', optional: true, description: 'xx xx' }],
+    [` { //description='xx"C" xx'`, { description: 'xx"C" xx' }],
   ].forEach(([input, output]) => {
     expect(_getLineComment(input)).toEqual(output);
   });
