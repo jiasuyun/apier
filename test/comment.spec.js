@@ -11,6 +11,7 @@ it('getLineKind', () => {
     [`foo: 'bar'`, { type: 'kv', key: 'foo' }],
     [`{`, { type: 'object' }],
     [`//`, { type: 'empty' }],
+    [`// foo`, { type: 'empty' }],
     [` `, { type: 'empty' }],
     [`}`, { type: 'exit' }],
     [`]`, { type: 'exit' }],
@@ -32,7 +33,7 @@ it('getLineComment', () => {
 });
 
 it('parse', () => {
-  const demoInput = fs.readFileSync(path.resolve(__dirname, 'fixtures/demo.json5'));
+  const demoInput = fs.readFileSync(path.resolve(__dirname, 'fixtures/demo.json5'), 'utf8');
   const lines = demoInput.split('\n');
   const comments = parse(lines);
   const output = [

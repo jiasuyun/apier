@@ -1,6 +1,6 @@
 function parse(lines) {
   const comments = [];
-  const root = new Visitor(lines, comments, [], 1);
+  const root = new Visitor(lines, comments, []);
   root.kind = { type: 'object', key: '$' };
   root.scopeObject(1);
   return comments;
