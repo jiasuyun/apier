@@ -35,7 +35,7 @@
             "null": null,
             "array": [ // mixItems=3
                 {
-                    foo: 1
+                    foo: 1, // type=integer
                 },
                 {
                     bar: 2

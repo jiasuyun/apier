@@ -36,7 +36,7 @@ class Visitor {
       case 'object':
         return this.enterScope(kind, lineIndex);
       case 'kv':
-        const paths = [...this.paths, kind.name];
+        const paths = [...this.paths, kind.key];
         this.resolveComment(paths, this.lines[lineIndex]);
         return this.scopeObject(lineIndex + 1);
       case 'exit':
@@ -47,7 +47,6 @@ class Visitor {
   }
   enterScope(kind, lineIndex) {
     const { lines, comments } = this;
-    if (lineIndex >= lines.length) return;
     const paths = [...this.paths, kind.key];
     this.resolveComment(paths, this.lines[lineIndex]);
     const visitor = new Visitor(lines, comments, paths);
@@ -62,7 +61,9 @@ class Visitor {
   }
 
   exitScope(lineIndex) {
-    return this.parent.enterScope(this.parent.kind, lineIndex + 1);
+    const visitor = this.parent;
+    if (!this.parent) return;
+    return visitor.kind.type === 'array' ? visitor.scopeArray(lineIndex) : visitor.scopeObject(lineIndex);
   }
 }
 
@@ -95,7 +96,7 @@ const getKeyName = (line, reg) => {
  */
 
 function getLineKind(line) {
-  const result = {};
+  const result = { type: 'empty' };
   const reg1 = /['"]?([a-zA-Z0-9])+['"]?(\s)*:(\s)*\[/g;
   const reg2 = /['"]?([a-zA-Z0-9])+['"]?(\s)*:(\s)*\{/g;
   const reg3 = /['"]?([a-zA-Z0-9])+['"]?(\s)*:(\s)*['"]?([a-zA-Z0-9])+['"]?/g;
@@ -110,19 +111,12 @@ function getLineKind(line) {
     result['key'] = getKeyName(line, reg3);
   } else {
     const text = line.replace(/(^\s*)|(\s*$)/g, "")
-
-    if (!text) {
-      result['type'] = 'empty';
-    } else if (text.startsWith('{')) {
+    if (text.startsWith('{')) {
       result['type'] = 'object';
-    } else if (text.startsWith('//')) {
-      result['type'] = 'empty';
     } else if (text.startsWith('}')) {
       result['type'] = 'exit';
     } else if (text.startsWith(']')) {
       result['type'] = 'exit';
-    } else {
-      console.error(`该行格式错误:\n${line}`);
     }
   }
   return result;
@@ -141,6 +135,9 @@ function getLineComment(line) {
   if (!line.includes("//")) return result;
   const addToResult = (k, v) => {
     if (!result) result = {};
+    try {
+      v = JSON.parse(v);
+    } catch (err) {}
     result[k] = v;
   }
   const textArr = line.match(reg1);

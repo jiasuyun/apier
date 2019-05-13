@@ -42,16 +42,5 @@ it('parse', () => {
   const demoInput = fs.readFileSync(path.resolve(__dirname, 'fixtures/demo.json5'), 'utf8');
   const lines = demoInput.split('\n');
   const comments = parse(lines);
-  const output = [
-    {
-      paths: ['$','getModel','route'],
-      comment: { security: null },
-    },
-    {
-      paths: ['$', 'getModel', 'req', 'query', 'pageSize'],
-      comment: { maximum: 10 },
-    },
-    // FIXME more
-  ];
-  expect(comments).toEqual(output);
+  expect(comments).toEqual(require('./fixtures/comments'));
 });
