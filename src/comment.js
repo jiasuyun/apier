@@ -127,7 +127,12 @@ function getLineKind(line) {
         result['type'] = 'exit';
         break;
       default:
-        console.error(`该行格式错误:\n${line}`);
+        if (text.startsWith('//')) {
+          result['type'] = 'empty';
+          break;
+        } else {
+          console.error(`该行格式错误:\n${line}`);
+        }
     }
   }
   return result;
