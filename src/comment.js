@@ -110,29 +110,19 @@ function getLineKind(line) {
     result['key'] = getKeyName(line, reg3);
   } else {
     const text = line.replace(/(^\s*)|(\s*$)/g, "")
-    switch (text) {
-      case '{':
-        result['type'] = 'object';
-        break;
-      case '//':
-        result['type'] = 'empty';
-        break;
-      case '':
-        result['type'] = 'empty';
-        break;
-      case '}':
-        result['type'] = 'exit';
-        break;
-      case ']':
-        result['type'] = 'exit';
-        break;
-      default:
-        if (text.startsWith('//')) {
-          result['type'] = 'empty';
-          break;
-        } else {
-          console.error(`该行格式错误:\n${line}`);
-        }
+
+    if (!text) {
+      result['type'] = 'empty';
+    } else if (text.startsWith('{')) {
+      result['type'] = 'object';
+    } else if (text.startsWith('//')) {
+      result['type'] = 'empty';
+    } else if (text.startsWith('}')) {
+      result['type'] = 'exit';
+    } else if (text.startsWith(']')) {
+      result['type'] = 'exit';
+    } else {
+      console.error(`该行格式错误:\n${line}`);
     }
   }
   return result;
