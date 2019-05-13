@@ -20,7 +20,7 @@ class Visitor {
     this.numChild = 0;
   }
   scopeArray(lineIndex) {
-    const kind = getLineKind(this.lines[lineIndex]);
+    const kind = getLineKind(this.lines[lineIndex], lineIndex);
     switch (kind.type) {
       case 'object':
         kind.key = this.numChild++;
@@ -32,7 +32,7 @@ class Visitor {
     }
   }
   scopeObject(lineIndex) {
-    const kind = getLineKind(this.lines[lineIndex]);
+    const kind = getLineKind(this.lines[lineIndex], lineIndex);
     switch (kind.type) {
       case 'array':
       case 'object':
@@ -97,7 +97,7 @@ const getKeyName = (line, reg) => {
  * `]` // { type: exit }
  */
 
-function getLineKind(line) {
+function getLineKind(line, lineIndex) {
   const result = { type: 'empty' };
   const reg1 = /^\s*['"]?([a-zA-Z0-9_\-])+['"]?\s*:\s*\[\s*(\/\/.*)?$/g;
   const reg2 = /^\s*['"]?([a-zA-Z0-9_\-])+['"]?\s*:\s*\{\s*(\/\/.*)?$/g;
@@ -129,7 +129,7 @@ function getLineKind(line) {
         JSON5.parse(text);
         result['type'] = 'empty';
       } catch (err) {
-        throw new Error(`行格式错误: ${line} `);
+        throw new Error(`Line ${lineIndex}: ${line}`);
       }
     }
   }

@@ -29,7 +29,7 @@ it('getLineKind', () => {
     [`"foo": [`, { type: 'array', key: 'foo' }],
     [`  'foo': [  `, { type: 'array', key: 'foo' }],
   ].forEach(([input, output]) => {
-    expect(_getLineKind(input)).toEqual(output);
+    expect(_getLineKind(input, 0)).toEqual(output);
   });
 });
 
