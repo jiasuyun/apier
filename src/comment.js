@@ -1,3 +1,5 @@
+const JSON5 = require('json5');
+
 function parse(lines) {
   const comments = [];
   const root = new Visitor(lines, comments, []);
@@ -97,9 +99,9 @@ const getKeyName = (line, reg) => {
 
 function getLineKind(line) {
   const result = { type: 'empty' };
-  const reg1 = /['"]?([a-zA-Z0-9])+['"]?(\s)*:(\s)*\[/g;
-  const reg2 = /['"]?([a-zA-Z0-9])+['"]?(\s)*:(\s)*\{/g;
-  const reg3 = /['"]?([a-zA-Z0-9])+['"]?(\s)*:(\s)*['"]?([a-zA-Z0-9])+['"]?/g;
+  const reg1 = /^\s*['"]?([a-zA-Z0-9_\-])+['"]?\s*:\s*\[\s*(\/\/.*)?$/g;
+  const reg2 = /^\s*['"]?([a-zA-Z0-9_\-])+['"]?\s*:\s*\{\s*(\/\/.*)?$/g;
+  const reg3 = /^\s*['"]?([a-zA-Z0-9_\-])+['"]?\s*:\s*['"]?([a-zA-Z0-9])+['"]?/g;
   if (reg1.test(line)) {
     result['type'] = 'array';
     result['key'] = getKeyName(line, reg1);
@@ -110,13 +112,25 @@ function getLineKind(line) {
     result['type'] = 'kv';
     result['key'] = getKeyName(line, reg3);
   } else {
-    const text = line.replace(/(^\s*)|(\s*$)/g, "")
-    if (text.startsWith('{')) {
+    const text = line
+      .replace(/\/\/.*$/g, '')
+      .replace(/,\s*$/g, '')
+      .replace(/(^\s*)|(\s*$)/g, "");
+    if (text === '{') {
       result['type'] = 'object';
-    } else if (text.startsWith('}')) {
+    } else if (text === '}') {
       result['type'] = 'exit';
-    } else if (text.startsWith(']')) {
+    } else if (text === ']') {
       result['type'] = 'exit';
+    } else if (text === '') {
+      result['type'] = 'empty';
+    } else {
+      try {
+        JSON5.parse(text);
+        result['type'] = 'empty';
+      } catch (err) {
+        throw new Error(`行格式错误: ${line} `);
+      }
     }
   }
   return result;
