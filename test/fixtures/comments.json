@@ -1,6 +1,14 @@
   [
     {
       "paths": [
+        "getModel"
+      ],
+      "comment": {
+        "summary": "获取模型"
+      }
+    },
+    {
+      "paths": [
         "getModel",
         "route"
       ],
@@ -67,6 +75,7 @@
       "paths": [
         "getModel",
         "res",
+        "body",
         "integer"
       ],
       "comment": {
@@ -77,6 +86,7 @@
       "paths": [
         "getModel",
         "res",
+        "body",
         "number"
       ],
       "comment": {
@@ -87,6 +97,7 @@
       "paths": [
         "getModel",
         "res",
+        "body",
         "array"
       ],
       "comment": {
@@ -97,6 +108,7 @@
       "paths": [
         "getModel",
         "res",
+        "body",
         "array",
         0,
         "foo"
@@ -109,6 +121,7 @@
       "paths": [
         "getModel",
         "res",
+        "body",
         "object",
         "password"
       ],

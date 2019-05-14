@@ -1,6 +1,7 @@
 const JSON5 = require('json5');
 
-function parse(lines) {
+function parse(input) {
+  const lines = input.split('\n');
   const comments = [];
   const root = new Visitor(lines, comments, []);
   root.kind = { type: 'object' };
@@ -8,8 +9,20 @@ function parse(lines) {
   return comments;
 }
 
-function connect(json5, comments) {
-
+function filter(comments, filterPaths, strict=false) {
+  const result = [];
+  const str = filterPaths.join('.');
+  for (let { paths, comment } of comments) {
+    if (paths.join('.').startsWith(str)) {
+      paths = paths.slice(filterPaths.length);
+      if (strict && paths.length === 0) {
+        return comment;
+      }
+      result.push({ comment, paths });
+    }
+  }
+  if (strict) return;
+  return result;
 }
 
 class Visitor {
@@ -177,7 +190,8 @@ function getLineComment(line) {
 
 
 module.exports = {
-  parse, connect,
+  parse,
+  filter,
   // export for test
   _getLineKind: getLineKind,
   _getLineComment: getLineComment,

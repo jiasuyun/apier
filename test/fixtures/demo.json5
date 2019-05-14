@@ -1,6 +1,6 @@
 {
-    // 获取模型
-    "getModel": {
+    // see
+    "getModel": { // summary=获取模型
 
         "route": "GET /model/:id", // security=null
         "req": {
@@ -29,20 +29,23 @@
             }
         },
         "res": {
-            "integer": 32, // format=int64
-            "number": 16.23, // format=float
-            "bool": true,
-            "null": null,
-            "array": [ // mixItems=3
-                {
-                    foo: 1, // type=integer
-                },
-                {
-                    bar: 2
+            status: 200,
+            body: {
+                "integer": 32, // format=int64
+                "number": 16.23, // format=float
+                "bool": true,
+                "null": null,
+                "array": [ // mixItems=3
+                    {
+                        foo: 1, // type=integer
+                    },
+                    {
+                        bar: 2
+                    }
+                ],
+                "object": {
+                    "password": "a234324", // minLength=6
                 }
-            ],
-            "object": {
-                "password": "a234324", // minLength=6
             }
         }
     }
