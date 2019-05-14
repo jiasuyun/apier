@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const { parse, connect } = require('../src/comment');
+const { parse, filter } = require('../src/comment');
 const { _getLineComment, _getLineKind } = require('../src/comment');
 
 it('getLineKind', () => {
@@ -47,7 +47,13 @@ it('getLineComment', () => {
 
 it('parse', () => {
   const demoInput = fs.readFileSync(path.resolve(__dirname, 'fixtures/demo.json5'), 'utf8');
-  const lines = demoInput.split('\n');
-  const comments = parse(lines);
+  const comments = parse(demoInput);
   expect(comments).toEqual(require('./fixtures/comments'));
 });
+
+it('filter', () => {
+  const comments = require('./fixtures/comments');
+  expect(filter(comments, ['getModel', 'route'])).toEqual([{ comment: { security: null }, paths: [] }]);
+  expect(filter(comments, [])).toEqual([{ comment: { security: null }, paths: [] }]);
+  expect(filter(comments, [], true)).toEqual(comments);
+})
