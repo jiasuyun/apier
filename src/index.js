@@ -20,3 +20,5 @@ function parse(input, options) {
   }
   return output;
 }
+
+module.exports = parse;
