@@ -48,7 +48,7 @@ class App extends Component {
   handleCodeInput = e => {
     this.setState({ code: e.target.value })
   }
-  renderClipboard() {
+  renderClipboard(text) {
     return (
       <ToastConsumer>
         {({ add }) => (
@@ -56,7 +56,7 @@ class App extends Component {
             className="btn btn-light"
             title="复制到剪切板"
             style={{ position: 'absolute', right: '14px', top: '3px' }}
-            data-clipboard-text={this.state.code}
+            data-clipboard-text={text}
             onSuccess={() => add('已复制', { appearance: 'success', autoDismiss: true })}
           >
             <img src={ClipboardIcon} alt="" style={{ width: '20px' }} />
@@ -69,7 +69,7 @@ class App extends Component {
     if (!text) return <div></div>;
     return (
       <div>
-        {this.renderClipboard()}
+        {this.renderClipboard(text)}
         <Editor
           value={text}
           disabled
