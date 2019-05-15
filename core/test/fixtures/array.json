@@ -74,129 +74,131 @@
           }
         }
       },
-      "schemas": {
-        "TestArrayRequest": {
-          "type": "object",
-          "properties": {
-            "array1": {
-              "type": "array",
-              "items": {
-                "anyOf": [
-                  {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "integer"
+      "components": {
+        "schemas": {
+          "TestArrayRequest": {
+            "type": "object",
+            "properties": {
+              "array1": {
+                "type": "array",
+                "items": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "k1": {
+                          "type": "integer"
+                        }
                       },
-                      "k1": {
-                        "type": "integer"
-                      }
+                      "required": [
+                        "id",
+                        "k1"
+                      ]
                     },
-                    "required": [
-                      "id",
-                      "k1"
-                    ]
+                    {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "k2": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "k2"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "array2": {
+                "type": "array",
+                "items": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "k1": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "k1"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "k2": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "k2"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "array3": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "k1": {
+                      "type": "integer"
+                    }
                   },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "integer"
-                      },
-                      "k2": {
-                        "type": "integer"
-                      }
+                  "required": [
+                    "id",
+                    "k1"
+                  ]
+                }
+              },
+              "array4": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
                     },
-                    "required": [
-                      "id",
-                      "k2"
-                    ]
-                  }
-                ]
+                    "k1": {
+                      "type": "integer"
+                    },
+                    "k2": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "id"
+                  ]
+                }
               }
             },
-            "array2": {
-              "type": "array",
-              "items": {
-                "anyOf": [
-                  {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "integer"
-                      },
-                      "k1": {
-                        "type": "integer"
-                      }
-                    },
-                    "required": [
-                      "id",
-                      "k1"
-                    ]
-                  },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "integer"
-                      },
-                      "k2": {
-                        "type": "integer"
-                      }
-                    },
-                    "required": [
-                      "id",
-                      "k2"
-                    ]
-                  }
-                ]
-              }
-            },
-            "array3": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "type": "integer"
-                  },
-                  "k1": {
-                    "type": "integer"
-                  }
-                },
-                "required": [
-                  "id",
-                  "k1"
-                ]
-              }
-            },
-            "array4": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "type": "integer"
-                  },
-                  "k1": {
-                    "type": "integer"
-                  },
-                  "k2": {
-                    "type": "integer"
-                  }
-                },
-                "required": [
-                  "id"
-                ]
-              }
-            }
-          },
-          "required": [
-            "array1",
-            "array2",
-            "array3",
-            "array4"
-          ]
+            "required": [
+              "array1",
+              "array2",
+              "array3",
+              "array4"
+            ]
+          }
         }
       }
     }

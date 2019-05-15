@@ -39,83 +39,84 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetModelResponse'
-schemas:
-  GetModelRequest:
-    type: object
-    description: body
-    properties:
-      integer:
-        type: integer
-        format: int64
-      number:
-        type: number
-        format: float
-      bool:
-        type: boolean
-      'null':
-        type: 'null'
-      array:
-        type: array
-        items:
-          anyOf:
-            - type: string
-            - type: string
-      object:
-        type: object
-        properties:
-          foo:
-            type: integer
-        required:
-          - foo
-    required:
-      - integer
-      - number
-      - bool
-      - 'null'
-      - array
-      - object
-  GetModelResponse:
-    type: object
-    properties:
-      integer:
-        type: integer
-        format: int64
-      number:
-        type: number
-        format: float
-      bool:
-        type: boolean
-      'null':
-        type: 'null'
-      array:
-        type: array
-        mixItems: 3
-        items:
-          anyOf:
-            - type: object
-              properties:
-                foo:
-                  type: integer
-              required:
-                - foo
-            - type: object
-              properties:
-                bar:
-                  type: integer
-              required:
-                - bar
-      object:
-        type: object
-        properties:
-          password:
-            type: string
-            minLength: 6
-        required:
-          - password
-    required:
-      - integer
-      - number
-      - bool
-      - 'null'
-      - array
-      - object
+components:
+  schemas:
+    GetModelRequest:
+      type: object
+      description: body
+      properties:
+        integer:
+          type: integer
+          format: int64
+        number:
+          type: number
+          format: float
+        bool:
+          type: boolean
+        'null':
+          type: 'null'
+        array:
+          type: array
+          items:
+            anyOf:
+              - type: string
+              - type: string
+        object:
+          type: object
+          properties:
+            foo:
+              type: integer
+          required:
+            - foo
+      required:
+        - integer
+        - number
+        - bool
+        - 'null'
+        - array
+        - object
+    GetModelResponse:
+      type: object
+      properties:
+        integer:
+          type: integer
+          format: int64
+        number:
+          type: number
+          format: float
+        bool:
+          type: boolean
+        'null':
+          type: 'null'
+        array:
+          type: array
+          mixItems: 3
+          items:
+            anyOf:
+              - type: object
+                properties:
+                  foo:
+                    type: integer
+                required:
+                  - foo
+              - type: object
+                properties:
+                  bar:
+                    type: integer
+                required:
+                  - bar
+        object:
+          type: object
+          properties:
+            password:
+              type: string
+              minLength: 6
+          required:
+            - password
+      required:
+        - integer
+        - number
+        - bool
+        - 'null'
+        - array
+        - object

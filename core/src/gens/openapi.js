@@ -16,7 +16,7 @@ const getOpenapi = (element, comments) => {
   }
   if (req.body) resolveRequestBody(element, comments, operation, schemas);
   if (res.body) resolveResponse(element, comments, operation, schemas);
-  return { paths: { [url]: { [method]: operation } }, schemas };
+  return { paths: { [url]: { [method]: operation } }, components: { schemas } };
 }
 
 function resolveParamters(element, comments) {
@@ -60,9 +60,9 @@ function resolveResponse(element, comments, operation, schemas) {
   const contentType = comment['contentType'] || 'application/json';
   const resSchemaName = nameSchema(element.name, 'Response');
   const { status = 200, body } = element.res;
-  const responses = {};
-  if (comment.description) responses.description = comment.description;
-  responses[status] = { content: { [contentType]: { schema: { '$ref': `#/components/schemas/${resSchemaName}` } } } };
+  const responses = { [status]: {} };
+  if (comment.description) responses[status].description = comment.description;
+  responses[status].content = { [contentType]: { schema: { '$ref': `#/components/schemas/${resSchemaName}` } } };
   operation.responses = responses;
   schemas[resSchemaName] = createSchema(body, filter(comments, paths));
 }

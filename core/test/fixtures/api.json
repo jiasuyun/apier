@@ -64,21 +64,23 @@
           }
         }
       },
-      "schemas": {
-        "GetGcodeRequest": {
-          "type": "object",
-          "properties": {
-            "phonenum": {
-              "type": "string",
-              "pattern": "FIXME"
-            }
+      "components": {
+        "schemas": {
+          "GetGcodeRequest": {
+            "type": "object",
+            "properties": {
+              "phonenum": {
+                "type": "string",
+                "pattern": "FIXME"
+              }
+            },
+            "required": [
+              "phonenum"
+            ]
           },
-          "required": [
-            "phonenum"
-          ]
-        },
-        "GetGcodeResponse": {
-          "type": "string"
+          "GetGcodeResponse": {
+            "type": "string"
+          }
         }
       }
     }
