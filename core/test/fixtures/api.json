@@ -27,6 +27,7 @@
           "get": {
             "operationId": "getGcode",
             "summary": "获取图形验证码",
+            "security": [],
             "description": "描述",
             "parameters": [
               {

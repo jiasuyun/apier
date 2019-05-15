@@ -3,7 +3,7 @@
 {
 
     // 测试
-    getGcode: { // summary=获取图形验证码 description=描述
+    getGcode: { // summary=获取图形验证码 description=描述 security=[]
         route: 'GET /c/gcode',
         req: {
             query: {

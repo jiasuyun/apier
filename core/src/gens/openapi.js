@@ -8,7 +8,7 @@ const getOpenapi = (element, comments) => {
   const comment  = filter(comments, [], true) || {};
   const summary = comment.summary || `接口 ${element.name}`;
   const operation = { operationId: name, summary };
-  Object.assign(operation, lpick(comment,['tags', 'description', 'deprecated'] ))
+  Object.assign(operation, lpick(comment,['tags', 'description', 'deprecated', 'security'] ))
   const schemas = {};
   const parameters = resolveParamters(element, comments);
   if (parameters.length > 0) {
