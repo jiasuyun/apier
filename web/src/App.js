@@ -5,9 +5,14 @@ import ClipboardIcon from './clipboard.png';
 import * as parse from '@dee-contrib/apier';
 import yaml from 'js-yaml';
 import merge from 'lodash.merge';
-import SyntaxHighlighter from 'react-syntax-highlighter';
-import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import { ToastConsumer, ToastProvider } from 'react-toast-notifications';
+import Editor from 'react-simple-code-editor';
+import { highlight, languages } from 'prismjs/components/prism-core';
+import 'prismjs/components/prism-clike';
+import 'prismjs/components/prism-javascript';
+import 'prismjs/components/prism-typescript';
+import 'prismjs/components/prism-yaml';
+import 'prismjs/themes/prism.css';
 
 import './App.css';
 class App extends Component {
@@ -61,33 +66,48 @@ class App extends Component {
     )
   }
   renderCode = (text, type) => {
-    return text ? <SyntaxHighlighter language={type} style={docco}>{text}</SyntaxHighlighter> : <div></div>;
+    if (!text) return <div></div>;
+    return <Editor
+      value={text}
+      disabled
+      highlight={code => highlight(code, languages[type])}
+      padding={10}
+      style={{
+        fontFamily: '"Fira code", "Fira Mono", monospace',
+        fontSize: 12,
+      }}
+    />
   }
   render() {
-    const textAreaHeight = Math.max(window.innerHeight - 50, this.state.code.split('\n').length * 24 + 60);
     return (
       <div className="App">
         <ToastProvider>
           <Container fluid>
             <Row>
               <Col sm={5}>
-                <Form>
-                  <Form.Group>
-                    <Row>
-                      <Col>
-                        <Form.Label style={{ paddingTop: '10px' }}>API</Form.Label>
-                      </Col>
-                      <Col sm="auto" style={{ marginLeft: 'auto' }}>
-                        <ToastConsumer>
-                          {({ add }) => (
-                            <Button variant="outline-primary" disabled={!this.state.code} onClick={() => this.handlerGenBtnClick(add)}>生成</Button>
-                          )}
-                        </ToastConsumer>
-                      </Col>
-                    </Row>
-                    <Form.Control as="textarea" rows="3" style={{ height: `${textAreaHeight}px` }} onChange={this.handleCodeInput} />
-                  </Form.Group>
-                </Form>
+                <Row>
+                  <Col>
+                    <Form.Label style={{ paddingTop: '10px' }}>API</Form.Label>
+                  </Col>
+                  <Col sm="auto" style={{ marginLeft: 'auto' }}>
+                    <ToastConsumer>
+                      {({ add }) => (
+                        <Button variant="outline-primary" disabled={!this.state.code} onClick={() => this.handlerGenBtnClick(add)}>生成</Button>
+                      )}
+                    </ToastConsumer>
+                  </Col>
+                </Row>
+                <Editor
+                  value={this.state.code}
+                  onValueChange={code => this.setState({ code })}
+                  highlight={code => highlight(code, languages.js)}
+                  padding={10}
+                  style={{
+                    fontFamily: '"Fira code", "Fira Mono", monospace',
+                    fontSize: 12,
+                    border: '1px solid lightgray',
+                  }}
+                />
               </Col>
               <Col sm={7}>
                 <Tabs defaultActiveKey="openapi">
