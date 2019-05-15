@@ -83,13 +83,14 @@ function schemaUtil(schema, data, comments) {
   Object.assign(schema, kind, lomit(comment, ['optional', 'contentType', 'array']));
   if (kind.type === 'object') {
     schema.properties = {};
-    schema.required = [];
+    const required = [];
     for (const key in data) {
       const item = schema.properties[key] = {}
       if (schemaUtil(item, data[key], filter(comments, [key]))) {
-        schema.required.push(key);
+        required.push(key);
       }
     }
+    if (required.length > 0) schema.required = required;
   } else if (kind.type === 'array') {
     schema.items = {};
     if (data.length > 1) {
@@ -119,7 +120,7 @@ function schemaUtil(schema, data, comments) {
             return {prev: c, count: 1}
           }
         }, {prev: '', count: 0});
-        schema.items.required = required;
+        if (required.length > 0) schema.items.required = required;
       } else {
         const anyOf = []
         schema.items = { anyOf };
