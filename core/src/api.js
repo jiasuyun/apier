@@ -25,7 +25,7 @@ function parseAPI(name, parsed) {
 }
 
 function parseRoute(api, route) {
-  const re = /^(get|put|update|delete)\s[:\/A-Za-z0-9_\-]+/i;
+  const re = /^(get|post|put|update|delete)\s[:\/A-Za-z0-9_\-]+/i;
   if (!re.test(route)) {
     throw new Error(`${api.name}.route: "${route}"`);
   }
