@@ -19,8 +19,8 @@ function parseAPI(name, parsed) {
   const api = { name };
   const { route, req, res } = parsed;
   parseRoute(api, route);
-  if (req) parseReq(api, req);
-  if (res) parseRes(api, res);
+  parseReq(api, req);
+  parseRes(api, res);
   return api;
 }
 
@@ -35,7 +35,7 @@ function parseRoute(api, route) {
 }
 
 function parseReq(api, req) {
-  const { headers, params, query, body } = req;
+  const { headers, params, query, body } = req || {};
   api.req = {}
   if (headers) parseStrKV(api, ['req', 'headers'], headers);
   if (params) parseStrKV(api, ['req', 'params'], params);
@@ -44,7 +44,7 @@ function parseReq(api, req) {
 }
 
 function parseRes(api, res) {
-  const { status, body } = res;
+  const { status, body } = res || {};
   api.res = {}
   if (status) parseResStatus(api, status);
   if (body) parseBody(api, ['res', 'body'], body);

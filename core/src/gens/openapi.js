@@ -5,10 +5,10 @@ const lpick = require('lodash.pick');
 const getOpenapi = (element, comments) => {
   let { url, method, name, req, res } = element;
   url = url.replace(/\/:([A-Za-z0-9_]+)/g, '/{$1}');
-  const comment  = filter(comments, [], true) || {};
+  const comment = filter(comments, [], true) || {};
   const summary = comment.summary || `接口 ${element.name}`;
   const operation = { operationId: name, summary };
-  Object.assign(operation, lpick(comment,['tags', 'description', 'deprecated', 'security'] ))
+  Object.assign(operation, lpick(comment, ['tags', 'description', 'deprecated', 'security']))
   const schemas = {};
   const parameters = resolveParamters(element, comments);
   if (parameters.length > 0) {
@@ -80,7 +80,7 @@ function createSchema(data, comments = []) {
 function schemaUtil(schema, data, comments) {
   const kind = getKind(data);
   const comment = filter(comments, [], true) || {};
-  Object.assign(schema, kind, lomit(comment, ['optional', 'contentType']));
+  Object.assign(schema, kind, lomit(comment, ['optional', 'contentType', 'array']));
   if (kind.type === 'object') {
     schema.properties = {};
     schema.required = [];
@@ -93,13 +93,42 @@ function schemaUtil(schema, data, comments) {
   } else if (kind.type === 'array') {
     schema.items = {};
     if (data.length > 1) {
-      const anyOf = []
-      schema.items = { anyOf };
-      data.forEach((child, index) => {
-        const childSchema = {}
-        schemaUtil(childSchema, child, filter(comments, [index]));
-        anyOf.push(childSchema)
-      });
+      if (comment.array === 'first') {
+        schemaUtil(schema.items, data[0], filter(comments, [0]));
+      } else if (comment.array === 'all') {
+        let allRequired = [];
+        let allProperties = {};
+        data.forEach((child, index) => {
+          const childSchema = {}
+          schemaUtil(childSchema, child, filter(comments, [index]));
+          if (!childSchema.type === 'object') return;
+          allRequired = [...allRequired, ...childSchema.required];
+          allProperties = { ...allProperties, ...childSchema.properties};
+        });
+        schema.items.type = 'object';
+        schema.items.properties = allProperties;
+        const required = [];
+        allRequired.sort().reduce((a, c) => {
+          if (c === a.prev) {
+            a.count++;
+            if (a.count === data.length) {
+              required.push(c);
+            }
+            return a;
+          } else {
+            return {prev: c, count: 1}
+          }
+        }, {prev: '', count: 0});
+        schema.items.required = required;
+      } else {
+        const anyOf = []
+        schema.items = { anyOf };
+        data.forEach((child, index) => {
+          const childSchema = {}
+          schemaUtil(childSchema, child, filter(comments, [index]));
+          anyOf.push(childSchema)
+        });
+      }
     } else {
       schemaUtil(schema.items, data[0], filter(comments, [0]));
     }
