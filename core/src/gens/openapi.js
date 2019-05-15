@@ -61,7 +61,7 @@ function resolveResponse(element, comments, operation, schemas) {
   const resSchemaName = nameSchema(element.name, 'Response');
   const { status = 200, body } = element.res;
   const responses = { [status]: {} };
-  if (comment.description) responses[status].description = comment.description;
+  responses[status].description = comment.description || 'SUCCESS';
   responses[status].content = { [contentType]: { schema: { '$ref': `#/components/schemas/${resSchemaName}` } } };
   operation.responses = responses;
   schemas[resSchemaName] = createSchema(body, filter(comments, paths));

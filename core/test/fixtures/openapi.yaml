@@ -35,6 +35,7 @@ paths:
               $ref: '#/components/schemas/GetModelRequest'
       responses:
         '200':
+          description: SUCCESS
           content:
             application/json:
               schema:

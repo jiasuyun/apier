@@ -52,6 +52,7 @@
             },
             "responses": {
               "200": {
+                "description": "SUCCESS",
                 "content": {
                   "image/png": {
                     "schema": {
