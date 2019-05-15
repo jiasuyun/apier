@@ -80,7 +80,7 @@ function createSchema(data, comments = []) {
 function schemaUtil(schema, data, comments) {
   const kind = getKind(data);
   const comment = filter(comments, [], true) || {};
-  Object.assign(schema, kind, lomit(comment, 'optional'));
+  Object.assign(schema, kind, lomit(comment, ['optional', 'contentType']));
   if (kind.type === 'object') {
     schema.properties = {};
     schema.required = [];

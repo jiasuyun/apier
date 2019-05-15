@@ -66,7 +66,6 @@
       "schemas": {
         "GetGcodeRequest": {
           "type": "object",
-          "contentType": "application/xml",
           "properties": {
             "phonenum": {
               "type": "string",
@@ -78,8 +77,7 @@
           ]
         },
         "GetGcodeResponse": {
-          "type": "string",
-          "contentType": "image/png"
+          "type": "string"
         }
       }
     }
