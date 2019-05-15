@@ -21,10 +21,12 @@ paths:
           in: query
           schema:
             type: integer
+          required: true
         - name: X-ORG-ID
           in: headers
           schema:
             type: integer
+          required: true
       requestBody:
         description: body
         required: true
@@ -57,8 +59,8 @@ schemas:
         type: array
         items:
           anyOf:
-            - type: integer
-            - type: integer
+            - type: string
+            - type: string
       object:
         type: object
         properties:

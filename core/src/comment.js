@@ -114,7 +114,7 @@ function getLineKind(line, lineIndex) {
   const result = { type: 'empty' };
   const reg1 = /^\s*['"]?([a-zA-Z0-9_\-])+['"]?\s*:\s*\[\s*(\/\/.*)?$/g;
   const reg2 = /^\s*['"]?([a-zA-Z0-9_\-])+['"]?\s*:\s*\{\s*(\/\/.*)?$/g;
-  const reg3 = /^\s*['"]?([a-zA-Z0-9_\-])+['"]?\s*:\s*['"]?([a-zA-Z0-9])+['"]?/g;
+  const reg3 = /^\s*['"]?([a-zA-Z0-9_\-])+['"]?\s*:\s*\S+/g;
   if (reg1.test(line)) {
     result['type'] = 'array';
     result['key'] = getKeyName(line, reg1);
@@ -122,6 +122,11 @@ function getLineKind(line, lineIndex) {
     result['type'] = 'object';
     result['key'] = getKeyName(line, reg2);
   } else if (reg3.test(line)) {
+    try {
+      JSON5.parse(`{${line.replace(/\/\/.*$/g, '')}}`) // 检查行合法
+    } catch (err) {
+      throw new Error(`Line ${lineIndex}: ${line}`);
+    }
     result['type'] = 'kv';
     result['key'] = getKeyName(line, reg3);
   } else {
@@ -187,7 +192,6 @@ function getLineComment(line) {
   }
   return result;
 }
-
 
 module.exports = {
   parse,

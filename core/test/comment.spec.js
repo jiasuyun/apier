@@ -54,6 +54,6 @@ it('parse', () => {
 it('filter', () => {
   const comments = require('./fixtures/comments');
   expect(filter(comments, ['getModel', 'route'])).toEqual([{ comment: { security: null }, paths: [] }]);
-  expect(filter(comments, [])).toEqual([{ comment: { security: null }, paths: [] }]);
-  expect(filter(comments, [], true)).toEqual(comments);
+  expect(filter(comments, ['getModel', 'route'], true)).toEqual({ security: null });
+  expect(filter(comments, [])).toEqual(comments);
 })
