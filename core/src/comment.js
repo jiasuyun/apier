@@ -5,11 +5,11 @@ function parse(input) {
   const comments = [];
   const root = new Visitor(lines, comments, []);
   root.kind = { type: 'object' };
-  root.scopeObject(1);
+  root.scopeObject(findLineOfBeginCurlyBraces(lines) + 1);
   return comments;
 }
 
-function filter(comments, filterPaths, strict=false) {
+function filter(comments, filterPaths, strict = false) {
   const result = [];
   const str = filterPaths.join('.');
   for (let { paths, comment } of comments) {
@@ -87,13 +87,22 @@ class Visitor {
  * @param line 
  * @param reg 
  */
-const getKeyName = (line, reg) => {
+function getKeyName(line, reg) {
   return line.match(reg).map(function (v) {
     if (!v) return '';
     let result = v.split(":")[0].replace(/(^\s*)|(\s*$)/g, "");
     if (/"[^"]*"|'[^"]*'/.test(result)) result = result.substring(1, result.length - 1);
     return result;
   })[0] || '';
+}
+
+function findLineOfBeginCurlyBraces(lines) {
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i][0] === '{') {
+      return i;
+    }
+  }
+  throw new Error('No root {');
 }
 
 /**
@@ -169,7 +178,7 @@ function getLineComment(line) {
     if (!result) result = {};
     try {
       v = JSON.parse(v);
-    } catch (err) {}
+    } catch (err) { }
     result[k] = v;
   }
   const textArr = line.match(reg1);
