@@ -55,7 +55,7 @@ class App extends Component {
           <Clipboard
             className="btn btn-light"
             title="复制到剪切板"
-            style={{ position: 'absolute', right: '14px' }}
+            style={{ position: 'absolute', right: '14px', top: '3px' }}
             data-clipboard-text={this.state.code}
             onSuccess={() => add('已复制', { appearance: 'success', autoDismiss: true })}
           >
@@ -67,16 +67,21 @@ class App extends Component {
   }
   renderCode = (text, type) => {
     if (!text) return <div></div>;
-    return <Editor
-      value={text}
-      disabled
-      highlight={code => highlight(code, languages[type])}
-      padding={10}
-      style={{
-        fontFamily: '"Fira code", "Fira Mono", monospace',
-        fontSize: 12,
-      }}
-    />
+    return (
+      <div>
+        {this.renderClipboard()}
+        <Editor
+          value={text}
+          disabled
+          highlight={code => highlight(code, languages[type])}
+          padding={10}
+          style={{
+            fontFamily: '"Fira code", "Fira Mono", monospace',
+            fontSize: 12,
+          }}
+        />
+      </div>
+    )
   }
   render() {
     return (
@@ -112,15 +117,12 @@ class App extends Component {
               <Col sm={7}>
                 <Tabs defaultActiveKey="openapi">
                   <Tab eventKey="openapi" title="OPENAPI">
-                    {this.renderClipboard()}
                     {this.renderCode(this.state.openapisText, 'yaml')}
                   </Tab>
                   <Tab eventKey="htte" title="HTTE">
-                    {this.renderClipboard()}
                     {this.renderCode(this.state.httesText, 'yaml')}
                   </Tab>
                   <Tab eventKey="handler" title="HANDLER">
-                    {this.renderClipboard()}
                     {this.renderCode(this.state.handlersText, 'typescript')}
                   </Tab>
                 </Tabs>
