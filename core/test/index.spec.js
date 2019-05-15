@@ -14,3 +14,9 @@ it('parse array', () => {
   const output = parse(apiInput);
   expect(output).toEqual(require('./fixtures/array.json'));
 });
+
+it('parse ref', () => {
+  const apiInput = fs.readFileSync(path.resolve(__dirname, 'fixtures/ref.json5'), 'utf8');
+  const output = parse(apiInput);
+  expect(output).toEqual(require('./fixtures/ref.json'));
+});

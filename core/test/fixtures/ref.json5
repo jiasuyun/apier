@@ -1,0 +1,21 @@
+{
+
+    testRef: {
+        route: 'GET /c/ref/test',
+        req: {
+            query: {
+                pageSize: 20, // description=页 saveSchema=PageSize
+                pageNo: 1,
+            },
+            body: {
+                f1: 'a',
+                f2: { // saveSchema=F2Ref
+                    f3: 'c'
+                }
+            }
+        },
+        res: {
+            body: {}, // useSchema=TestRef
+        }
+    }
+}

@@ -1,0 +1,101 @@
+{
+      "handlers": [
+        "export async function testRef(req: Request, res: Response) {}"
+      ],
+      "httes": [
+        {
+          "describe": "测试 testRef",
+          "req": {
+            "method": "get",
+            "url": "/c/ref/test",
+            "query": {
+              "pageSize": 20,
+              "pageNo": 1
+            },
+            "body": {
+              "f1": "a",
+              "f2": {
+                "f3": "c"
+              }
+            }
+          },
+          "res": {
+            "body": {}
+          }
+        }
+      ],
+      "openapis": [
+        {
+          "paths": {
+            "/c/ref/test": {
+              "get": {
+                "operationId": "testRef",
+                "summary": "接口 testRef",
+                "parameters": [
+                  {
+                    "$ref": "#/components/schemas/PageSize"
+                  },
+                  {
+                    "name": "pageNo",
+                    "in": "query",
+                    "schema": {
+                      "type": "integer"
+                    },
+                    "required": true
+                  }
+                ],
+                "requestBody": {
+                  "required": true,
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/TestRefRequest"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "components": {
+            "schemas": {
+              "PageSize": {
+                "name": "pageSize",
+                "in": "query",
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "页",
+                "required": true
+              },
+              "F2Ref": {
+                "type": "object",
+                "properties": {
+                  "f3": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "f3"
+                ]
+              },
+              "TestRefRequest": {
+                "type": "object",
+                "properties": {
+                  "f1": {
+                    "type": "string"
+                  },
+                  "f2": {
+                    "$ref": "#/components/schemas/F2Ref"
+                  }
+                },
+                "required": [
+                  "f1",
+                  "f2"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
