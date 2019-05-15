@@ -5,7 +5,7 @@ const lpick = require('lodash.pick');
 const getOpenapi = (element, comments) => {
   let { url, method, name, req, res } = element;
   url = url.replace(/\/:([A-Za-z0-9_]+)/g, '/{$1}');
-  const comment  = filter(comments, [element.name], true) || {};
+  const comment  = filter(comments, [], true) || {};
   const summary = comment.summary || `接口 ${element.name}`;
   const operation = { operationId: name, summary };
   Object.assign(operation, lpick(comment,['tags', 'description', 'deprecated'] ))
@@ -28,10 +28,10 @@ function resolveParamters(element, comments) {
         const parameter = {}
         parameter.name = name;
         parameter.in = key === 'params' ? 'path' : key;
-        const comment = filter(comments, [element.name, 'req', key, name], true) || {};
+        const comment = filter(comments, ['req', key, name], true) || {};
         parameter.schema = createSchema(item[name]);
         if (!comment.optional) parameter.required = true;
-        const parameterFields = ['description', 'deprecated', 'allowEmptyValue', 'type']
+        const parameterFields = ['description', 'deprecated', 'allowEmptyValue']
         Object.assign(parameter, lpick(comment, parameterFields));
         Object.assign(parameter.schema, lomit(comment, [...parameterFields, 'optional']));
         parameters.push(parameter);
@@ -42,7 +42,7 @@ function resolveParamters(element, comments) {
 }
 
 function resolveRequestBody(element, comments, operation, schemas) {
-  const paths = [element.name, 'req', 'body']
+  const paths = ['req', 'body']
   const comment = filter(comments, paths, true) || {};
   const contentType = comment['contentType'] || 'application/json';
   const reqSchemaName = nameSchema(element.name, 'Request');
@@ -55,7 +55,7 @@ function resolveRequestBody(element, comments, operation, schemas) {
 }
 
 function resolveResponse(element, comments, operation, schemas) {
-  const paths = [element.name, 'res', 'body'];
+  const paths = ['res', 'body'];
   const comment = filter(comments, paths, true) || {};
   const contentType = comment['contentType'] || 'application/json';
   const resSchemaName = nameSchema(element.name, 'Response');

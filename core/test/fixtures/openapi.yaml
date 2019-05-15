@@ -10,7 +10,6 @@ paths:
             type: integer
             format: int32
           required: true
-          type: integer
         - name: pageSize
           in: query
           schema:
