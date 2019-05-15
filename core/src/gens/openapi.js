@@ -28,14 +28,12 @@ function resolveParamters(element, comments) {
         const parameter = {}
         parameter.name = name;
         parameter.in = key === 'params' ? 'path' : key;
-        const comment = filter(comments, [element.name, 'req', key, name], true);
+        const comment = filter(comments, [element.name, 'req', key, name], true) || {};
         parameter.schema = createSchema(item[name]);
-        if (comment) {
-          if (!comment.optional) parameter.required = true;
-          const parameterFields = ['description', 'deprecated', 'allowEmptyValue', 'type']
-          Object.assign(parameter, lpick(comment, parameterFields));
-          Object.assign(parameter.schema, lomit(comment, [...parameterFields, 'optional']));
-        }
+        if (!comment.optional) parameter.required = true;
+        const parameterFields = ['description', 'deprecated', 'allowEmptyValue', 'type']
+        Object.assign(parameter, lpick(comment, parameterFields));
+        Object.assign(parameter.schema, lomit(comment, [...parameterFields, 'optional']));
         parameters.push(parameter);
       })
     }
