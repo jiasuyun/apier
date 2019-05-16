@@ -7,7 +7,7 @@ export interface GeneratorResult {
     } & apier.ApierRawReq;
     res: apier.ApierRawRes;
 }
-export declare class Generator {
+export default class Generator {
     readonly value: GeneratorResult;
     constructor(apier: apier.Apier);
 }

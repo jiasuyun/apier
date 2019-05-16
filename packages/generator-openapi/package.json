@@ -32,7 +32,6 @@
     "openapi3-ts": "^1.2.0"
   },
   "devDependencies": {
-    "@dee-contrib/apier-parser-json5": "^0.1.0",
-    "@types/node": "^12.0.2"
+    "@dee-contrib/apier-test-utils-generator": "^0.1.0"
   }
 }

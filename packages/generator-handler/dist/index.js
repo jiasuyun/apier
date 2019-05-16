@@ -5,5 +5,5 @@ class Generator {
         this.value = `export async function ${apier.name}(req: Request, res: Response) {}`;
     }
 }
-exports.Generator = Generator;
+exports.default = Generator;
 //# sourceMappingURL=index.js.map

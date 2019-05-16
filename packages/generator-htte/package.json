@@ -26,5 +26,8 @@
   "dependencies": {
     "@dee-contrib/apier": "^0.1.0",
     "@dee-contrib/apier-utils": "^0.1.0"
+  },
+  "devDependencies": {
+    "@dee-contrib/apier-test-utils-generator": "^0.1.0"
   }
 }

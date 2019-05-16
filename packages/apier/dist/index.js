@@ -91,7 +91,7 @@ exports.ApierNull = ApierNull;
 class ApierArray extends ApierItem {
     constructor(comment, name, value) {
         super(comment, name, value);
-        this.model = value.map((v, i) => this.createJSONKind(this.comment, String(i), v[i]));
+        this.model = value.map((v, i) => this.createJSONKind(this.comment, String(i), v));
     }
 }
 exports.ApierArray = ApierArray;

@@ -3,7 +3,7 @@ import * as openapi from 'openapi3-ts';
 import { ApierKind, colonToCurlybrace } from '@dee-contrib/apier-utils';
 
 const OPERATION_KEYS = ['tags', 'description', 'deperacated', 'security', 'servers'];
-const PARAMETER_KEYS = ['name', 'in', 'description', 'required', 'deprecated', 'allowEmptyValue'];
+const PARAMETER_KEYS = ['name', 'in', 'description', 'deprecated', 'allowEmptyValue'];
 const FUN_KEYS = ['optional', 'saveSchema', 'useSchema', 'array'];
 
 export interface GeneratorResult {
@@ -29,8 +29,10 @@ export default class Generator {
     const { apier } = this;
     const { comment, model: { req } } = apier;
     const commentUtil = comment.retrive();
+    const operation = this.operation;
+    operation.operationId = apier.name;
     const summary = commentUtil.val('summary', apier.name);
-    const operation: any = { operationId: apier.name, summary };
+    operation.summary = summary;
     Object.assign(operation, commentUtil.pick(OPERATION_KEYS));
     const parameters = this.dealParameters();
     if (parameters.length > 0) {
@@ -53,7 +55,7 @@ export default class Generator {
         Object.assign(parameter, commentUtil.pick(PARAMETER_KEYS));
         parameter.schema = this.createSchema(apierParameter);
         [...PARAMETER_KEYS, ...FUN_KEYS, 'description'].forEach(key => delete parameter.schema[key]);
-        if (commentUtil.val('optional')) parameter.required = true;
+        if (!commentUtil.val('optional')) parameter.required = true;
         const saveSchema = commentUtil.val('saveSchema');
         if (saveSchema) parameter.schema = this.saveSchema(saveSchema, parameter.schema);
         parameters.push(parameter);
@@ -86,7 +88,7 @@ export default class Generator {
     const useSchema = commentUtil.val('useSchema');
     if (useSchema) return responses[status].content = { [contentType]: { schema: createRef(useSchema) } };
     const schemaName = commentUtil.val('saveSchema', nameOfReqResSchema(this.apier.name, 'Response'));
-    responses[status].content = { [contentType]: { schema: this.saveSchema(schemaName, this.createSchema(body)) } };
+    responses[status].content = { [contentType]: { schema: this.saveSchema(schemaName, body ? this.createSchema(body): { type: 'object' }) } };
   }
   saveSchema(name: string, schema: openapi.SchemaObject): openapi.ReferenceObject {
     this.value.components.schemas[name] = schema;
@@ -97,7 +99,7 @@ export default class Generator {
     this.schemaUtil(apierItem, schema);
     return schema;
   }
-  schemaUtil(apierItem: apier.ApierJSONKind, schema: openapi.SchemaObject): boolean {
+  schemaUtil(apierItem: apier.ApierItem, schema: openapi.SchemaObject): boolean {
     const commentUtil = apierItem.comment.retrive();
     const useSchema = commentUtil.val('useSchema');
     if (useSchema) {
@@ -127,7 +129,7 @@ export default class Generator {
     if (children.length === 1) strategy = 'first';
     if (strategy === 'first') {
       this.schemaUtil(children[0], items);
-    } else if (strategy = 'anyOf') {
+    } else if (strategy === 'anyOf') {
       const anyOf = items.anyOf = [];
       children.forEach((child) => {
         const childSchema = {}
@@ -161,7 +163,7 @@ export default class Generator {
     let haveProperties = false;
     for (const key in apierItem.model) {
       haveProperties = true;
-      const item = schema.properties[key] = {}
+      const item = properties[key] = {}
       if (this.schemaUtil(apierItem.model[key], item)) {
         required.push(key);
       }

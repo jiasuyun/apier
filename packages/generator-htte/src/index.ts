@@ -10,7 +10,7 @@ export interface GeneratorResult {
   res: apier.ApierRawRes;
 }
 
-export class Generator {
+export default class Generator {
   public readonly value: GeneratorResult;
   constructor(apier: apier.Apier) {
     const { method, url, name, value: { req, res } } = apier;

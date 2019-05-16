@@ -150,8 +150,3 @@ function getApier(): apier.Apier {
   const parser = new Parser();
   return apier.parse(input, parser)[0];
 }
-
-function getApierValue(): apier.ApierRaw {
-  const { getModel } = loadFixtureJSON('general.apis');
-  return getModel;
-}

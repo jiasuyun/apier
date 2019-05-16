@@ -12,5 +12,5 @@ class Generator {
         };
     }
 }
-exports.Generator = Generator;
+exports.default = Generator;
 //# sourceMappingURL=index.js.map

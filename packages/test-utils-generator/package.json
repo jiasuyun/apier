@@ -1,7 +1,7 @@
 {
-  "name": "@dee-contrib/apier-generator-handler",
+  "name": "@dee-contrib/apier-test-utils-generator",
   "version": "0.1.0",
-  "description": "apier handler generator",
+  "description": "apier test utils for generator",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
@@ -23,11 +23,10 @@
     "type": "git",
     "url": "git+https://g.sigoden.com/backend/apier"
   },
-  "dependencies": {
-    "@dee-contrib/apier": "^0.1.0",
-    "@dee-contrib/apier-utils": "^0.1.0"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@dee-contrib/apier-test-utils-generator": "^0.1.0"
+    "@dee-contrib/apier": "^0.1.0",
+    "@dee-contrib/apier-parser-json5": "^0.1.0",
+    "@dee-contrib/apier-test-utils": "^0.1.0"
   }
 }

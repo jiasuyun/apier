@@ -23,7 +23,7 @@ export default class Generator {
     };
     saveSchema(name: string, schema: openapi.SchemaObject): openapi.ReferenceObject;
     createSchema(apierItem: apier.ApierJSONKind): openapi.SchemaObject;
-    schemaUtil(apierItem: apier.ApierJSONKind, schema: openapi.SchemaObject): boolean;
+    schemaUtil(apierItem: apier.ApierItem, schema: openapi.SchemaObject): boolean;
     schemaArray(apierItem: apier.ApierArray, schema: openapi.SchemaObject): void;
     schemaArrayAll(apierItem: apier.ApierArray, schema: openapi.SchemaObject): void;
     schemaObject(apierItem: apier.ApierObject, schema: openapi.SchemaObject): void;

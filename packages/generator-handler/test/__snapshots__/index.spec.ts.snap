@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generate 1`] = `"export async function getModel(req: Request, res: Response) {}"`;
