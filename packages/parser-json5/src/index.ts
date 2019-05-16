@@ -1,61 +1,103 @@
-export enum ApierKind {
-  NUMBER = 'number',
-  INTEGER = 'integer',
-  STRING = 'string',
-  BOOLEAN = 'boolean',
-  ARRAY = 'array',
-  OBJECT = 'object',
-  NULL = 'null',
-}
+import * as apier from '@dee-contrib/apier';
+import { ApierComment } from '@dee-contrib/apier-comment';
+import { ApierKind, kindOf } from '@dee-contrib/apier-utils';
+import * as JSON5 from 'json5';
+import { beignLineNum } from './helper';
+import * as lset from 'lodash.set';
+import Visitor from './Visitor';
 
-export interface ApierComments {
-  [k: string]: any;
-}
+// 解析 Route
+const RE_ROUTE = /^(get|post|put|delete)\s[:\/A-Za-z0-9_\-]+/i;
 
-export abstract class ValueComments {
-  public readonly value: any;
-  public readonly comments: ApierComments;
-}
-
-export abstract class ApierItem extends ValueComments {
-  public static kindOf(value: any): ApierKind {
-    if (value === null) {
-      return ApierKind.NULL;
+class Parser implements apier.Parser {
+  public parse(input: string): apier.ParseResult {
+    let parsedObj: any;
+    try {
+      parsedObj = JSON5.parse(input);
+    } catch (err) {
+      throw new apier.ParserError([], err.message);
     }
-    switch (typeof value) {
-      case 'boolean':
-        return ApierKind.BOOLEAN;
-      case 'number':
-        if (Number.isInteger(value)) {
-          return ApierKind.INTEGER;
-        }
-        return ApierKind.NUMBER;
-      case 'string':
-        return ApierKind.STRING;
-      default:
-        if (Array.isArray(value)) {
-          return ApierKind.ARRAY;
-        }
-        return ApierKind.OBJECT;
+    const apis = {};
+    for (const name in parsedObj) {
+      apis[name] = this.parseApi(name, parsedObj[name]);
     }
+    return { apis, comment: this.parseComment(input) };
   }
-  public kind(): ApierKind {
-    return ApierItem.kindOf(this.value);
+  private parseApi(name: string, data: any): apier.ApierRaw {
+    if (kindOf(data) !== ApierKind.OBJECT) {
+      throw new apier.ParserError([name], 'should be object');
+    }
+    let api: any = { name };
+    const { route, req, res } = data;
+    this.parseRoute(api, route);
+    this.parseReq(api, req);
+    this.parseRes(api, res);
+    return api as apier.ApierRaw;
   }
-}
+  private parseComment(input: string): ApierComment {
+    const lines = input.split('\n');
+    const comment = new ApierComment();
+    const root = new Visitor(lines, comment, []);
+    root.scopeObject(beignLineNum(lines) + 1);
+    return comment;
+  }
+  private parseRoute(api: apier.ApierRaw, route: string) {
+    if (!RE_ROUTE.test(route)) {
+      throw new apier.ParserError([api.name, 'route'], route);
+    }
+    const [method, url] = route.split(' ');
+    api.method = method.toLowerCase() as apier.Method;
+    api.url = url;
+  }
 
-export class ApierNumber extends ApierItem {
+  private parseReq(api: apier.ApierRaw, req) {
+    if (req === undefined) return;
+    if (kindOf(req) !== ApierKind.OBJECT) {
+      throw new apier.ParserError([api.name, 'req'], 'must be object');
+    }
+    const { headers, params, query, body } = req;
+    api.req = {}
+    if (headers) this.parseParameters(api, ['req', 'headers'], headers);
+    if (params) this.parseParameters(api, ['req', 'params'], params);
+    if (query) this.parseParameters(api, ['req', 'query'], query);
+    if (body) this.parseBody(api, ['req', 'body'], body);
+  }
 
-}
+  private parseRes(api: apier.ApierRaw, res) {
+    api.res = { status: 200 };
+    if (res === undefined) {
+      return;
+    }
+    if (kindOf(res) !== ApierKind.OBJECT) {
+      throw new apier.ParserError([api.name, 'res'], 'must be object');
+    }
+    const { status, body } = res;
+    if (status) this.parseResStatus(api, status);
+    if (body) this.parseBody(api, ['res', 'body'], body);
+  }
 
-export enum Method {
-  GET = 'get',
-  POST = 'post',
-  PUT = 'put',
-  DELETE = 'delete',
-}
+  private parseParameters(api, paths, obj) {
+    if (typeof obj !== "object") {
+      throw new apier.ParserError([api.name, ...paths], `must be object`);
+    }
+    for (const key in obj) {
+      const value = obj[key];
+      const valueKind  = kindOf(value);
+      if (valueKind === ApierKind.ARRAY || valueKind === ApierKind.OBJECT) {
+        throw new apier.ParserError([api.name, ...paths, key], `must be scalar value`);
+      }
+    }
+    lset(api, paths, obj);
+  }
 
-export class Apier extends ValueComments {
-  public readonly method: Method;
-  public readonly url: string;
+  private parseResStatus(api, status = 200) {
+    if (typeof status !== "number" && (status < 100 && status >= 600)) {
+      throw new apier.ParserError([name, 'res', 'status'], `{status}`);
+    }
+    api.res.status = status;
+  }
+
+  private parseBody(api, paths, body) {
+    lset(api, paths, body);
+  }
 }

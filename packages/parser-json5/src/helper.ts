@@ -18,7 +18,6 @@ export interface LineValue {
   key?: string;
 }
 
-
 // 正则： 判定进入数组
 const RG_ENTER_ARRAY = /^\s*['"]?([a-zA-Z0-9_\-])+['"]?\s*:\s*\[\s*(\/\/.*)?$/g;
 // 正则： 判定进入对象 
@@ -28,14 +27,14 @@ const RE_KV = /^\s*['"]?([a-zA-Z0-9_\-])+['"]?\s*:\s*\S+/g;
 /**
  * 获取行值
  */
-export function valueOfLine(line: string, index: number): LineValue {
+export function valueOfLine(line: string): LineValue {
   if (RG_ENTER_ARRAY.test(line)) {
     return { key: keyOfLine(line, RG_ENTER_ARRAY), kind: LineKind.ARRAY };
   }
   if (RG_ENTER_OBJECT.test(line)) {
     return { key: keyOfLine(line, RG_ENTER_OBJECT), kind: LineKind.OBJECT };
   }
-  const error = () => new Error(`Line ${index}: ${line}`);
+  const error = () => new Error(`can not get value of line: ${line}`);
   if (RE_KV.test(line)) {
     try {
       JSON5.parse(`{${line.replace(/\/\/.*$/g, '')}}`) // 检查行合法
@@ -71,41 +70,15 @@ function keyOfLine(line: string, rg: RegExp): string {
   return matched[1];
 }
 
+
+// 判断根 `{`
+const RE_ROOT_CURLY_BRACE = /^\s*{/
 /**
- * 获取行注释
- * 
- * `...// optional type=integer format=int32` => { optional: true, type: integer, format: int32 }
+ * 起始行号
  */
-export function commentsOfLine(line) {
-  let isComment = false;
-  let result;
-  const reg1 = /(\S+=("[^"]*"|'[^']*'))|"[^"]*"|'[^"]*'|\S+/g;
-  const reg2 = /'[^']*\/\/[^']*'|"[^"]*\/\/[^"]*"/;
-  if (!line.includes("//")) return result;
-  const addToResult = (k, v) => {
-    if (!result) result = {};
-    try {
-      v = JSON.parse(v);
-    } catch (err) { }
-    result[k] = v;
+export function beignLineNum(lines: string[]) {
+  for (let i = 0; i < lines.length; i++) {
+    if (RE_ROOT_CURLY_BRACE.test(lines[i])) return i;
   }
-  const textArr = line.match(reg1);
-  for (let item of textArr) {
-    if (!isComment && item.includes("//") && !reg2.test(item)) isComment = true;
-    if (isComment) {
-      const subscript = item.indexOf('//');
-      if (subscript > -1) item = item.substring(subscript + 2).replace(/(^\s*)|(\s*$)/g, "");
-      if (!item) continue;
-      const subscript2 = item.indexOf('=');
-      if (subscript2 > 0) {
-        let key = item.substring(0, subscript2);
-        let value = item.substring(subscript2 + 1);
-        if (/"[^"]*"|'[^"]*'/.test(value)) value = value.substring(1, value.length - 1);
-        addToResult(key, value);
-      } else {
-        addToResult(item, true);
-      }
-    }
-  }
-  return result;
+  return -1;
 }
