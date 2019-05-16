@@ -1,18 +1,19 @@
 import { colonToCurlybrace } from "@jiasuyun/apier-utils";
-import * as apier from "@jiasuyun/apier";
+import { Apier } from "@jiasuyun/apier";
+import { ApierRawReq, ApierRawRes } from "@jiasuyun/apier-parser-base";
 
 export interface GeneratorResult {
   describe: string;
   req: {
     method: string;
     url: string;
-  } & apier.ApierRawReq;
-  res: apier.ApierRawRes;
+  } & ApierRawReq;
+  res: ApierRawRes;
 }
 
 export default class Generator {
   public readonly value: GeneratorResult;
-  constructor(apier: apier.Apier) {
+  constructor(apier: Apier) {
     const {
       method,
       url,

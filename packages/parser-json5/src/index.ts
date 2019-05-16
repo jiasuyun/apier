@@ -1,4 +1,4 @@
-import * as apier from "@jiasuyun/apier";
+import * as apier from "@jiasuyun/apier-parser-base";
 import { ApierComment } from "@jiasuyun/apier-comment";
 import { ApierKind, kindOf } from "@jiasuyun/apier-utils";
 import * as JSON5 from "json5";
