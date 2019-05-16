@@ -1,5 +1,5 @@
-import { colonToCurlybrace } from '@dee-contrib/apier-utils';
-import * as apier from '@dee-contrib/apier';
+import { colonToCurlybrace } from '@jiasuyun/apier-utils';
+import * as apier from '@jiasuyun/apier';
 
 export interface GeneratorResult {
   describe: string;

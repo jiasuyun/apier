@@ -1,8 +1,8 @@
 import * as apier from '../src';
-import { loadFixtureJSON5, loadFixtureJSON } from '@dee-contrib/apier-test-utils';
-import Parser from "@dee-contrib/apier-parser-json5";
-import { ApierKind } from '@dee-contrib/apier-utils';
-import { ApierComment } from '@dee-contrib/apier-comment';
+import { loadFixtureJSON5, loadFixtureJSON } from '@jiasuyun/apier-test-utils';
+import Parser from "@jiasuyun/apier-parser-json5";
+import { ApierKind } from '@jiasuyun/apier-utils';
+import { ApierComment } from '@jiasuyun/apier-comment';
 
 test('Apier', () => {
   const api = getApier()

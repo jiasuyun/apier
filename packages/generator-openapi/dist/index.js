@@ -7,8 +7,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const apier = __importStar(require("@dee-contrib/apier"));
-const apier_utils_1 = require("@dee-contrib/apier-utils");
+const apier = __importStar(require("@jiasuyun/apier"));
+const apier_utils_1 = require("@jiasuyun/apier-utils");
 const OPERATION_KEYS = ['tags', 'description', 'deperacated', 'security', 'servers'];
 const PARAMETER_KEYS = ['name', 'in', 'description', 'deprecated', 'allowEmptyValue'];
 const FUN_KEYS = ['optional', 'saveSchema', 'useSchema', 'array'];
@@ -94,7 +94,7 @@ class Generator {
         if (useSchema)
             return responses[status].content = { [contentType]: { schema: createRef(useSchema) } };
         const schemaName = commentUtil.val('saveSchema', nameOfReqResSchema(this.apier.name, 'Response'));
-        responses[status].content = { [contentType]: { schema: this.saveSchema(schemaName, this.createSchema(body)) } };
+        responses[status].content = { [contentType]: { schema: this.saveSchema(schemaName, body ? this.createSchema(body) : { type: 'object' }) } };
     }
     saveSchema(name, schema) {
         this.value.components.schemas[name] = schema;
@@ -106,7 +106,6 @@ class Generator {
         return schema;
     }
     schemaUtil(apierItem, schema) {
-        console.log(apierItem.name);
         const commentUtil = apierItem.comment.retrive();
         const useSchema = commentUtil.val('useSchema');
         if (useSchema) {
@@ -141,7 +140,7 @@ class Generator {
         if (strategy === 'first') {
             this.schemaUtil(children[0], items);
         }
-        else if (strategy = 'anyOf') {
+        else if (strategy === 'anyOf') {
             const anyOf = items.anyOf = [];
             children.forEach((child) => {
                 const childSchema = {};

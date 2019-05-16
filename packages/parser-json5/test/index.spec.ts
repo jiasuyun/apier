@@ -1,5 +1,5 @@
 import Parser from '../src';
-import { loadFixtureJSON5, loadFixtureJSON } from '@dee-contrib/apier-test-utils';
+import { loadFixtureJSON5, loadFixtureJSON } from '@jiasuyun/apier-test-utils';
 
 describe('Parser', () => {
   it('parse', () => {

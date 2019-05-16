@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const apier_utils_1 = require("@dee-contrib/apier-utils");
+const apier_utils_1 = require("@jiasuyun/apier-utils");
 class ApierItem {
     constructor(comment, name, value) {
         this.comment = comment.scope([name]);

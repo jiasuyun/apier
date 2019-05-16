@@ -10,9 +10,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const apier = __importStar(require("@dee-contrib/apier"));
-const apier_comment_1 = require("@dee-contrib/apier-comment");
-const apier_utils_1 = require("@dee-contrib/apier-utils");
+const apier = __importStar(require("@jiasuyun/apier"));
+const apier_comment_1 = require("@jiasuyun/apier-comment");
+const apier_utils_1 = require("@jiasuyun/apier-utils");
 const JSON5 = __importStar(require("json5"));
 const Visitor_1 = __importDefault(require("./Visitor"));
 const helper_1 = require("./helper");

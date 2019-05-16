@@ -1,6 +1,6 @@
-import * as apier from '@dee-contrib/apier';
-import { ApierComment } from '@dee-contrib/apier-comment';
-import { ApierKind, kindOf } from '@dee-contrib/apier-utils';
+import * as apier from '@jiasuyun/apier';
+import { ApierComment } from '@jiasuyun/apier-comment';
+import { ApierKind, kindOf } from '@jiasuyun/apier-utils';
 import * as JSON5 from 'json5';
 import Visitor from './Visitor';
 import { beignLineNum } from './helper';

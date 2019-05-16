@@ -1,5 +1,5 @@
 import Generator from '../src';
-import { loadApiers } from "@dee-contrib/apier-test-utils-generator";
+import { loadApiers } from "@jiasuyun/apier-test-utils-generator";
 
 test('generate', () => {
   const apier = loadApiers('general')[0];

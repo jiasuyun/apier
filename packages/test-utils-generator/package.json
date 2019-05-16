@@ -1,5 +1,5 @@
 {
-  "name": "@dee-contrib/apier-test-utils-generator",
+  "name": "@jiasuyun/apier-test-utils-generator",
   "version": "0.1.0",
   "description": "apier test utils for generator",
   "main": "dist/index.js",
@@ -25,8 +25,8 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@dee-contrib/apier": "^0.1.0",
-    "@dee-contrib/apier-parser-json5": "^0.1.0",
-    "@dee-contrib/apier-test-utils": "^0.1.0"
+    "@jiasuyun/apier": "^0.1.0",
+    "@jiasuyun/apier-parser-json5": "^0.1.0",
+    "@jiasuyun/apier-test-utils": "^0.1.0"
   }
 }

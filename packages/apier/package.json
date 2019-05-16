@@ -1,5 +1,5 @@
 {
-  "name": "@dee-contrib/apier",
+  "name": "@jiasuyun/apier",
   "version": "0.1.0",
   "description": "apier core",
   "main": "dist/index.js",
@@ -24,11 +24,11 @@
     "url": "git+https://github.com/jiasuyun/apier"
   },
   "dependencies": {
-    "@dee-contrib/apier-utils": "^0.1.0",
-    "@dee-contrib/apier-comment": "^0.1.0"
+    "@jiasuyun/apier-utils": "^0.1.0",
+    "@jiasuyun/apier-comment": "^0.1.0"
   },
   "devDependencies": {
-    "@dee-contrib/apier-test-utils": "^0.1.0",
-    "@dee-contrib/apier-parser-json5": "^0.1.0"
+    "@jiasuyun/apier-test-utils": "^0.1.0",
+    "@jiasuyun/apier-parser-json5": "^0.1.0"
   }
 }

@@ -1,4 +1,4 @@
-import * as apier from '@dee-contrib/apier';
+import * as apier from '@jiasuyun/apier';
 import * as openapi from 'openapi3-ts';
 export interface GeneratorResult {
     paths: openapi.PathsObject;

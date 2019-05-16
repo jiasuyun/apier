@@ -1,4 +1,4 @@
-import * as apier from '@dee-contrib/apier';
+import * as apier from '@jiasuyun/apier';
 export declare type GeneratorResult = string;
 export default class Generator {
     readonly value: GeneratorResult;

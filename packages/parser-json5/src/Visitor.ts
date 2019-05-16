@@ -1,5 +1,5 @@
 import { valueOfLine, LineKind, LineValue, getLineComment } from './helper';
-import { ApierComment } from '@dee-contrib/apier-comment';
+import { ApierComment } from '@jiasuyun/apier-comment';
 
 export default class Visitor {
   private lines: string[];

@@ -1,6 +1,6 @@
-import * as apier from '@dee-contrib/apier';
+import * as apier from '@jiasuyun/apier';
 import * as openapi from 'openapi3-ts';
-import { ApierKind, colonToCurlybrace } from '@dee-contrib/apier-utils';
+import { ApierKind, colonToCurlybrace } from '@jiasuyun/apier-utils';
 
 const OPERATION_KEYS = ['tags', 'description', 'deperacated', 'security', 'servers'];
 const PARAMETER_KEYS = ['name', 'in', 'description', 'deprecated', 'allowEmptyValue'];

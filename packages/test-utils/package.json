@@ -1,5 +1,5 @@
 {
-  "name": "@dee-contrib/apier-test-utils",
+  "name": "@jiasuyun/apier-test-utils",
   "version": "0.1.0",
   "description": "apier test utils",
   "main": "dist/index.js",

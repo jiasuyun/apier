@@ -1,5 +1,5 @@
-import { ApierKind, kindOf } from '@dee-contrib/apier-utils';
-import { ApierComment } from '@dee-contrib/apier-comment';
+import { ApierKind, kindOf } from '@jiasuyun/apier-utils';
+import { ApierComment } from '@jiasuyun/apier-comment';
 
 export abstract class ApierItem {
   public readonly comment: ApierComment;

@@ -1,4 +1,4 @@
-import * as apier from '@dee-contrib/apier';
+import * as apier from '@jiasuyun/apier';
 export default class Parser implements apier.Parser {
     parse(input: string): apier.ParseResult;
     private parseApi;
