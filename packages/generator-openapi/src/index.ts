@@ -16,7 +16,13 @@ const PARAMETER_KEYS = [
   "deprecated",
   "allowEmptyValue"
 ];
-const FUN_KEYS = ["optional", "saveSchema", "useSchema", "array"];
+const FUN_KEYS = [
+  "optional",
+  "saveSchema",
+  "useSchema",
+  "array",
+  "contentType"
+];
 
 export interface GeneratorResult {
   paths: openapi.PathsObject;

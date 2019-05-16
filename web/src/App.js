@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import { Container, Row, Col, Form, Tabs, Tab, Button } from 'react-bootstrap';
 import Clipboard from 'react-clipboard.js';
 import ClipboardIcon from './clipboard.png';
-import * as parse from '@dee-contrib/apier';
-import yaml from 'js-yaml';
-import merge from 'lodash.merge';
 import { ToastConsumer, ToastProvider } from 'react-toast-notifications';
 import Editor from 'react-simple-code-editor';
 import { highlight, languages } from 'prismjs/components/prism-core';
@@ -13,6 +10,7 @@ import 'prismjs/components/prism-javascript';
 import 'prismjs/components/prism-typescript';
 import 'prismjs/components/prism-yaml';
 import 'prismjs/themes/prism.css';
+import parse from './parse';
 
 import './App.css';
 class App extends Component {
@@ -34,15 +32,9 @@ class App extends Component {
       add(err.message, { appearance: 'error', autoDismiss: false })
       return;
     }
-    const { handlers, httes, openapis } = result;
-    const handlersText = handlers.join('\n\n');
-    const httesText = yaml.safeDump(httes);
-    const openapisText = yaml.safeDump(openapis.reduce((a, c) => merge(a, c), {}))
     this.setState({
       error: '',
-      handlersText,
-      httesText,
-      openapisText,
+      ...result,
     })
   }
   handleCodeInput = e => {

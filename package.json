@@ -1,16 +1,18 @@
 {
   "name": "apier",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "lerna bootstrap",
     "test": "node ./scripts/test.js",
-    "lint": "node ./scripts/lint.js"
+    "lint": "node ./scripts/lint.js",
+    "predeploy": "cd web && npm run build",
+    "deploy": "gh-pages -d web/build"
   },
   "repository": {
     "type": "git",
-    "url": "https://g.sigoden.com/backend/apier.git"
+    "url": "https://g.sigoden.com/jiasuyun/apier.git"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +29,7 @@
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-prettier": "^3.0.1",
+    "gh-pages": "^2.0.1",
     "husky": "^2.3.0",
     "jest": "^24.8.0",
     "lerna": "^3.14.1",
