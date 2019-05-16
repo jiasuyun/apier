@@ -1,29 +1,7 @@
 import * as apier from "@jiasuyun/apier";
 import * as openapi from "openapi3-ts";
 import { ApierKind, colonToCurlybrace } from "@jiasuyun/apier-utils";
-
-const OPERATION_KEYS = [
-  "tags",
-  "description",
-  "deperacated",
-  "security",
-  "servers"
-];
-const PARAMETER_KEYS = [
-  "name",
-  "in",
-  "description",
-  "deprecated",
-  "allowEmptyValue"
-];
-const FUN_KEYS = [
-  "optional",
-  "saveSchema",
-  "useSchema",
-  "array",
-  "contentType"
-];
-
+import { OPERATION_KEYS, PARAMETER_KEYS, SCHEMA_KEYS } from "./constants";
 export interface GeneratorResult {
   paths: openapi.PathsObject;
   components: openapi.ComponentsObject;
@@ -83,9 +61,7 @@ export default class Generator {
         };
         Object.assign(parameter, commentUtil.pick(PARAMETER_KEYS));
         parameter.schema = this.createSchema(apierParameter);
-        [...PARAMETER_KEYS, ...FUN_KEYS, "description"].forEach(
-          key => delete parameter.schema[key]
-        );
+        PARAMETER_KEYS.forEach(key => delete parameter.schema[key]);
         if (!commentUtil.val("optional")) parameter.required = true;
         const saveSchema = commentUtil.val("saveSchema");
         if (saveSchema)
@@ -175,7 +151,7 @@ export default class Generator {
     Object.assign(
       schema,
       { type: apierItem.kind() },
-      commentUtil.omit(FUN_KEYS)
+      commentUtil.pick(SCHEMA_KEYS)
     );
     const saveSchema = commentUtil.val("saveSchema");
     if (saveSchema) {
