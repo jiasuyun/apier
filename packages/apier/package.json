@@ -24,11 +24,11 @@
     "url": "git+https://github.com/jiasuyun/apier"
   },
   "dependencies": {
-    "@jiasuyun/apier-utils": "^0.1.0",
-    "@jiasuyun/apier-comment": "^0.1.0"
+    "@jiasuyun/apier-comment": "^0.1.0",
+    "@jiasuyun/apier-utils": "^0.1.0"
   },
   "devDependencies": {
-    "@jiasuyun/apier-test-utils": "^0.1.0",
-    "@jiasuyun/apier-parser-json5": "^0.1.0"
+    "@jiasuyun/apier-parser-json5": "^0.1.0",
+    "@jiasuyun/apier-test-utils": "^0.1.0"
   }
 }
