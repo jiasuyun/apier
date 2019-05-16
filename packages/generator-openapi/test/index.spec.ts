@@ -1,4 +1,4 @@
-import Generator from '../src';
+import Generator from "../src";
 import { loadApiers } from "@jiasuyun/apier-test-utils-generator";
 
 // test('generate', () => {
@@ -7,8 +7,8 @@ import { loadApiers } from "@jiasuyun/apier-test-utils-generator";
 //   expect(generator.value).toMatchSnapshot();
 // });
 
-test('generate: array', () => {
-  const apier = loadApiers('array')[0];
+test("generate: array", () => {
+  const apier = loadApiers("array")[0];
   const generator = new Generator(apier);
   expect(generator.value).toMatchSnapshot();
 });

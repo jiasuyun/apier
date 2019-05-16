@@ -1,10 +1,10 @@
-import * as apier from '@jiasuyun/apier';
-import { ApierComment } from '@jiasuyun/apier-comment';
-import { ApierKind, kindOf } from '@jiasuyun/apier-utils';
-import * as JSON5 from 'json5';
-import Visitor from './Visitor';
-import { beignLineNum } from './helper';
-import lset from 'lodash/set';
+import * as apier from "@jiasuyun/apier";
+import { ApierComment } from "@jiasuyun/apier-comment";
+import { ApierKind, kindOf } from "@jiasuyun/apier-utils";
+import * as JSON5 from "json5";
+import Visitor from "./Visitor";
+import { beignLineNum } from "./helper";
+import lset from "lodash/set";
 
 // 解析 Route
 const RE_ROUTE = /^(get|post|put|delete)\s[:\/A-Za-z0-9_\-]+/i;
@@ -21,12 +21,12 @@ export default class Parser implements apier.Parser {
     for (const name in parsedObj) {
       apis[name] = this.parseApi(name, parsedObj[name]);
     }
-    const comment = this.parseComment(input)
+    const comment = this.parseComment(input);
     return { apis, comment };
   }
   private parseApi(name: string, data: any): apier.ApierRaw {
     if (kindOf(data) !== ApierKind.OBJECT) {
-      throw new apier.ParserError([name], 'should be object');
+      throw new apier.ParserError([name], "should be object");
     }
     let api: any = { name };
     const { route, req, res } = data;
@@ -36,7 +36,7 @@ export default class Parser implements apier.Parser {
     return api as apier.ApierRaw;
   }
   private parseComment(input: string): ApierComment {
-    const lines = input.split('\n');
+    const lines = input.split("\n");
     const comment = new ApierComment();
     const root = new Visitor(lines, comment, []);
     root.scopeObject(beignLineNum(lines) + 1);
@@ -44,9 +44,9 @@ export default class Parser implements apier.Parser {
   }
   private parseRoute(api: apier.ApierRaw, route: string) {
     if (!RE_ROUTE.test(route)) {
-      throw new apier.ParserError([api.name, 'route'], route);
+      throw new apier.ParserError([api.name, "route"], route);
     }
-    const [method, url] = route.split(' ');
+    const [method, url] = route.split(" ");
     api.method = method.toLowerCase() as apier.Method;
     api.url = url;
   }
@@ -54,14 +54,14 @@ export default class Parser implements apier.Parser {
   private parseReq(api: apier.ApierRaw, req) {
     if (req === undefined) return;
     if (kindOf(req) !== ApierKind.OBJECT) {
-      throw new apier.ParserError([api.name, 'req'], 'must be object');
+      throw new apier.ParserError([api.name, "req"], "must be object");
     }
     const { headers, params, query, body } = req;
-    api.req = {}
-    if (headers) this.parseParameters(api, ['req', 'headers'], headers);
-    if (params) this.parseParameters(api, ['req', 'params'], params);
-    if (query) this.parseParameters(api, ['req', 'query'], query);
-    if (body) this.parseBody(api, ['req', 'body'], body);
+    api.req = {};
+    if (headers) this.parseParameters(api, ["req", "headers"], headers);
+    if (params) this.parseParameters(api, ["req", "params"], params);
+    if (query) this.parseParameters(api, ["req", "query"], query);
+    if (body) this.parseBody(api, ["req", "body"], body);
   }
 
   private parseRes(api: apier.ApierRaw, res) {
@@ -70,11 +70,11 @@ export default class Parser implements apier.Parser {
       return;
     }
     if (kindOf(res) !== ApierKind.OBJECT) {
-      throw new apier.ParserError([api.name, 'res'], 'must be object');
+      throw new apier.ParserError([api.name, "res"], "must be object");
     }
     const { status, body } = res;
     if (status) this.parseResStatus(api, status);
-    if (body) this.parseBody(api, ['res', 'body'], body);
+    if (body) this.parseBody(api, ["res", "body"], body);
   }
 
   private parseParameters(api, paths, obj) {
@@ -85,7 +85,10 @@ export default class Parser implements apier.Parser {
       const value = obj[key];
       const valueKind = kindOf(value);
       if (valueKind === ApierKind.ARRAY || valueKind === ApierKind.OBJECT) {
-        throw new apier.ParserError([api.name, ...paths, key], `must be scalar value`);
+        throw new apier.ParserError(
+          [api.name, ...paths, key],
+          `must be scalar value`
+        );
       }
     }
     lset(api, paths, obj);
@@ -93,7 +96,7 @@ export default class Parser implements apier.Parser {
 
   private parseResStatus(api, status = 200) {
     if (typeof status !== "number" && (status < 100 && status >= 600)) {
-      throw new apier.ParserError([name, 'res', 'status'], `{status}`);
+      throw new apier.ParserError([name, "res", "status"], `{status}`);
     }
     api.res.status = status;
   }

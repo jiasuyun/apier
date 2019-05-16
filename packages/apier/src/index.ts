@@ -1,5 +1,5 @@
-import { ApierKind, kindOf } from '@jiasuyun/apier-utils';
-import { ApierComment } from '@jiasuyun/apier-comment';
+import { ApierKind, kindOf } from "@jiasuyun/apier-utils";
+import { ApierComment } from "@jiasuyun/apier-comment";
 
 export abstract class ApierItem {
   public readonly comment: ApierComment;
@@ -14,7 +14,11 @@ export abstract class ApierItem {
   public kind(): ApierKind {
     return kindOf(this.value);
   }
-  protected createJSONKind(comment: ApierComment, name: string, value: any): ApierJSONKind {
+  protected createJSONKind(
+    comment: ApierComment,
+    name: string,
+    value: any
+  ): ApierJSONKind {
     switch (kindOf(value)) {
       case ApierKind.INTEGER:
         return new ApierInteger(comment, name, value);
@@ -31,17 +35,22 @@ export abstract class ApierItem {
       case ApierKind.OBJECT:
         return new ApierObject(comment, name, value);
       default:
-        throw new Error('unreachable');
+        throw new Error("unreachable");
     }
-  };
+  }
 }
 
 export interface ApierRawObject {
   [k: string]: any;
 }
 
-export type ApierJSONKind = ApierArray | ApierObject | ApierParameter
-export type ApierParameter = ApierInteger | ApierString | ApierBoolean | ApierNull | ApierNumber;
+export type ApierJSONKind = ApierArray | ApierObject | ApierParameter;
+export type ApierParameter =
+  | ApierInteger
+  | ApierString
+  | ApierBoolean
+  | ApierNull
+  | ApierNumber;
 export interface ApierReqModel {
   params?: ApierObject;
   query?: ApierObject;
@@ -70,7 +79,7 @@ export class ApierRes extends ApierItem {
     super(comment, name, value);
     const { status, body } = value;
     this.model = { status };
-    if (body) this.model.body = this.createJSONKind(this.comment, 'body', body);
+    if (body) this.model.body = this.createJSONKind(this.comment, "body", body);
   }
 }
 export class ApierNumber extends ApierItem {
@@ -115,10 +124,12 @@ export class ApierArray extends ApierItem {
   public readonly value: any[];
   constructor(comment: ApierComment, name: string, value: any[]) {
     super(comment, name, value);
-    this.model = value.map((v, i) => this.createJSONKind(this.comment, String(i), v));
+    this.model = value.map((v, i) =>
+      this.createJSONKind(this.comment, String(i), v)
+    );
   }
 }
-export type ApierObjectModel = {
+export interface ApierObjectModel {
   [k: string]: ApierJSONKind;
 }
 
@@ -135,10 +146,10 @@ export class ApierObject extends ApierItem {
 }
 
 export enum Method {
-  GET = 'get',
-  POST = 'post',
-  PUT = 'put',
-  DELETE = 'delete',
+  GET = "get",
+  POST = "post",
+  PUT = "put",
+  DELETE = "delete"
 }
 
 export interface ApierRaw {
@@ -168,7 +179,7 @@ export interface ApierRawRes {
 export interface ParseResult {
   apis: {
     [k: string]: ApierRaw;
-  }
+  };
   comment: ApierComment;
 }
 
@@ -191,15 +202,15 @@ export interface ApierModel {
 export class Apier extends ApierItem {
   public readonly method: Method;
   public readonly url: string;
-  public readonly model: ApierModel
+  public readonly model: ApierModel;
   public readonly value: ApierRaw;
   constructor(comment: ApierComment, value: ApierRaw) {
     super(comment, value.name, value);
     this.method = value.method;
     this.url = value.url;
     const model: any = {};
-    if (value.req) model.req = new ApierReq(this.comment, 'req', value.req);
-    model.res = new ApierRes(this.comment, 'res', value.res);
+    if (value.req) model.req = new ApierReq(this.comment, "req", value.req);
+    model.res = new ApierRes(this.comment, "res", value.res);
     this.model = model;
   }
 }

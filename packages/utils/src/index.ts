@@ -6,14 +6,14 @@ export function kindOf(value: any): ApierKind {
     return ApierKind.NULL;
   }
   switch (typeof value) {
-    case 'boolean':
+    case "boolean":
       return ApierKind.BOOLEAN;
-    case 'number':
+    case "number":
       if (Number.isInteger(value)) {
         return ApierKind.INTEGER;
       }
       return ApierKind.NUMBER;
-    case 'string':
+    case "string":
       return ApierKind.STRING;
     default:
       if (Array.isArray(value)) {
@@ -24,16 +24,16 @@ export function kindOf(value: any): ApierKind {
 }
 
 export enum ApierKind {
-  NUMBER = 'number',
-  INTEGER = 'integer',
-  STRING = 'string',
-  BOOLEAN = 'boolean',
-  ARRAY = 'array',
-  OBJECT = 'object',
-  NULL = 'null',
+  NUMBER = "number",
+  INTEGER = "integer",
+  STRING = "string",
+  BOOLEAN = "boolean",
+  ARRAY = "array",
+  OBJECT = "object",
+  NULL = "null"
 }
 
 // 路径 `/model/:id` => `/model/{id}`
 export function colonToCurlybrace(url: string): string {
-  return url.replace(/\/:([A-Za-z0-9_]+)/g, '/{$1}');
+  return url.replace(/\/:([A-Za-z0-9_]+)/g, "/{$1}");
 }

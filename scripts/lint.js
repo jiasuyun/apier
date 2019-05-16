@@ -15,9 +15,9 @@ if (pkgs.length) {
 }
 
 function lint(pkgFolder) {
-  const cmd = `npx tslint -c ${tsLintFile} -p tsconfig.json --fix`;
+  const cmd = `npx eslint --ext .ts --fix .`;
   const pkgName = path.basename(pkgFolder);
-  process.stdout.write(`Linting ${pkgName}\n`)
+  process.stdout.write(`Linting ${pkgName}\n`);
   try {
     execSync(cmd, { cwd: pkgFolder, stdio: 'inherit' });
   } catch (err) {}

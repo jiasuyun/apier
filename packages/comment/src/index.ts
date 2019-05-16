@@ -22,25 +22,26 @@ export class ApierComment {
     if (comment) this.comments.push({ paths, comment });
   }
   public scope(paths: string[]) {
-    const comments = this
-      .comments
+    const comments = this.comments
       .filter(c => isPrefixArray(paths, c.paths))
-      .map(c => ({ paths: c.paths.slice(paths.length), comment: c.comment }))
+      .map(c => ({ paths: c.paths.slice(paths.length), comment: c.comment }));
     return new ApierComment(comments);
   }
   public retrive(paths: string[] = []): CommentUtil {
-    const commentItem = this.comments.find(c => paths.length === c.paths.length && isPrefixArray(paths, c.paths))
+    const commentItem = this.comments.find(
+      c => paths.length === c.paths.length && isPrefixArray(paths, c.paths)
+    );
     return new CommentUtil(commentItem ? commentItem.comment : {});
   }
   /**
    * 获取行注释
-   * 
+   *
    * `optional type=integer format=int32` => { optional: true, type: integer, format: int32 }
    */
   private parse(commentText: string): { [k: string]: any } {
-    const result = {}
+    const result = {};
     let matched;
-    while (matched = RG_COMMENT_VALUE.exec(commentText)) {
+    while ((matched = RG_COMMENT_VALUE.exec(commentText))) {
       const key = matched[1];
       let value = matched[3];
       if (value === undefined) {
@@ -48,7 +49,7 @@ export class ApierComment {
       } else {
         try {
           value = JSON.parse(value);
-        } catch (err) { }
+        } catch (err) {}
       }
       result[key] = value;
     }
@@ -68,7 +69,7 @@ export class CommentUtil {
     return pick(this.comment, keys);
   }
   val(key?: string, defaultValue?: any) {
-    if (key === undefined) return {...this.comment};
+    if (key === undefined) return { ...this.comment };
     if (this.comment.hasOwnProperty(key)) {
       return this.comment[key];
     }

@@ -1,5 +1,5 @@
-import { valueOfLine, LineKind, LineValue, getLineComment } from './helper';
-import { ApierComment } from '@jiasuyun/apier-comment';
+import { valueOfLine, LineKind, LineValue, getLineComment } from "./helper";
+import { ApierComment } from "@jiasuyun/apier-comment";
 
 export default class Visitor {
   private lines: string[];
@@ -65,17 +65,21 @@ export default class Visitor {
     const visitor = new Visitor(lines, comment, paths);
     visitor.lineValue = lineValue;
     visitor.parent = this;
-    return visitor.lineValue.kind === LineKind.ARRAY ? visitor.scopeArray(lineIndex + 1) : visitor.scopeObject(lineIndex + 1);
+    return visitor.lineValue.kind === LineKind.ARRAY
+      ? visitor.scopeArray(lineIndex + 1)
+      : visitor.scopeObject(lineIndex + 1);
   }
 
   exitScope(lineIndex) {
     const visitor = this.parent;
     if (!this.parent) return;
-    return visitor.lineValue.kind === LineKind.ARRAY ? visitor.scopeArray(lineIndex) : visitor.scopeObject(lineIndex);
+    return visitor.lineValue.kind === LineKind.ARRAY
+      ? visitor.scopeArray(lineIndex)
+      : visitor.scopeObject(lineIndex);
   }
 
   collectComment(paths, line) {
-    const commentText = getLineComment(line)
+    const commentText = getLineComment(line);
     if (commentText) this.comment.append(paths, commentText);
   }
 }

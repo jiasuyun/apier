@@ -10,8 +10,7 @@
     "prepublish": "npm run -s clean && npm run -s build"
   },
   "files": [
-    "dist",
-    "src/fixtures"
+    "dist"
   ],
   "publishConfig": {
     "access": "public"

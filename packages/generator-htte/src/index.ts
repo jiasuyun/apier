@@ -1,5 +1,5 @@
-import { colonToCurlybrace } from '@jiasuyun/apier-utils';
-import * as apier from '@jiasuyun/apier';
+import { colonToCurlybrace } from "@jiasuyun/apier-utils";
+import * as apier from "@jiasuyun/apier";
 
 export interface GeneratorResult {
   describe: string;
@@ -13,12 +13,17 @@ export interface GeneratorResult {
 export default class Generator {
   public readonly value: GeneratorResult;
   constructor(apier: apier.Apier) {
-    const { method, url, name, value: { req, res } } = apier;
-    const summary = apier.comment.retrive().val('summary', name) as string;
+    const {
+      method,
+      url,
+      name,
+      value: { req, res }
+    } = apier;
+    const summary = apier.comment.retrive().val("summary", name) as string;
     this.value = {
       describe: summary,
       req: { method, url: colonToCurlybrace(url), ...req },
       res
-    }
+    };
   }
 }

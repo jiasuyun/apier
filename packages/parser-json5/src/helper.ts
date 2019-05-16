@@ -1,17 +1,17 @@
-import * as JSON5 from 'json5';
-import extract from 'extract-comments';
+import * as JSON5 from "json5";
+import extract from "extract-comments";
 
 export enum LineKind {
   // 行类型： 进入数组, `foo: [`
-  ARRAY = 'array',
+  ARRAY = "array",
   // 行类型： 进入对象, `foo: {`
-  OBJECT = 'object',
+  OBJECT = "object",
   // 行类型： Key-Value, `foo: bar`, `foo: [1, 2]`, `foo: { a: 3, b: 4 }`
-  KV = 'kv',
+  KV = "kv",
   // 行类型：退出域, `}`, `]`
-  EXIT = 'exit',
+  EXIT = "exit",
   // 行类型:  空, ` `, `// ...` 或其他无法识别行
-  EMPTY = 'empty',
+  EMPTY = "empty"
 }
 
 export interface LineValue {
@@ -29,48 +29,48 @@ const RE_ENTER_OBJECT = /{\s*(\/\/.*)?$/;
  * 获取行值
  */
 export function valueOfLine(line: string): LineValue {
-  line = line.trim()
+  line = line.trim();
   const error = () => new Error(`bad line: ${line}`);
   let matched = RE_KEY.exec(line);
   if (matched) {
-    const key = matched[1].replace(/(^"|^'|"$|'$)/g, '');
+    const key = matched[1].replace(/(^"|^'|"$|'$)/g, "");
     const tail = line.slice(matched[0].length).trim();
     if (RE_ENTER_ARRAY.test(tail)) {
       return { key, kind: LineKind.ARRAY };
     }
-    if(RE_ENTER_OBJECT.test(tail)) {
+    if (RE_ENTER_OBJECT.test(tail)) {
       return { key, kind: LineKind.OBJECT };
     }
     try {
-      JSON5.parse(`{${line.replace(/\/\/.*$/g, '')}}`) // 检查行合法
+      JSON5.parse(`{${line.replace(/\/\/.*$/g, "")}}`); // 检查行合法
     } catch (err) {
       throw error();
     }
     return { key, kind: LineKind.KV };
   }
   const text = line // 移除空白和注释
-    .replace(/\/\/.*$/g, '')
-    .replace(/,\s*$/g, '')
+    .replace(/\/\/.*$/g, "")
+    .replace(/,\s*$/g, "")
     .replace(/(^\s*)|(\s*$)/g, "");
-  if (text === '{') {
-    return { kind: LineKind.OBJECT }
+  if (text === "{") {
+    return { kind: LineKind.OBJECT };
   }
-  if (text === '}' || text === ']') {
-    return { kind: LineKind.EXIT }
+  if (text === "}" || text === "]") {
+    return { kind: LineKind.EXIT };
   }
-  if (text === '') {
-    return { kind: LineKind.EMPTY }
+  if (text === "") {
+    return { kind: LineKind.EMPTY };
   }
   try {
     JSON5.parse(text); // 有效的数组元素
-    return { kind: LineKind.EMPTY }
+    return { kind: LineKind.EMPTY };
   } catch (err) {
     throw error();
   }
 }
 
 // 判断根 `{`
-const RE_ROOT_CURLY_BRACE = /^\s*{/
+const RE_ROOT_CURLY_BRACE = /^\s*{/;
 /**
  * 起始行号
  */
@@ -89,22 +89,22 @@ export function getLineComment(line: string): string {
   let patchLine = line;
   switch (lineValue.kind) {
     case LineKind.ARRAY:
-      patchLine = line + '\n]';
+      patchLine = line + "\n]";
       break;
     case LineKind.OBJECT:
-      patchLine = line + '\n}';
+      patchLine = line + "\n}";
       break;
     case LineKind.KV:
-      patchLine = `{\n` + line + '\n}';
+      patchLine = `{\n` + line + "\n}";
       break;
     case LineKind.EXIT:
     case LineKind.EMPTY:
-      return '';
+      return "";
   }
   try {
     return extract(patchLine)
-      .filter(c => c.type === 'LineComment')
+      .filter(c => c.type === "LineComment")
       .map(c => c.value)[0];
-  } catch (err) { }
-  return '';
+  } catch (err) {}
+  return "";
 }

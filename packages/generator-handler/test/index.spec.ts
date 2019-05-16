@@ -1,8 +1,8 @@
-import Generator from '../src';
+import Generator from "../src";
 import { loadApiers } from "@jiasuyun/apier-test-utils-generator";
 
-test('generate', () => {
-  const apier = loadApiers('general')[0];
+test("generate", () => {
+  const apier = loadApiers("general")[0];
   const generator = new Generator(apier);
   expect(generator.value).toMatchSnapshot();
 });

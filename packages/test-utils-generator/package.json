@@ -23,8 +23,7 @@
     "type": "git",
     "url": "git+https://github.com/jiasuyun/apier"
   },
-  "dependencies": {},
-  "devDependencies": {
+  "dependencies": {
     "@jiasuyun/apier": "^0.1.0",
     "@jiasuyun/apier-parser-json5": "^0.1.0",
     "@jiasuyun/apier-test-utils": "^0.1.0"
