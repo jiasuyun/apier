@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es6",
+    "sourceMap": true
+  },
+  "exclude": ["node_modules", "**/*.spec.ts"]
+}
