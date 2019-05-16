@@ -1,0 +1,295 @@
+{
+    // phonenum 可以在单独建立一个 schema 已复用
+
+    signup: { // summary=注册 security=[]
+        route: 'POST /c/signup',
+        req: {
+            body: {
+                phonenum: '13010001000', // pattern=FIXME
+                code: '453263', // description=验证码
+                password: '123456abc', // pattern=FIXME
+            }
+        },
+        res: {
+            body: { // description=返回数据同登录
+                id: 32342,
+                token: '<jwt token>'
+            }
+        }
+    },
+    loginPasswd: { // summary=密码登录 security=[]
+        route: 'POST /c/login/passwd',
+        req: {
+            body: {
+                phonenum: '13010001000', // pattern=FIXME
+                code: '453263', // description=图形验证码，密码输错三次后出现
+                password: '123456abc', // pattern=FIXME
+            }
+        },
+        res: {
+            body: {
+                id: 32342,
+                token: '<jwt token>'
+            }
+        }
+    },
+    getGcode: { // summary=获取图形验证码 security=[]
+        route: 'POST /c/gcode',
+        req: {
+            body: {
+                phonenum: '13010001000', // pattern=FIXME
+            }
+        },
+        res: {
+            body: '<svg data>', // contentType=image/svg+xml format=binary
+        }
+    },
+    loginSms: { // summary=验证码登录 security=[]
+        route: 'POST /c/login/sms',
+        req: {
+            body: {
+                phonenum: '13010001000', // pattern=FIXME
+                code: '123421',
+            }
+        },
+        res: {
+            body: {
+                id: 32342,
+                token: '<jwt token>'
+            }
+        }
+    },
+    getScode: { // summary=获取短信验证码 security=[]
+        route: 'POST /c/scode',
+        req: {
+            body: {
+                phonenum: '13010001000', // pattern=FIXME
+            }
+        },
+        res: {
+            body: {
+                msg: 'OK'
+            }
+        }
+    },
+    updatePasswd: { // summary=修改密码
+        route: 'PUT /c/user/passwd',
+        req: {
+            body: {
+                password: 'abc12346'
+            }
+        },
+        res: {
+            body: {
+                msg: 'OK'
+            }
+        }
+    },
+    listFavoriates: { // summary=获取我的收藏
+        route: 'GET /c/favoriates',
+        req: {
+            query: {
+                pageSize: 20, // optional
+                pageNo: 1, // optional
+                type: 1, // optional description="类型 1 文字, 2 商品, 3 链接, 4 图片, 5 视频, 6 语音, 7 位置, 8 名片"
+            }
+        },
+        res: {
+            body: [
+                { // description=文字
+                    type: 1,
+                    id: 32134,
+                    authorId: 3212,
+                    authorName: '子鱼',
+                    data: {
+                        id: 33234,
+                        content: 'how are you'
+                    }
+                },
+                { // description=商品
+                    type: 2,
+                    id: 32134,
+                    authorId: 3212,
+                    authorName: '子鱼',
+                    data: {
+                        id: 32347,
+                        thumbnail: '<image url>',
+                        name: '沙驰 系带舒适牛皮商务正装皮鞋男 21822007Z 黑色 40',
+                        price: 232.34
+                    }
+                },
+                { // description=链接
+                    type: 3,
+                    id: 32134,
+                    authorId: 3212,
+                    authorName: '子鱼',
+                    data: {
+                        link: '<href url>', // description=跳转链接
+                    }
+                },
+                { // description=图片
+                    type: 4,
+                    id: 32134,
+                    authorId: 3212,
+                    authorName: '子鱼',
+                    data: {
+                        url: '<image url>', // description=图片链接
+                    }
+                },
+                { // description=视频
+                    type: 5,
+                    id: 32134,
+                    authorId: 3212,
+                    authorName: '子鱼',
+                    data: {
+                        url: '<image url>', // description=视频链接
+                    }
+                },
+                { // description=语音
+                    type: 6,
+                    id: 32134,
+                    authorId: 3212,
+                    authorName: '子鱼',
+                    data: {
+                        url: '<image url>', // description=语音链接
+                    }
+                },
+                { // description=地理位置
+                    type: 7,
+                    id: 32134,
+                    authorId: 3212,
+                    authorName: '子鱼',
+                    data: {
+                        longitude: 22.5894947942,
+                        latitude: 113.9739117838,
+                        location: '广东省深圳市南山区桃源街道平山社区'
+                    }
+                },
+                {
+                    type: 8,
+                    id: 32134,
+                    authorId: 3212,
+                    authorName: '子鱼',
+                    data: {
+                        avatarUrl: '<url>'
+                    }
+                }
+            ]
+        }
+    },
+    checkProductFavoriate: { // summary=查看商品是否已收藏
+        route: 'GET /c/favoriates/product/:id',
+        req: {
+            params: {
+                id: 3243
+            }
+        },
+        res: {
+            body: {
+                isFavoriated: true
+            }
+        }
+    },
+    createFeedback: { // summary=反馈
+        route: 'POST /c/feedbacks',
+        req: {
+            body: {
+                platform: 'android',
+                apiVersion: '28',
+                appVersion: '1.0.0',
+                note: '<text>', // description=意见
+            }
+        },
+        res: {
+            body: {
+                msg: 'OK'
+            }
+        }
+    },
+    getStats: { // summary=获取统计数据
+        route: 'GET /c/stats',
+        req: {},
+        res: {
+            body: {
+                numFollowings: 322, // description=关注数
+                numFavoriates: 100, // description=收藏数
+                numQuns: 32, // description=群数
+                numFriends: 320, // description=好友数
+            }
+        }
+    },
+    getUserInfo: { // summary=获取我的个人信息
+        route: 'GET /c/user/info',
+        req: {},
+        res: {
+            body: {
+                avatarUrl: '<url>',
+                name: '子鱼',
+                myId: 'Brsadfng', // description=秒音号
+                sex: 1, // description=性别
+                regionId: 32423,
+                signature: '<text>', // description=个性签名
+            }
+        }
+    },
+    updateUserInfo: { // summary=修改我的个人信息
+        route: 'PUT /c/user/info',
+        req: {
+            body: {
+                avatarUrl: '<url>', // optional 
+                name: '子鱼', // optional
+                sex: 1, // optional description=性别
+                regionId: 32423, // optional
+                signature: '<text>', // optional description=个性签名
+            }
+        },
+        res: {
+            body: {
+                msg: 'OK'
+            }
+        }
+    },
+    getUserSettings: { // summary=获取我的设置
+        route: 'GET /c/user/settings',
+        req: {},
+        res: {
+            body: {
+                notifyNewMessage: 1, // description=开关，是否开启新消息通知
+                notifyPhoneCall: 1, // description=开关，是否开启语音视频提醒
+                notifyShowDetail: 1, // description=开关，是否在通知中显示消息详情
+                notifyDynamic: 1, // description=开关，是否开启动态消息提醒
+                notifyWithSound: 1, // description=开关，是否开启声音通知
+                notifyWithVibration: 1, // description=开关，是否开启声音通知
+                privacyNewFriend: 1, // description=开关，是否启用添加好友验证
+                privacyPhonenumSearchable: 1, // description=开关，是否可以通过手机号搜到我
+                privacyIdSearchable: 1, // description=开关，是否可以通过秒音号搜到我
+                privacyRecommandContacts: 1, // description=开关，是否推荐通讯录好友
+                commonBackground: '<url>', // description=北京
+            }
+        }
+    },
+    updateUserSettings: {
+        route: 'PUT /c/user/settings',
+        req: {
+            body: {
+                notifyNewMessage: 1, // optional description=开关，是否开启新消息通知
+                notifyPhoneCall: 1, // optional description=开关，是否开启语音视频提醒
+                notifyShowDetail: 1, // optional description=开关，是否在通知中显示消息详情
+                notifyDynamic: 1, // optional description=开关，是否开启动态消息提醒
+                notifyWithSound: 1, // optional description=开关，是否开启声音通知
+                notifyWithVibration: 1, // optional description=开关，是否开启声音通知
+                privacyNewFriend: 1, // optional description=开关，是否启用添加好友验证
+                privacyPhonenumSearchable: 1, // optional description=开关，是否可以通过手机号搜到我
+                privacyIdSearchable: 1, // optional description=开关，是否可以通过秒音号搜到我
+                privacyRecommandContacts: 1, // optional description=开关，是否推荐通讯录好友
+                commonBackground: '<url>', // optional description=北京
+            }
+        },
+        res: {
+            body: {
+                msg: 'OK'
+            }
+        }
+    }
+}
+

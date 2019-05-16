@@ -4,6 +4,9 @@ function kindOf(value) {
     if (value === null) {
         return ApierKind.NULL;
     }
+    if (value === undefined) {
+        return ApierKind.NULL;
+    }
     switch (typeof value) {
         case 'boolean':
             return ApierKind.BOOLEAN;
@@ -32,4 +35,9 @@ var ApierKind;
     ApierKind["OBJECT"] = "object";
     ApierKind["NULL"] = "null";
 })(ApierKind = exports.ApierKind || (exports.ApierKind = {}));
+// 路径 `/model/:id` => `/model/{id}`
+function colonToCurlybrace(url) {
+    return url.replace(/\/:([A-Za-z0-9_]+)/g, '/{$1}');
+}
+exports.colonToCurlybrace = colonToCurlybrace;
 //# sourceMappingURL=index.js.map

@@ -1,5 +1,5 @@
 {
-  "name": "@dee-contrib/apier-parse-json5",
+  "name": "@dee-contrib/apier-parser-json5",
   "version": "0.1.0",
   "description": "apier json5 parser",
   "main": "dist/index.js",
@@ -10,7 +10,8 @@
     "prepublish": "npm run -s clean && npm run -s build"
   },
   "files": [
-    "dist"
+    "dist",
+    "src/fixtures"
   ],
   "publishConfig": {
     "access": "public"
@@ -27,8 +28,12 @@
     "@dee-contrib/apier": "^0.1.0",
     "@dee-contrib/apier-comment": "^0.1.0",
     "@dee-contrib/apier-utils": "^0.1.0",
+    "extract-comments": "^1.1.0",
     "json5": "^2.1.0",
-    "lodash.set": "^4.3.2"
+    "lodash": "^4.17.11"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@dee-contrib/apier-test-utils": "^0.1.0",
+    "@types/node": "^12.0.2"
+  }
 }

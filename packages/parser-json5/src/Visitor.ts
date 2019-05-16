@@ -1,4 +1,4 @@
-import { valueOfLine, LineKind, LineValue } from './helper';
+import { valueOfLine, LineKind, LineValue, getLineComment } from './helper';
 import { ApierComment } from '@dee-contrib/apier-comment';
 
 export default class Visitor {
@@ -50,7 +50,7 @@ export default class Visitor {
         return this.enterScope(lineValue, lineIndex);
       case LineKind.KV:
         const paths = [...this.paths, lineValue.key];
-        this.comment.append(paths, line);
+        this.collectComment(paths, line);
         return this.scopeObject(lineIndex + 1);
       case LineKind.EXIT:
         return this.exitScope(lineIndex + 1);
@@ -61,7 +61,7 @@ export default class Visitor {
   enterScope(lineValue: LineValue, lineIndex: number) {
     const { lines, comment } = this;
     const paths = [...this.paths, lineValue.key];
-    this.comment.append(paths, this.lines[lineIndex]);
+    this.collectComment(paths, this.lines[lineIndex]);
     const visitor = new Visitor(lines, comment, paths);
     visitor.lineValue = lineValue;
     visitor.parent = this;
@@ -72,5 +72,10 @@ export default class Visitor {
     const visitor = this.parent;
     if (!this.parent) return;
     return visitor.lineValue.kind === LineKind.ARRAY ? visitor.scopeArray(lineIndex) : visitor.scopeObject(lineIndex);
+  }
+
+  collectComment(paths, line) {
+    const commentText = getLineComment(line)
+    if (commentText) this.comment.append(paths, commentText);
   }
 }

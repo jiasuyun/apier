@@ -6,17 +6,22 @@ export interface CommentItem {
     comment: CommentObject;
 }
 export declare class ApierComment {
-    private comments;
+    readonly comments: CommentItem[];
     constructor(comments?: any[]);
+    append(paths: string[], commentText: string): void;
+    scope(paths: string[]): ApierComment;
+    retrive(paths?: string[]): CommentUtil;
     /**
      * 获取行注释
      *
-     * `...// optional type=integer format=int32` => { optional: true, type: integer, format: int32 }
+     * `optional type=integer format=int32` => { optional: true, type: integer, format: int32 }
      */
-    static commentOfLine(line: any): {
-        [k: string]: any;
-    };
-    append(paths: string[], line: string): void;
-    scope(paths: any): ApierComment;
-    retrive(paths: any): CommentObject;
+    private parse;
+}
+export declare class CommentUtil {
+    private readonly comment;
+    constructor(comment: CommentObject);
+    omit(keys: string[]): any;
+    pick(keys: string[]): any;
+    val(key?: string, defaultValue?: any): any;
 }

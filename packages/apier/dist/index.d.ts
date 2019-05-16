@@ -4,24 +4,25 @@ export declare abstract class ApierItem {
     readonly comment: ApierComment;
     readonly name: string;
     readonly value: any;
-    model: any;
+    readonly model: any;
     constructor(comment: ApierComment, name: string, value: any);
     kind(): ApierKind;
-    createJSONKind(comment: ApierComment, name: string, value: any): ApierJSONKind;
+    protected createJSONKind(comment: ApierComment, name: string, value: any): ApierJSONKind;
 }
-export interface ApierMap {
-    [k: string]: Apier;
+export interface ApierRawObject {
+    [k: string]: any;
 }
-export declare type ApierJSONKind = ApierArray | ApierObject | ApierInteger | ApierString | ApierBoolean | ApierNull | ApierNumber;
-export declare type ApierParameters = ApierInteger | ApierString | ApierBoolean | ApierNull | ApierNumber;
+export declare type ApierJSONKind = ApierArray | ApierObject | ApierParameter;
+export declare type ApierParameter = ApierInteger | ApierString | ApierBoolean | ApierNull | ApierNumber;
 export interface ApierReqModel {
-    params?: ApierParameters;
-    query?: ApierParameters;
-    headers?: ApierParameters;
+    params?: ApierObject;
+    query?: ApierObject;
+    headers?: ApierObject;
     body?: ApierJSONKind;
 }
 export declare class ApierReq extends ApierItem {
     readonly model: ApierReqModel;
+    readonly value: ApierRawReq;
     constructor(comment: ApierComment, name: string, value: ApierRawReq);
 }
 export interface ApierResModel {
@@ -30,31 +31,38 @@ export interface ApierResModel {
 }
 export declare class ApierRes extends ApierItem {
     readonly model: ApierResModel;
+    readonly value: ApierRawRes;
     constructor(comment: ApierComment, name: string, value: ApierRawRes);
 }
 export declare class ApierNumber extends ApierItem {
-    readonly model: boolean;
+    readonly model: any;
+    readonly value: number;
     constructor(comment: ApierComment, name: string, value: number);
 }
 export declare class ApierInteger extends ApierItem {
-    readonly model: boolean;
+    readonly model: any;
+    readonly value: number;
     constructor(comment: ApierComment, name: string, value: number);
 }
 export declare class ApierString extends ApierItem {
-    readonly model: boolean;
+    readonly model: any;
+    readonly value: string;
     constructor(comment: ApierComment, name: string, value: string);
 }
 export declare class ApierBoolean extends ApierItem {
-    readonly model: boolean;
+    readonly model: any;
+    readonly value: boolean;
     constructor(comment: ApierComment, name: string, value: boolean);
 }
 export declare class ApierNull extends ApierItem {
-    readonly model: boolean;
+    readonly model: any;
+    readonly value: null;
     constructor(comment: ApierComment, name: string, value: null);
 }
 export declare type ApierArrayModel = ApierJSONKind[];
 export declare class ApierArray extends ApierItem {
     readonly model: ApierArrayModel;
+    readonly value: any[];
     constructor(comment: ApierComment, name: string, value: any[]);
 }
 export declare type ApierObjectModel = {
@@ -62,9 +70,8 @@ export declare type ApierObjectModel = {
 };
 export declare class ApierObject extends ApierItem {
     readonly model: ApierObjectModel;
-    constructor(comment: ApierComment, name: string, value: {
-        [k: string]: any;
-    });
+    readonly value: ApierRawObject;
+    constructor(comment: ApierComment, name: string, value: ApierRawObject);
 }
 export declare enum Method {
     GET = "get",
@@ -110,8 +117,10 @@ export interface ApierModel {
     res: ApierRes;
 }
 export declare class Apier extends ApierItem {
-    method: Method;
-    url: string;
-    model: ApierModel;
+    readonly method: Method;
+    readonly url: string;
+    readonly model: ApierModel;
+    readonly value: ApierRaw;
     constructor(comment: ApierComment, value: ApierRaw);
 }
+export declare function parse(input: string, parser: Parser): Apier[];

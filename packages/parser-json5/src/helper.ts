@@ -1,4 +1,5 @@
 import * as JSON5 from 'json5';
+import extract from 'extract-comments';
 
 export enum LineKind {
   // 行类型： 进入数组, `foo: [`
@@ -18,30 +19,34 @@ export interface LineValue {
   key?: string;
 }
 
-// 正则： 判定进入数组
-const RG_ENTER_ARRAY = /^\s*['"]?([a-zA-Z0-9_\-])+['"]?\s*:\s*\[\s*(\/\/.*)?$/g;
-// 正则： 判定进入对象 
-const RG_ENTER_OBJECT = /^\s*['"]?([a-zA-Z0-9_\-])+['"]?\s*:\s*\{\s*(\/\/.*)?$/g;;
-// 正则： 判定KV 
-const RE_KV = /^\s*['"]?([a-zA-Z0-9_\-])+['"]?\s*:\s*\S+/g;
+// 正则： 判定 `key:` `"key":` `'key':` `'key' :`
+const RE_KEY = /^("[^"]+"|'[^']+'|[^\s:]+)\s*:/;
+// 正则: 判定进入数组
+const RE_ENTER_ARRAY = /\[\s*(\/\/.*)?$/;
+// 正则: 判定进入对象
+const RE_ENTER_OBJECT = /{\s*(\/\/.*)?$/;
 /**
  * 获取行值
  */
 export function valueOfLine(line: string): LineValue {
-  if (RG_ENTER_ARRAY.test(line)) {
-    return { key: keyOfLine(line, RG_ENTER_ARRAY), kind: LineKind.ARRAY };
-  }
-  if (RG_ENTER_OBJECT.test(line)) {
-    return { key: keyOfLine(line, RG_ENTER_OBJECT), kind: LineKind.OBJECT };
-  }
-  const error = () => new Error(`can not get value of line: ${line}`);
-  if (RE_KV.test(line)) {
+  line = line.trim()
+  const error = () => new Error(`bad line: ${line}`);
+  let matched = RE_KEY.exec(line);
+  if (matched) {
+    const key = matched[1].replace(/(^"|^'|"$|'$)/g, '');
+    const tail = line.slice(matched[0].length).trim();
+    if (RE_ENTER_ARRAY.test(tail)) {
+      return { key, kind: LineKind.ARRAY };
+    }
+    if(RE_ENTER_OBJECT.test(tail)) {
+      return { key, kind: LineKind.OBJECT };
+    }
     try {
       JSON5.parse(`{${line.replace(/\/\/.*$/g, '')}}`) // 检查行合法
     } catch (err) {
       throw error();
     }
-    return { key: keyOfLine(line, RE_KV), kind: LineKind.KV };
+    return { key, kind: LineKind.KV };
   }
   const text = line // 移除空白和注释
     .replace(/\/\/.*$/g, '')
@@ -64,13 +69,6 @@ export function valueOfLine(line: string): LineValue {
   }
 }
 
-function keyOfLine(line: string, rg: RegExp): string {
-  const matched = line.match(rg);
-  if (!matched) return '';
-  return matched[1];
-}
-
-
 // 判断根 `{`
 const RE_ROOT_CURLY_BRACE = /^\s*{/
 /**
@@ -81,4 +79,32 @@ export function beignLineNum(lines: string[]) {
     if (RE_ROOT_CURLY_BRACE.test(lines[i])) return i;
   }
   return -1;
+}
+
+/**
+ * 提取注释部分
+ */
+export function getLineComment(line: string): string {
+  const lineValue = valueOfLine(line);
+  let patchLine = line;
+  switch (lineValue.kind) {
+    case LineKind.ARRAY:
+      patchLine = line + '\n]';
+      break;
+    case LineKind.OBJECT:
+      patchLine = line + '\n}';
+      break;
+    case LineKind.KV:
+      patchLine = `{\n` + line + '\n}';
+      break;
+    case LineKind.EXIT:
+    case LineKind.EMPTY:
+      return '';
+  }
+  try {
+    return extract(patchLine)
+      .filter(c => c.type === 'LineComment')
+      .map(c => c.value)[0];
+  } catch (err) { }
+  return '';
 }

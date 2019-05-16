@@ -17,3 +17,7 @@ export declare function valueOfLine(line: string): LineValue;
  * 起始行号
  */
 export declare function beignLineNum(lines: string[]): number;
+/**
+ * 提取注释部分
+ */
+export declare function getLineComment(line: string): string;

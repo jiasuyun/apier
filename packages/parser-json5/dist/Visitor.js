@@ -46,7 +46,7 @@ class Visitor {
                 return this.enterScope(lineValue, lineIndex);
             case helper_1.LineKind.KV:
                 const paths = [...this.paths, lineValue.key];
-                this.comment.append(paths, line);
+                this.collectComment(paths, line);
                 return this.scopeObject(lineIndex + 1);
             case helper_1.LineKind.EXIT:
                 return this.exitScope(lineIndex + 1);
@@ -57,7 +57,7 @@ class Visitor {
     enterScope(lineValue, lineIndex) {
         const { lines, comment } = this;
         const paths = [...this.paths, lineValue.key];
-        this.comment.append(paths, this.lines[lineIndex]);
+        this.collectComment(paths, this.lines[lineIndex]);
         const visitor = new Visitor(lines, comment, paths);
         visitor.lineValue = lineValue;
         visitor.parent = this;
@@ -68,6 +68,11 @@ class Visitor {
         if (!this.parent)
             return;
         return visitor.lineValue.kind === helper_1.LineKind.ARRAY ? visitor.scopeArray(lineIndex) : visitor.scopeObject(lineIndex);
+    }
+    collectComment(paths, line) {
+        const commentText = helper_1.getLineComment(line);
+        if (commentText)
+            this.comment.append(paths, commentText);
     }
 }
 exports.default = Visitor;

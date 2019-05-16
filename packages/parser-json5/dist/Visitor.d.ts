@@ -13,4 +13,5 @@ export default class Visitor {
     scopeObject(lineIndex: number): any;
     enterScope(lineValue: LineValue, lineIndex: number): any;
     exitScope(lineIndex: any): any;
+    collectComment(paths: any, line: any): void;
 }

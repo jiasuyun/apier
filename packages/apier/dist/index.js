@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const apier_utils_1 = require("@dee-contrib/apier-utils");
 class ApierItem {
     constructor(comment, name, value) {
-        this.comment = comment.scope(['name']);
+        this.comment = comment.scope([name]);
         this.name = name;
         this.value = value;
     }
@@ -37,8 +37,8 @@ class ApierReq extends ApierItem {
     constructor(comment, name, value) {
         super(comment, name, value);
         this.model = Object.keys(value).reduce((model, key) => {
-            model[key] = this.createJSONKind(comment, key, value[key]);
-            return model[key];
+            model[key] = this.createJSONKind(this.comment, key, value[key]);
+            return model;
         }, {});
     }
 }
@@ -47,51 +47,51 @@ class ApierRes extends ApierItem {
     constructor(comment, name, value) {
         super(comment, name, value);
         const { status, body } = value;
-        this.model.status = status;
+        this.model = { status };
         if (body)
-            this.model.body = this.createJSONKind(comment, 'body', body);
+            this.model.body = this.createJSONKind(this.comment, 'body', body);
     }
 }
 exports.ApierRes = ApierRes;
 class ApierNumber extends ApierItem {
     constructor(comment, name, value) {
         super(comment, name, value);
-        this.model = false;
+        this.model = null;
     }
 }
 exports.ApierNumber = ApierNumber;
 class ApierInteger extends ApierItem {
     constructor(comment, name, value) {
         super(comment, name, value);
-        this.model = false;
+        this.model = null;
     }
 }
 exports.ApierInteger = ApierInteger;
 class ApierString extends ApierItem {
     constructor(comment, name, value) {
         super(comment, name, value);
-        this.model = false;
+        this.model = null;
     }
 }
 exports.ApierString = ApierString;
 class ApierBoolean extends ApierItem {
     constructor(comment, name, value) {
         super(comment, name, value);
-        this.model = false;
+        this.model = null;
     }
 }
 exports.ApierBoolean = ApierBoolean;
 class ApierNull extends ApierItem {
     constructor(comment, name, value) {
         super(comment, name, value);
-        this.model = false;
+        this.model = null;
     }
 }
 exports.ApierNull = ApierNull;
 class ApierArray extends ApierItem {
     constructor(comment, name, value) {
         super(comment, name, value);
-        this.model = value.map((v, i) => this.createJSONKind(comment, String(i), v[i]));
+        this.model = value.map((v, i) => this.createJSONKind(this.comment, String(i), v[i]));
     }
 }
 exports.ApierArray = ApierArray;
@@ -99,8 +99,8 @@ class ApierObject extends ApierItem {
     constructor(comment, name, value) {
         super(comment, name, value);
         this.model = Object.keys(value).reduce((model, key) => {
-            model[key] = this.createJSONKind(comment, key, value[key]);
-            return model[key];
+            model[key] = this.createJSONKind(this.comment, key, value[key]);
+            return model;
         }, {});
     }
 }
@@ -122,12 +122,23 @@ exports.ParserError = ParserError;
 class Apier extends ApierItem {
     constructor(comment, value) {
         super(comment, value.name, value);
+        this.method = value.method;
+        this.url = value.url;
         const model = {};
         if (value.req)
-            model.req = new ApierReq(comment, 'req', value.req);
-        model.res = new ApierRes(comment, 'res', value.res);
+            model.req = new ApierReq(this.comment, 'req', value.req);
+        model.res = new ApierRes(this.comment, 'res', value.res);
         this.model = model;
     }
 }
 exports.Apier = Apier;
+function parse(input, parser) {
+    const result = [];
+    const { apis, comment } = parser.parse(input);
+    for (const name in apis) {
+        result.push(new Apier(comment, apis[name]));
+    }
+    return result;
+}
+exports.parse = parse;
 //# sourceMappingURL=index.js.map

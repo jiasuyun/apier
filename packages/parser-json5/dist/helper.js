@@ -6,8 +6,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const JSON5 = __importStar(require("json5"));
+const extract_comments_1 = __importDefault(require("extract-comments"));
 var LineKind;
 (function (LineKind) {
     // 行类型： 进入数组, `foo: [`
@@ -21,32 +25,35 @@ var LineKind;
     // 行类型:  空, ` `, `// ...` 或其他无法识别行
     LineKind["EMPTY"] = "empty";
 })(LineKind = exports.LineKind || (exports.LineKind = {}));
-// 正则： 判定进入数组
-const RG_ENTER_ARRAY = /^\s*['"]?([a-zA-Z0-9_\-])+['"]?\s*:\s*\[\s*(\/\/.*)?$/g;
-// 正则： 判定进入对象 
-const RG_ENTER_OBJECT = /^\s*['"]?([a-zA-Z0-9_\-])+['"]?\s*:\s*\{\s*(\/\/.*)?$/g;
-;
-// 正则： 判定KV 
-const RE_KV = /^\s*['"]?([a-zA-Z0-9_\-])+['"]?\s*:\s*\S+/g;
+// 正则： 判定 `key:` `"key":` `'key':` `'key' :`
+const RE_KEY = /^("[^"]+"|'[^']+'|[^\s:]+)\s*:/;
+// 正则: 判定进入数组
+const RE_ENTER_ARRAY = /\[\s*(\/\/.*)?$/;
+// 正则: 判定进入对象
+const RE_ENTER_OBJECT = /{\s*(\/\/.*)?$/;
 /**
  * 获取行值
  */
 function valueOfLine(line) {
-    if (RG_ENTER_ARRAY.test(line)) {
-        return { key: keyOfLine(line, RG_ENTER_ARRAY), kind: LineKind.ARRAY };
-    }
-    if (RG_ENTER_OBJECT.test(line)) {
-        return { key: keyOfLine(line, RG_ENTER_OBJECT), kind: LineKind.OBJECT };
-    }
-    const error = () => new Error(`can not get value of line: ${line}`);
-    if (RE_KV.test(line)) {
+    line = line.trim();
+    const error = () => new Error(`bad line: ${line}`);
+    let matched = RE_KEY.exec(line);
+    if (matched) {
+        const key = matched[1].replace(/(^"|^'|"$|'$)/g, '');
+        const tail = line.slice(matched[0].length).trim();
+        if (RE_ENTER_ARRAY.test(tail)) {
+            return { key, kind: LineKind.ARRAY };
+        }
+        if (RE_ENTER_OBJECT.test(tail)) {
+            return { key, kind: LineKind.OBJECT };
+        }
         try {
             JSON5.parse(`{${line.replace(/\/\/.*$/g, '')}}`); // 检查行合法
         }
         catch (err) {
             throw error();
         }
-        return { key: keyOfLine(line, RE_KV), kind: LineKind.KV };
+        return { key, kind: LineKind.KV };
     }
     const text = line // 移除空白和注释
         .replace(/\/\/.*$/g, '')
@@ -70,12 +77,6 @@ function valueOfLine(line) {
     }
 }
 exports.valueOfLine = valueOfLine;
-function keyOfLine(line, rg) {
-    const matched = line.match(rg);
-    if (!matched)
-        return '';
-    return matched[1];
-}
 // 判断根 `{`
 const RE_ROOT_CURLY_BRACE = /^\s*{/;
 /**
@@ -89,4 +90,33 @@ function beignLineNum(lines) {
     return -1;
 }
 exports.beignLineNum = beignLineNum;
+/**
+ * 提取注释部分
+ */
+function getLineComment(line) {
+    const lineValue = valueOfLine(line);
+    let patchLine = line;
+    switch (lineValue.kind) {
+        case LineKind.ARRAY:
+            patchLine = line + '\n]';
+            break;
+        case LineKind.OBJECT:
+            patchLine = line + '\n}';
+            break;
+        case LineKind.KV:
+            patchLine = `{\n` + line + '\n}';
+            break;
+        case LineKind.EXIT:
+        case LineKind.EMPTY:
+            return '';
+    }
+    try {
+        return extract_comments_1.default(patchLine)
+            .filter(c => c.type === 'LineComment')
+            .map(c => c.value)[0];
+    }
+    catch (err) { }
+    return '';
+}
+exports.getLineComment = getLineComment;
 //# sourceMappingURL=helper.js.map

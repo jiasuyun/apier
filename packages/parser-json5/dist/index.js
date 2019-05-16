@@ -14,9 +14,9 @@ const apier = __importStar(require("@dee-contrib/apier"));
 const apier_comment_1 = require("@dee-contrib/apier-comment");
 const apier_utils_1 = require("@dee-contrib/apier-utils");
 const JSON5 = __importStar(require("json5"));
-const helper_1 = require("./helper");
-const lset = __importStar(require("lodash.set"));
 const Visitor_1 = __importDefault(require("./Visitor"));
+const helper_1 = require("./helper");
+const set_1 = __importDefault(require("lodash/set"));
 // 解析 Route
 const RE_ROUTE = /^(get|post|put|delete)\s[:\/A-Za-z0-9_\-]+/i;
 class Parser {
@@ -32,7 +32,8 @@ class Parser {
         for (const name in parsedObj) {
             apis[name] = this.parseApi(name, parsedObj[name]);
         }
-        return { apis, comment: this.parseComment(input) };
+        const comment = this.parseComment(input);
+        return { apis, comment };
     }
     parseApi(name, data) {
         if (apier_utils_1.kindOf(data) !== apier_utils_1.ApierKind.OBJECT) {
@@ -102,7 +103,7 @@ class Parser {
                 throw new apier.ParserError([api.name, ...paths, key], `must be scalar value`);
             }
         }
-        lset(api, paths, obj);
+        set_1.default(api, paths, obj);
     }
     parseResStatus(api, status = 200) {
         if (typeof status !== "number" && (status < 100 && status >= 600)) {
@@ -111,7 +112,8 @@ class Parser {
         api.res.status = status;
     }
     parseBody(api, paths, body) {
-        lset(api, paths, body);
+        set_1.default(api, paths, body);
     }
 }
+exports.default = Parser;
 //# sourceMappingURL=index.js.map

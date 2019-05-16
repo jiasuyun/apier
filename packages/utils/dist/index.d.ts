@@ -8,3 +8,4 @@ export declare enum ApierKind {
     OBJECT = "object",
     NULL = "null"
 }
+export declare function colonToCurlybrace(url: string): string;

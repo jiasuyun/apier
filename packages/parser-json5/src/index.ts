@@ -2,14 +2,14 @@ import * as apier from '@dee-contrib/apier';
 import { ApierComment } from '@dee-contrib/apier-comment';
 import { ApierKind, kindOf } from '@dee-contrib/apier-utils';
 import * as JSON5 from 'json5';
-import { beignLineNum } from './helper';
-import * as lset from 'lodash.set';
 import Visitor from './Visitor';
+import { beignLineNum } from './helper';
+import lset from 'lodash/set';
 
 // 解析 Route
 const RE_ROUTE = /^(get|post|put|delete)\s[:\/A-Za-z0-9_\-]+/i;
 
-class Parser implements apier.Parser {
+export default class Parser implements apier.Parser {
   public parse(input: string): apier.ParseResult {
     let parsedObj: any;
     try {
@@ -21,7 +21,8 @@ class Parser implements apier.Parser {
     for (const name in parsedObj) {
       apis[name] = this.parseApi(name, parsedObj[name]);
     }
-    return { apis, comment: this.parseComment(input) };
+    const comment = this.parseComment(input)
+    return { apis, comment };
   }
   private parseApi(name: string, data: any): apier.ApierRaw {
     if (kindOf(data) !== ApierKind.OBJECT) {
@@ -82,7 +83,7 @@ class Parser implements apier.Parser {
     }
     for (const key in obj) {
       const value = obj[key];
-      const valueKind  = kindOf(value);
+      const valueKind = kindOf(value);
       if (valueKind === ApierKind.ARRAY || valueKind === ApierKind.OBJECT) {
         throw new apier.ParserError([api.name, ...paths, key], `must be scalar value`);
       }

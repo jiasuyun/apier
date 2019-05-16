@@ -1,7 +1,8 @@
-import * as  extract from 'babel-extract-comments';
+import omit from "lodash/omit";
+import pick from "lodash/pick";
 
 // 注释键值, `optional`, `type=integer`, `description="split with ws"`
-const RG_COMMENT_VALUE = /([A-Za-z_\-]+)(\=("[^"]*"|'[^']*'|[^"'\s]+))?/;
+const RG_COMMENT_VALUE = /([A-Za-z_\-]+)(\=("[^"]*"|'[^']*'|[^\s]+))?/g;
 
 export interface CommentObject {
   [k: string]: any;
@@ -12,21 +13,32 @@ export interface CommentItem {
 }
 
 export class ApierComment {
-  private comments: CommentItem[];
+  public readonly comments: CommentItem[];
   constructor(comments = []) {
     this.comments = comments;
+  }
+  public append(paths: string[], commentText: string) {
+    const comment = this.parse(commentText);
+    if (comment) this.comments.push({ paths, comment });
+  }
+  public scope(paths: string[]) {
+    const comments = this
+      .comments
+      .filter(c => isPrefixArray(paths, c.paths))
+      .map(c => ({ paths: c.paths.slice(paths.length), comment: c.comment }))
+    return new ApierComment(comments);
+  }
+  public retrive(paths: string[] = []): CommentUtil {
+    const commentItem = this.comments.find(c => isPrefixArray(paths, c.paths))
+    return new CommentUtil(commentItem ? commentItem.comment : {});
   }
   /**
    * 获取行注释
    * 
-   * `...// optional type=integer format=int32` => { optional: true, type: integer, format: int32 }
+   * `optional type=integer format=int32` => { optional: true, type: integer, format: int32 }
    */
-  public static commentOfLine(line): { [k: string]: any } {
-    let result = {}
-    const commentText = extract(line)
-      .filter(c => c.type === 'CommentLine')
-      .map(c => line.slice(c.start + 2, c.end).trim())[0];
-    if (!commentText) return result;
+  private parse(commentText: string): { [k: string]: any } {
+    const result = {}
     let matched;
     while (matched = RG_COMMENT_VALUE.exec(commentText)) {
       const key = matched[1];
@@ -42,21 +54,25 @@ export class ApierComment {
     }
     return result;
   }
-  public append(paths: string[], line: string) {
-    const comment = ApierComment.commentOfLine(line);
-    if (comment) this.comments.push({ paths, comment });
+}
+
+export class CommentUtil {
+  private readonly comment: CommentObject;
+  constructor(comment: CommentObject) {
+    this.comment = comment;
   }
-  public scope(paths) {
-    const comments = this
-      .comments
-      .filter(c => isPrefixArray(paths, c.paths))
-      .map(c => ({ paths: c.paths.slice(paths.length), comment: c.comment }))
-    return new ApierComment(comments);
+  omit(keys: string[]) {
+    return omit(this.comment, keys);
   }
-  public retrive(paths): CommentObject {
-    const commentItem = this.comments.find(c => isPrefixArray(paths, c.paths))
-    if (!commentItem) return {};
-    return commentItem.comment;
+  pick(keys: string[]) {
+    return pick(this.comment, keys);
+  }
+  val(key?: string, defaultValue?: any) {
+    if (key === undefined) return {...this.comment};
+    if (this.comment.hasOwnProperty(key)) {
+      return this.comment[key];
+    }
+    return defaultValue;
   }
 }
 
