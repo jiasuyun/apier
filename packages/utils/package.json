@@ -17,11 +17,11 @@
   },
   "keywords": [],
   "author": "Sigoden Huang <sigoden@gmail.com> (https://sigoden.com/)",
-  "homepage": "https://g.sigoden.com/backend/apier",
+  "homepage": "https://github.com/jiasuyun/apier",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://g.sigoden.com/backend/apier"
+    "url": "git+https://github.com/jiasuyun/apier"
   },
   "dependencies": {}
 }
