@@ -6,9 +6,7 @@ import { ApierComment } from "@jiasuyun/apier-comment";
 
 test("Apier", () => {
   const api = getApier();
-  const comment = new ApierComment(loadFixtureJSON("general.comments")).scope([
-    "getModel"
-  ]);
+  const comment = new ApierComment(loadFixtureJSON("general.comments")).scope(["getModel"]);
   expect(api).toBeInstanceOf(apier.Apier);
   expect(api.name).toEqual("getModel");
   expect(api.kind()).toEqual(ApierKind.OBJECT);
@@ -44,33 +42,25 @@ test("ApierReq {headers, params, query, body}", () => {
   expect(headers.name).toEqual("headers");
   expect(headers.kind()).toEqual(ApierKind.OBJECT);
   expect(headers.value).toEqual(api.value.req.headers);
-  expect(headers.comment.comments).toEqual(
-    api.comment.scope(["req", "headers"]).comments
-  );
+  expect(headers.comment.comments).toEqual(api.comment.scope(["req", "headers"]).comments);
   expect(headers.model["X-ORG-ID"]).toBeInstanceOf(apier.ApierInteger);
   expect(params).toBeInstanceOf(apier.ApierObject);
   expect(params.name).toEqual("params");
   expect(params.kind()).toEqual(ApierKind.OBJECT);
   expect(params.value).toEqual(api.value.req.params);
-  expect(params.comment.comments).toEqual(
-    api.comment.scope(["req", "params"]).comments
-  );
+  expect(params.comment.comments).toEqual(api.comment.scope(["req", "params"]).comments);
   expect(params.model["id"]).toBeInstanceOf(apier.ApierInteger);
   expect(query).toBeInstanceOf(apier.ApierObject);
   expect(query.name).toEqual("query");
   expect(query.kind()).toEqual(ApierKind.OBJECT);
   expect(query.value).toEqual(api.value.req.query);
-  expect(query.comment.comments).toEqual(
-    api.comment.scope(["req", "query"]).comments
-  );
+  expect(query.comment.comments).toEqual(api.comment.scope(["req", "query"]).comments);
   expect(query.model["pageSize"]).toBeInstanceOf(apier.ApierInteger);
   expect(body).toBeInstanceOf(apier.ApierObject);
   expect(body.name).toEqual("body");
   expect(body.kind()).toEqual(ApierKind.OBJECT);
   expect(body.value).toEqual(api.value.req.body);
-  expect(body.comment.comments).toEqual(
-    api.comment.scope(["req", "body"]).comments
-  );
+  expect(body.comment.comments).toEqual(api.comment.scope(["req", "body"]).comments);
   expect(body.model["number"]).toBeInstanceOf(apier.ApierNumber);
 });
 
@@ -82,9 +72,7 @@ test("ApierRes {status, body}", () => {
   expect(body.name).toEqual("body");
   expect(body.kind()).toEqual(ApierKind.OBJECT);
   expect(body.value).toEqual(api.value.res.body);
-  expect(body.comment.comments).toEqual(
-    api.comment.scope(["res", "body"]).comments
-  );
+  expect(body.comment.comments).toEqual(api.comment.scope(["res", "body"]).comments);
   expect(body.model["number"]).toBeInstanceOf(apier.ApierNumber);
 });
 
@@ -124,8 +112,7 @@ test("ApierInteger", () => {
 test("ApierString", () => {
   const api = getApier();
   const key = "password";
-  const item: apier.ApierString =
-    api.model.res.model.body.model["object"].model[key];
+  const item: apier.ApierString = api.model.res.model.body.model["object"].model[key];
   expect(item).toBeInstanceOf(apier.ApierString);
   expect(item.name).toEqual(key);
   expect(item.value).toEqual(api.value.res.body["object"][key]);

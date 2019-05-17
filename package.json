@@ -15,6 +15,9 @@
     "url": "https://g.sigoden.com/jiasuyun/apier.git"
   },
   "keywords": [],
+  "prettier": {
+    "printWidth": 120
+  },
   "author": "",
   "license": "ISC",
   "devDependencies": {

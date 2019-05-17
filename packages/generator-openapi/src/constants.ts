@@ -24,17 +24,5 @@ export const SCHEMA_KEYS = [
   "minProperties",
   "enum"
 ];
-export const OPERATION_KEYS = [
-  "tags",
-  "description",
-  "deperacated",
-  "security",
-  "servers"
-];
-export const PARAMETER_KEYS = [
-  "name",
-  "in",
-  "description",
-  "deprecated",
-  "allowEmptyValue"
-];
+export const OPERATION_KEYS = ["tags", "description", "deperacated", "security", "servers"];
+export const PARAMETER_KEYS = ["name", "in", "description", "deprecated", "allowEmptyValue"];

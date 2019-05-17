@@ -1,11 +1,4 @@
-import {
-  ApierRaw,
-  ApierRawObject,
-  ApierRawReq,
-  ApierRawRes,
-  Method,
-  Parser
-} from "@jiasuyun/apier-parser-base";
+import { ApierRaw, ApierRawObject, ApierRawReq, ApierRawRes, Method, Parser } from "@jiasuyun/apier-parser-base";
 import { ApierKind, kindOf } from "@jiasuyun/apier-utils";
 import { ApierComment } from "@jiasuyun/apier-comment";
 
@@ -22,11 +15,7 @@ export abstract class ApierItem {
   public kind(): ApierKind {
     return kindOf(this.value);
   }
-  protected createJSONKind(
-    comment: ApierComment,
-    name: string,
-    value: any
-  ): ApierJSONKind {
+  protected createJSONKind(comment: ApierComment, name: string, value: any): ApierJSONKind {
     switch (kindOf(value)) {
       case ApierKind.INTEGER:
         return new ApierInteger(comment, name, value);
@@ -49,12 +38,7 @@ export abstract class ApierItem {
 }
 
 export type ApierJSONKind = ApierArray | ApierObject | ApierParameter;
-export type ApierParameter =
-  | ApierInteger
-  | ApierString
-  | ApierBoolean
-  | ApierNull
-  | ApierNumber;
+export type ApierParameter = ApierInteger | ApierString | ApierBoolean | ApierNull | ApierNumber;
 export interface ApierReqModel {
   params?: ApierObject;
   query?: ApierObject;
@@ -128,9 +112,7 @@ export class ApierArray extends ApierItem {
   public readonly value: any[];
   constructor(comment: ApierComment, name: string, value: any[]) {
     super(comment, name, value);
-    this.model = value.map((v, i) =>
-      this.createJSONKind(this.comment, String(i), v)
-    );
+    this.model = value.map((v, i) => this.createJSONKind(this.comment, String(i), v));
   }
 }
 export interface ApierObjectModel {

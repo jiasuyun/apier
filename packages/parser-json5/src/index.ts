@@ -85,10 +85,7 @@ export default class Parser implements apier.Parser {
       const value = obj[key];
       const valueKind = kindOf(value);
       if (valueKind === ApierKind.ARRAY || valueKind === ApierKind.OBJECT) {
-        throw new apier.StructParserError(
-          [api.name, ...paths, key],
-          `must be scalar value`
-        );
+        throw new apier.StructParserError([api.name, ...paths, key], `must be scalar value`);
       }
     }
     lset(api, paths, obj);

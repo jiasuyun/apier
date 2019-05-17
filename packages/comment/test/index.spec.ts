@@ -9,10 +9,7 @@ describe("ApierComment", () => {
       type: "integer",
       description: "a b =c"
     });
-    comment.append(
-      ["a"],
-      'bool=true num=3.2 int=4 str=abc nil=null arr=[3] obj={"k":3}'
-    );
+    comment.append(["a"], 'bool=true num=3.2 int=4 str=abc nil=null arr=[3] obj={"k":3}');
     const commentUtil2 = comment.retrive(["a"]);
     expect(commentUtil2.val()).toEqual({
       bool: true,
@@ -55,10 +52,7 @@ describe("CommentUtil", () => {
   });
   it("omit & pick", () => {
     const comment = new ApierComment();
-    comment.append(
-      [],
-      'bool=true num=3.2 int=4 str=abc nil=null arr=[3] obj={"k":3}'
-    );
+    comment.append([], 'bool=true num=3.2 int=4 str=abc nil=null arr=[3] obj={"k":3}');
     const commentUtil = comment.retrive();
     expect(commentUtil.omit(["bool", "num"])).toEqual({
       int: 4,

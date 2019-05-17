@@ -74,9 +74,7 @@ export default class Visitor {
   exitScope(lineIndex) {
     const visitor = this.parent;
     if (!this.parent) return;
-    return visitor.lineValue.kind === LineKind.ARRAY
-      ? visitor.scopeArray(lineIndex)
-      : visitor.scopeObject(lineIndex);
+    return visitor.lineValue.kind === LineKind.ARRAY ? visitor.scopeArray(lineIndex) : visitor.scopeObject(lineIndex);
   }
 
   collectComment(paths, line) {

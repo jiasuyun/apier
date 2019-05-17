@@ -28,9 +28,7 @@ export class ApierComment {
     return new ApierComment(comments);
   }
   public retrive(paths: string[] = []): CommentUtil {
-    const commentItem = this.comments.find(
-      c => paths.length === c.paths.length && isPrefixArray(paths, c.paths)
-    );
+    const commentItem = this.comments.find(c => paths.length === c.paths.length && isPrefixArray(paths, c.paths));
     return new CommentUtil(commentItem ? commentItem.comment : {});
   }
   /**
