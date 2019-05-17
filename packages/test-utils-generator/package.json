@@ -1,6 +1,6 @@
 {
   "name": "@jiasuyun/apier-test-utils-generator",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "apier test utils for generator",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -24,8 +24,8 @@
     "url": "git+https://github.com/jiasuyun/apier"
   },
   "dependencies": {
-    "@jiasuyun/apier": "^0.1.4",
-    "@jiasuyun/apier-parser-json5": "^0.1.4",
+    "@jiasuyun/apier": "^0.1.5",
+    "@jiasuyun/apier-parser-json5": "^0.1.5",
     "@jiasuyun/apier-test-utils": "^0.1.0"
   }
 }
