@@ -20,7 +20,7 @@ if (!isAllRight) {
 }
 
 function lint(pkgFolder) {
-  const cmd = `npx eslint --ext .ts --fix .`;
+  const cmd = `npx eslint --ext .ts --fix --ignore-pattern dist .`;
   const pkgName = path.basename(pkgFolder);
   process.stdout.write(`Linting ${pkgName}\n`);
   try {
