@@ -20,7 +20,7 @@ class App extends Component {
       code: '',
       error: '',
       errorToastId: null,
-      errorLineIndex: 0,
+      errorLineIndex: -1,
       handlersText: '',
       httesText: '',
       openapisText: '',
@@ -31,23 +31,23 @@ class App extends Component {
       toastManager.remove(this.state.errorToastId);
     }
     let result;
-    let errorLineIndex = -1;
     try {
       result = parse(this.state.code);
     } catch (err) {
+      let errorLineIndex = -1;
       if (err.lineNumber) {
         errorLineIndex = err.lineNumber - 1;
       }
       toastManager.add(
         err.message,
         { appearance: 'error', autoDismiss: false },
-        errorToastId => this.setState({ errorToastId })
+        errorToastId => this.setState({ errorToastId, errorLineIndex })
       );
       return;
     }
     this.setState({
       error: '',
-      errorLineIndex,
+      errorLineIndex: -1,
       ...result,
     })
   }

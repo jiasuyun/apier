@@ -44,7 +44,7 @@ export class ContentParserError extends Error {
   public readonly columnNumber: number;
   public readonly underlayError: Error;
   constructor(lineNumber: number, columnNumber: number, err: Error) {
-    super(`Parser: invalid content at ${lineNumber}:{columnNumber}`);
+    super(`Parser: invalid content at ${lineNumber}:${columnNumber}`);
     this.columnNumber = columnNumber;
     this.lineNumber = lineNumber;
     this.underlayError = err;
