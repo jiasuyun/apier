@@ -1,6 +1,6 @@
 {
   "name": "@jiasuyun/apier-comment",
-  "version": "0.1.0",
+  "version": "0.1.7",
   "description": "apier comment",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
