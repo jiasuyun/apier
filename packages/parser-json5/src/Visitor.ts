@@ -1,5 +1,6 @@
 import { valueOfLine, LineKind, LineValue, getLineComment } from "./helper";
 import { ApierComment } from "@jiasuyun/apier-comment";
+import { CommentParserError } from "@jiasuyun/apier-parser-base";
 
 export default class Visitor {
   private lines: string[];
@@ -16,7 +17,7 @@ export default class Visitor {
     this.lineValue = { kind: LineKind.OBJECT };
   }
   error(line: string, lineIndex: number) {
-    return new Error(`Line ${lineIndex}: ${line}`);
+    return new CommentParserError(lineIndex, line);
   }
   scopeArray(lineIndex: number) {
     let lineValue: LineValue;

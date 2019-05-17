@@ -30,7 +30,7 @@ const RE_ENTER_OBJECT = /{\s*(\/\/.*)?$/;
  */
 export function valueOfLine(line: string): LineValue {
   line = line.trim();
-  const error = () => new Error(`bad line: ${line}`);
+  const error = () => new Error(`invalid line at ${line}`);
   let matched = RE_KEY.exec(line);
   if (matched) {
     const key = matched[1].replace(/(^"|^'|"$|'$)/g, "");

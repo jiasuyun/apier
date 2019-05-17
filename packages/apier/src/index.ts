@@ -43,7 +43,7 @@ export abstract class ApierItem {
       case ApierKind.OBJECT:
         return new ApierObject(comment, name, value);
       default:
-        throw new Error("unreachable");
+        throw new Error("unexpect undefined value");
     }
   }
 }

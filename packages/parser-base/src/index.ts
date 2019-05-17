@@ -39,11 +39,21 @@ export interface Parser {
   parse(input: string): ParseResult;
 }
 
-export class ParserError extends Error {
+export class DataParserError extends Error {
   public readonly paths: string[];
   constructor(paths: string[], message: string) {
-    super(message);
+    super(`Parser: ${paths.join(".")} ${message}`);
     this.paths = paths;
+  }
+}
+
+export class CommentParserError extends Error {
+  public readonly lineNumber: number;
+  public readonly line: string;
+  constructor(lineNumber: number, line: string, message = "invalid line") {
+    super(`Parser: ${message} at ${lineNumber}`);
+    this.line = line;
+    this.lineNumber = lineNumber;
   }
 }
 
