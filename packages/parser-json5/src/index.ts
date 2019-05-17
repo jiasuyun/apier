@@ -15,7 +15,7 @@ export default class Parser implements apier.Parser {
     try {
       parsedObj = JSON5.parse(input);
     } catch (err) {
-      throw new apier.DataParserError([], err.message);
+      throw new apier.ContentParserError(err.lineNumber, err.columnNumber, err);
     }
     const apis = {};
     for (const name in parsedObj) {
@@ -26,7 +26,7 @@ export default class Parser implements apier.Parser {
   }
   private parseApi(name: string, data: any): apier.ApierRaw {
     if (kindOf(data) !== ApierKind.OBJECT) {
-      throw new apier.DataParserError([name], "should be object");
+      throw new apier.StructParserError([name], "should be object");
     }
     let api: any = { name };
     const { route, req, res } = data;
@@ -44,7 +44,7 @@ export default class Parser implements apier.Parser {
   }
   private parseRoute(api: apier.ApierRaw, route: string) {
     if (!RE_ROUTE.test(route)) {
-      throw new apier.DataParserError([api.name, "route"], route);
+      throw new apier.StructParserError([api.name, "route"], route);
     }
     const [method, url] = route.split(" ");
     api.method = method.toLowerCase() as apier.Method;
@@ -54,7 +54,7 @@ export default class Parser implements apier.Parser {
   private parseReq(api: apier.ApierRaw, req) {
     if (req === undefined) return;
     if (kindOf(req) !== ApierKind.OBJECT) {
-      throw new apier.DataParserError([api.name, "req"], "must be object");
+      throw new apier.StructParserError([api.name, "req"], "must be object");
     }
     const { headers, params, query, body } = req;
     api.req = {};
@@ -70,7 +70,7 @@ export default class Parser implements apier.Parser {
       return;
     }
     if (kindOf(res) !== ApierKind.OBJECT) {
-      throw new apier.DataParserError([api.name, "res"], "must be object");
+      throw new apier.StructParserError([api.name, "res"], "must be object");
     }
     const { status, body } = res;
     if (status) this.parseResStatus(api, status);
@@ -79,13 +79,13 @@ export default class Parser implements apier.Parser {
 
   private parseParameters(api, paths, obj) {
     if (typeof obj !== "object") {
-      throw new apier.DataParserError([api.name, ...paths], `must be object`);
+      throw new apier.StructParserError([api.name, ...paths], `must be object`);
     }
     for (const key in obj) {
       const value = obj[key];
       const valueKind = kindOf(value);
       if (valueKind === ApierKind.ARRAY || valueKind === ApierKind.OBJECT) {
-        throw new apier.DataParserError(
+        throw new apier.StructParserError(
           [api.name, ...paths, key],
           `must be scalar value`
         );
@@ -96,7 +96,7 @@ export default class Parser implements apier.Parser {
 
   private parseResStatus(api, status = 200) {
     if (typeof status !== "number" && (status < 100 && status >= 600)) {
-      throw new apier.DataParserError([name, "res", "status"], `{status}`);
+      throw new apier.StructParserError([name, "res", "status"], `{status}`);
     }
     api.res.status = status;
   }

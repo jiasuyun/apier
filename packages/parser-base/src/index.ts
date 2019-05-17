@@ -39,7 +39,19 @@ export interface Parser {
   parse(input: string): ParseResult;
 }
 
-export class DataParserError extends Error {
+export class ContentParserError extends Error {
+  public readonly lineNumber: number;
+  public readonly columnNumber: number;
+  public readonly underlayError: Error;
+  constructor(lineNumber: number, columnNumber: number, err: Error) {
+    super(`Parser: invalid content at ${lineNumber}:{columnNumber}`);
+    this.columnNumber = columnNumber;
+    this.lineNumber = lineNumber;
+    this.underlayError = err;
+  }
+}
+
+export class StructParserError extends Error {
   public readonly paths: string[];
   constructor(paths: string[], message: string) {
     super(`Parser: ${paths.join(".")} ${message}`);

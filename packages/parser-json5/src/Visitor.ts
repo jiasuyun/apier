@@ -17,7 +17,7 @@ export default class Visitor {
     this.lineValue = { kind: LineKind.OBJECT };
   }
   error(line: string, lineIndex: number) {
-    return new CommentParserError(lineIndex, line);
+    return new CommentParserError(lineIndex + 1, line);
   }
   scopeArray(lineIndex: number) {
     let lineValue: LineValue;

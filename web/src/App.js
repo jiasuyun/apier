@@ -20,6 +20,7 @@ class App extends Component {
       code: '',
       error: '',
       errorToastId: null,
+      errorLineIndex: 0,
       handlersText: '',
       httesText: '',
       openapisText: '',
@@ -30,9 +31,13 @@ class App extends Component {
       toastManager.remove(this.state.errorToastId);
     }
     let result;
+    let errorLineIndex = -1;
     try {
       result = parse(this.state.code);
     } catch (err) {
+      if (err.lineNumber) {
+        errorLineIndex = err.lineNumber - 1;
+      }
       toastManager.add(
         err.message,
         { appearance: 'error', autoDismiss: false },
@@ -42,6 +47,7 @@ class App extends Component {
     }
     this.setState({
       error: '',
+      errorLineIndex,
       ...result,
     })
   }
@@ -105,7 +111,12 @@ class App extends Component {
                 <Editor
                   value={this.state.code}
                   onValueChange={code => this.setState({ code })}
-                  highlight={code => highlight(code, languages.js)}
+                  highlight={code =>
+                    highlight(code, languages.js)
+                      .split('\n')
+                      .map((line, index) => `<span class="${index === this.state.errorLineIndex ? 'line line-error' : 'line'}">${line}</span>`)
+                      .join('\n')
+                  }
                   padding={10}
                   style={{
                     fontFamily: '"Fira code", "Fira Mono", monospace',
