@@ -19,17 +19,25 @@ class App extends Component {
     this.state = {
       code: '',
       error: '',
+      errorToastId: null,
       handlersText: '',
       httesText: '',
       openapisText: '',
     };
   }
-  handlerGenBtnClick = (add) => {
+  handlerGenBtnClick = toastManager => {
+    if (this.state.errorToastId) {
+      toastManager.remove(this.state.errorToastId);
+    }
     let result;
     try {
       result = parse(this.state.code);
     } catch (err) {
-      add(err.message, { appearance: 'error', autoDismiss: false })
+      toastManager.add(
+        err.message,
+        { appearance: 'error', autoDismiss: false },
+        errorToastId => this.setState({ errorToastId })
+      );
       return;
     }
     this.setState({
@@ -88,8 +96,8 @@ class App extends Component {
                   </Col>
                   <Col sm="auto" style={{ marginLeft: 'auto' }}>
                     <ToastConsumer>
-                      {({ add }) => (
-                        <Button variant="outline-primary" disabled={!this.state.code} onClick={() => this.handlerGenBtnClick(add)}>生成</Button>
+                      {toastManager => (
+                        <Button variant="outline-primary" disabled={!this.state.code} onClick={() => this.handlerGenBtnClick(toastManager)}>生成</Button>
                       )}
                     </ToastConsumer>
                   </Col>
