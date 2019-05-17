@@ -56,6 +56,74 @@ Object {
         ],
         "type": "object",
       },
+      "GetModelResponse": Object {
+        "properties": Object {
+          "array": Object {
+            "items": Object {
+              "anyOf": Array [
+                Object {
+                  "properties": Object {
+                    "foo": Object {
+                      "type": "integer",
+                    },
+                  },
+                  "required": Array [
+                    "foo",
+                  ],
+                  "type": "object",
+                },
+                Object {
+                  "properties": Object {
+                    "bar": Object {
+                      "type": "integer",
+                    },
+                  },
+                  "required": Array [
+                    "bar",
+                  ],
+                  "type": "object",
+                },
+              ],
+            },
+            "type": "array",
+          },
+          "bool": Object {
+            "type": "boolean",
+          },
+          "integer": Object {
+            "format": "int64",
+            "type": "integer",
+          },
+          "null": Object {
+            "type": "null",
+          },
+          "number": Object {
+            "format": "float",
+            "type": "number",
+          },
+          "object": Object {
+            "properties": Object {
+              "password": Object {
+                "minLength": 6,
+                "type": "string",
+              },
+            },
+            "required": Array [
+              "password",
+            ],
+            "type": "object",
+          },
+        },
+        "required": Array [
+          "integer",
+          "number",
+          "bool",
+          "null",
+          "array",
+          "object",
+        ],
+        "type": "object",
+      },
     },
   },
   "paths": Object {
@@ -114,72 +182,7 @@ Object {
             "content": Object {
               "application/json": Object {
                 "schema": Object {
-                  "properties": Object {
-                    "array": Object {
-                      "items": Object {
-                        "anyOf": Array [
-                          Object {
-                            "properties": Object {
-                              "foo": Object {
-                                "type": "integer",
-                              },
-                            },
-                            "required": Array [
-                              "foo",
-                            ],
-                            "type": "object",
-                          },
-                          Object {
-                            "properties": Object {
-                              "bar": Object {
-                                "type": "integer",
-                              },
-                            },
-                            "required": Array [
-                              "bar",
-                            ],
-                            "type": "object",
-                          },
-                        ],
-                      },
-                      "type": "array",
-                    },
-                    "bool": Object {
-                      "type": "boolean",
-                    },
-                    "integer": Object {
-                      "format": "int64",
-                      "type": "integer",
-                    },
-                    "null": Object {
-                      "type": "null",
-                    },
-                    "number": Object {
-                      "format": "float",
-                      "type": "number",
-                    },
-                    "object": Object {
-                      "properties": Object {
-                        "password": Object {
-                          "minLength": 6,
-                          "type": "string",
-                        },
-                      },
-                      "required": Array [
-                        "password",
-                      ],
-                      "type": "object",
-                    },
-                  },
-                  "required": Array [
-                    "integer",
-                    "number",
-                    "bool",
-                    "null",
-                    "array",
-                    "object",
-                  ],
-                  "type": "object",
+                  "$ref": "#/components/schemas/GetModelResponse",
                 },
               },
             },
@@ -198,7 +201,125 @@ Object {
   "components": Object {
     "schemas": Object {
       "TestArrayRequest": Object {
-        "type": "object ",
+        "properties": Object {
+          "array1": Object {
+            "items": Object {
+              "anyOf": Array [
+                Object {
+                  "properties": Object {
+                    "id": Object {
+                      "type": "integer",
+                    },
+                    "k1": Object {
+                      "type": "integer",
+                    },
+                  },
+                  "required": Array [
+                    "id",
+                    "k1",
+                  ],
+                  "type": "object",
+                },
+                Object {
+                  "properties": Object {
+                    "id": Object {
+                      "type": "integer",
+                    },
+                    "k2": Object {
+                      "type": "integer",
+                    },
+                  },
+                  "required": Array [
+                    "id",
+                    "k2",
+                  ],
+                  "type": "object",
+                },
+              ],
+            },
+            "type": "array",
+          },
+          "array2": Object {
+            "items": Object {
+              "anyOf": Array [
+                Object {
+                  "properties": Object {
+                    "id": Object {
+                      "type": "integer",
+                    },
+                    "k1": Object {
+                      "type": "integer",
+                    },
+                  },
+                  "required": Array [
+                    "id",
+                    "k1",
+                  ],
+                  "type": "object",
+                },
+                Object {
+                  "properties": Object {
+                    "id": Object {
+                      "type": "integer",
+                    },
+                    "k2": Object {
+                      "type": "integer",
+                    },
+                  },
+                  "required": Array [
+                    "id",
+                    "k2",
+                  ],
+                  "type": "object",
+                },
+              ],
+            },
+            "type": "array",
+          },
+          "array3": Object {
+            "items": Object {
+              "properties": Object {
+                "id": Object {
+                  "type": "integer",
+                },
+                "k1": Object {
+                  "type": "integer",
+                },
+              },
+              "required": Array [
+                "id",
+                "k1",
+              ],
+              "type": "object",
+            },
+            "type": "array",
+          },
+          "array4": Object {
+            "items": Object {},
+            "properties": Object {
+              "id": Object {
+                "type": "integer",
+              },
+              "k1": Object {
+                "type": "integer",
+              },
+              "k2": Object {
+                "type": "integer",
+              },
+            },
+            "required": Array [
+              "id",
+            ],
+            "type": "object",
+          },
+        },
+        "required": Array [
+          "array1",
+          "array2",
+          "array3",
+          "array4",
+        ],
+        "type": "object",
       },
     },
   },
@@ -210,125 +331,7 @@ Object {
           "content": Object {
             "application/json": Object {
               "schema": Object {
-                "properties": Object {
-                  "array1": Object {
-                    "items": Object {
-                      "anyOf": Array [
-                        Object {
-                          "properties": Object {
-                            "id": Object {
-                              "type": "integer",
-                            },
-                            "k1": Object {
-                              "type": "integer",
-                            },
-                          },
-                          "required": Array [
-                            "id",
-                            "k1",
-                          ],
-                          "type": "object",
-                        },
-                        Object {
-                          "properties": Object {
-                            "id": Object {
-                              "type": "integer",
-                            },
-                            "k2": Object {
-                              "type": "integer",
-                            },
-                          },
-                          "required": Array [
-                            "id",
-                            "k2",
-                          ],
-                          "type": "object",
-                        },
-                      ],
-                    },
-                    "type": "array",
-                  },
-                  "array2": Object {
-                    "items": Object {
-                      "anyOf": Array [
-                        Object {
-                          "properties": Object {
-                            "id": Object {
-                              "type": "integer",
-                            },
-                            "k1": Object {
-                              "type": "integer",
-                            },
-                          },
-                          "required": Array [
-                            "id",
-                            "k1",
-                          ],
-                          "type": "object",
-                        },
-                        Object {
-                          "properties": Object {
-                            "id": Object {
-                              "type": "integer",
-                            },
-                            "k2": Object {
-                              "type": "integer",
-                            },
-                          },
-                          "required": Array [
-                            "id",
-                            "k2",
-                          ],
-                          "type": "object",
-                        },
-                      ],
-                    },
-                    "type": "array",
-                  },
-                  "array3": Object {
-                    "items": Object {
-                      "properties": Object {
-                        "id": Object {
-                          "type": "integer",
-                        },
-                        "k1": Object {
-                          "type": "integer",
-                        },
-                      },
-                      "required": Array [
-                        "id",
-                        "k1",
-                      ],
-                      "type": "object",
-                    },
-                    "type": "array",
-                  },
-                  "array4": Object {
-                    "items": Object {},
-                    "properties": Object {
-                      "id": Object {
-                        "type": "integer",
-                      },
-                      "k1": Object {
-                        "type": "integer",
-                      },
-                      "k2": Object {
-                        "type": "integer",
-                      },
-                    },
-                    "required": Array [
-                      "id",
-                    ],
-                    "type": "object",
-                  },
-                },
-                "required": Array [
-                  "array1",
-                  "array2",
-                  "array3",
-                  "array4",
-                ],
-                "type": "object",
+                "$ref": "#/components/schemas/TestArrayRequest",
               },
             },
           },
@@ -339,7 +342,7 @@ Object {
             "content": Object {
               "application/json": Object {
                 "schema": Object {
-                  "$ref": "#/components/schemas/TestArrayRequest",
+                  "type": "object",
                 },
               },
             },

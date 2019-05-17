@@ -71,28 +71,30 @@ export default class Generator {
     });
     return parameters;
   }
-  dealReqeustBody() {
-    const body: apier.ApierJSONKind = this.apier.model.req.model.body;
+  dealBody(body: apier.ApierJSONKind, bodySchema: BodySchemaObject, schemaSuffix: string) {
     const commentUtil = body.comment.retrive();
-    const requestBody: openapi.RequestBodyObject = {} as any;
-    this.operation.requestBody = requestBody;
     const description = commentUtil.val("description");
-    if (description) requestBody.description = description;
-    if (!commentUtil.val("optional")) requestBody.required = true;
+    if (description) bodySchema.description = description;
     const useSchema = commentUtil.val("useSchema");
     const contentType = commentUtil.val("contentType", "application/json");
     if (useSchema)
-      return (requestBody.content = {
+      return (bodySchema.content = {
         [contentType]: { schema: createRef(useSchema) }
       });
-    if (!commentUtil.val("saveSchema")) {
-      commentUtil.modify("saveSchema", nameOfReqResSchema(this.apier.name, "Request"));
-    }
-    requestBody.content = {
+    const bodySchemaName = commentUtil.val("saveSchema", nameOfReqResSchema(this.apier.name, schemaSuffix));
+    bodySchema.content = {
       [contentType]: {
-        schema: this.createSchema(body)
+        schema: this.createSchema(body, { bodySchemaName })
       }
     };
+  }
+  dealReqeustBody() {
+    const body: apier.ApierJSONKind = this.apier.model.req.model.body;
+    const bodySchema: any = {};
+    const commentUtil = body.comment.retrive();
+    if (!commentUtil.val("optional")) bodySchema.required = true;
+    this.dealBody(body, bodySchema, "Request");
+    this.operation.requestBody = bodySchema;
   }
   dealResponses() {
     const res: apier.ApierRes = this.apier.model.res;
@@ -100,21 +102,28 @@ export default class Generator {
     const { status, body } = res.model;
     const responses: openapi.ResponsesObject = { [status]: {} };
     this.operation.responses = responses;
-    responses[status].description = commentUtil.val("description", "SUCCESS");
+    const description = (responses[status].description = commentUtil.val("description", "SUCCESS"));
     const contentType = commentUtil.val("contentType", "application/json");
     const useSchema = commentUtil.val("useSchema");
-    if (useSchema)
+    if (useSchema) {
       return (responses[status].content = {
-        [contentType]: { schema: createRef(useSchema) }
+        [contentType]: { schema: createRef(useSchema, "responses") }
       });
-    if (!commentUtil.val("saveSchema")) {
-      commentUtil.modify("saveSchema", nameOfReqResSchema(this.apier.name, "Request"));
     }
-    responses[status].content = {
-      [contentType]: {
-        schema: body ? this.createSchema(body) : this.saveSchema(commentUtil.val("saveSchema"), { type: "object " })
-      }
-    };
+    if (!body) {
+      return (responses[status].content = {
+        [contentType]: { schema: { type: "object" } }
+      });
+    }
+    const bodySchema: any = {};
+    this.dealBody(body, bodySchema, "Response");
+    if (!bodySchema.description) bodySchema.description = description;
+    const saveSchema = commentUtil.val("saveSchema");
+    if (saveSchema) {
+      responses[status] = this.saveResponses(saveSchema, bodySchema);
+    } else {
+      responses[status] = bodySchema;
+    }
   }
   saveSchema(name: string, schema: openapi.SchemaObject): openapi.ReferenceObject {
     this.value.components.schemas[name] = schema;
@@ -126,6 +135,12 @@ export default class Generator {
     parameters[name] = schema;
     return createRef(name, "parameters");
   }
+  saveResponses(name: string, schema: openapi.ResponseObject): openapi.ReferenceObject {
+    let responses = this.value.components.responses;
+    if (!responses) responses = this.value.components.responses = {};
+    responses[name] = schema;
+    return createRef(name, "responses");
+  }
   createSchema(
     apierItem: apier.ApierJSONKind,
     options: CreateSchemaOptions = { isParameter: false }
@@ -135,8 +150,16 @@ export default class Generator {
     return schema;
   }
   schemaUtil(apierItem: apier.ApierItem, context: SchemaUtilContext): boolean {
-    const { schema, isParameter } = context;
+    const { schema, isParameter, bodySchemaName } = context;
     const commentUtil = apierItem.comment.retrive();
+    let saveSchema = commentUtil.val("saveSchema");
+    if (isParameter) {
+      saveSchema = null;
+    }
+    if (bodySchemaName) {
+      saveSchema = bodySchemaName;
+      context.bodySchemaName = null;
+    }
     const useSchema = commentUtil.val("useSchema");
     if (!isParameter && useSchema) {
       Object.assign(schema, createRef(useSchema));
@@ -149,8 +172,7 @@ export default class Generator {
       this.schemaUtilArray(apierItem, context);
     }
     Object.assign(schema, commentUtil.pick(SCHEMA_KEYS));
-    const saveSchema = commentUtil.val("saveSchema");
-    if (!isParameter && saveSchema) {
+    if (saveSchema) {
       this.value.components.schemas[saveSchema] = { ...schema };
       Object.keys(schema).forEach(key => delete schema[key]); // clear
       Object.assign(schema, createRef(saveSchema));
@@ -248,7 +270,13 @@ function filterByCount(arr: string[], count: number): string[] {
 
 export interface CreateSchemaOptions {
   isParameter?: boolean;
+  bodySchemaName?: string;
 }
 export interface SchemaUtilContext extends CreateSchemaOptions {
   schema: openapi.SchemaObject;
+}
+
+export interface BodySchemaObject {
+  description?: string;
+  content: openapi.ContentObject;
 }
