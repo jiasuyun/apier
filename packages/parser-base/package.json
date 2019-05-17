@@ -1,6 +1,6 @@
 {
   "name": "@jiasuyun/apier-parser-base",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "apier parser base",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
