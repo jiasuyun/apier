@@ -1,6 +1,6 @@
 {
   "name": "@jiasuyun/apier-generator-htte",
-  "version": "0.1.0",
+  "version": "0.1.3",
   "description": "apier htte generator",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -24,11 +24,11 @@
     "url": "git+https://github.com/jiasuyun/apier"
   },
   "dependencies": {
-    "@jiasuyun/apier": "^0.1.0",
-    "@jiasuyun/apier-utils": "^0.1.0",
-    "@jiasuyun/apier-parser-base": "^0.1.0"
+    "@jiasuyun/apier": "^0.1.3",
+    "@jiasuyun/apier-parser-base": "^0.1.3",
+    "@jiasuyun/apier-utils": "^0.1.0"
   },
   "devDependencies": {
-    "@jiasuyun/apier-test-utils-generator": "^0.1.0"
+    "@jiasuyun/apier-test-utils-generator": "^0.1.3"
   }
 }
