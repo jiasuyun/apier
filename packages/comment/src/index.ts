@@ -68,6 +68,9 @@ export class CommentUtil {
   pick(keys: string[]) {
     return pick(this.comment, keys);
   }
+  modify(key: string, value: any) {
+    this.comment[key] = value;
+  }
   val(key?: string, defaultValue?: any) {
     if (key === undefined) return { ...this.comment };
     if (this.comment.hasOwnProperty(key)) {

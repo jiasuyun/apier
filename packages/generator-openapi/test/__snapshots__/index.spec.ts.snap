@@ -1,132 +1,204 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`generate 1`] = `
+Object {
+  "components": Object {
+    "schemas": Object {
+      "GetModelRequest": Object {
+        "description": "body",
+        "properties": Object {
+          "array": Object {
+            "items": Object {
+              "anyOf": Array [
+                Object {
+                  "type": "string",
+                },
+                Object {
+                  "type": "string",
+                },
+              ],
+            },
+            "type": "array",
+          },
+          "bool": Object {
+            "type": "boolean",
+          },
+          "integer": Object {
+            "format": "int64",
+            "type": "integer",
+          },
+          "null": Object {
+            "type": "null",
+          },
+          "number": Object {
+            "format": "float",
+            "type": "number",
+          },
+          "object": Object {
+            "properties": Object {
+              "foo": Object {
+                "type": "integer",
+              },
+            },
+            "required": Array [
+              "foo",
+            ],
+            "type": "object",
+          },
+        },
+        "required": Array [
+          "integer",
+          "number",
+          "bool",
+          "null",
+          "array",
+          "object",
+        ],
+        "type": "object",
+      },
+    },
+  },
+  "paths": Object {
+    "/model/{id}": Object {
+      "get": Object {
+        "operationId": "getModel",
+        "parameters": Array [
+          Object {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": Object {
+              "format": "int32",
+              "type": "integer",
+            },
+          },
+          Object {
+            "in": "query",
+            "name": "pageSize",
+            "required": true,
+            "schema": Object {
+              "maximum": 10,
+              "type": "integer",
+            },
+          },
+          Object {
+            "in": "query",
+            "name": "pageNo",
+            "required": true,
+            "schema": Object {
+              "type": "integer",
+            },
+          },
+          Object {
+            "in": "header",
+            "name": "X-ORG-ID",
+            "required": true,
+            "schema": Object {
+              "type": "integer",
+            },
+          },
+        ],
+        "requestBody": Object {
+          "content": Object {
+            "application/json": Object {
+              "schema": Object {
+                "$ref": "#/components/schemas/GetModelRequest",
+              },
+            },
+          },
+          "description": "body",
+          "required": true,
+        },
+        "responses": Object {
+          "200": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "properties": Object {
+                    "array": Object {
+                      "items": Object {
+                        "anyOf": Array [
+                          Object {
+                            "properties": Object {
+                              "foo": Object {
+                                "type": "integer",
+                              },
+                            },
+                            "required": Array [
+                              "foo",
+                            ],
+                            "type": "object",
+                          },
+                          Object {
+                            "properties": Object {
+                              "bar": Object {
+                                "type": "integer",
+                              },
+                            },
+                            "required": Array [
+                              "bar",
+                            ],
+                            "type": "object",
+                          },
+                        ],
+                      },
+                      "type": "array",
+                    },
+                    "bool": Object {
+                      "type": "boolean",
+                    },
+                    "integer": Object {
+                      "format": "int64",
+                      "type": "integer",
+                    },
+                    "null": Object {
+                      "type": "null",
+                    },
+                    "number": Object {
+                      "format": "float",
+                      "type": "number",
+                    },
+                    "object": Object {
+                      "properties": Object {
+                        "password": Object {
+                          "minLength": 6,
+                          "type": "string",
+                        },
+                      },
+                      "required": Array [
+                        "password",
+                      ],
+                      "type": "object",
+                    },
+                  },
+                  "required": Array [
+                    "integer",
+                    "number",
+                    "bool",
+                    "null",
+                    "array",
+                    "object",
+                  ],
+                  "type": "object",
+                },
+              },
+            },
+            "description": "SUCCESS",
+          },
+        },
+        "summary": "获取模型",
+      },
+    },
+  },
+}
+`;
+
 exports[`generate: array 1`] = `
 Object {
   "components": Object {
     "schemas": Object {
       "TestArrayRequest": Object {
-        "properties": Object {
-          "array1": Object {
-            "items": Object {
-              "anyOf": Array [
-                Object {
-                  "properties": Object {
-                    "id": Object {
-                      "type": "integer",
-                    },
-                    "k1": Object {
-                      "type": "integer",
-                    },
-                  },
-                  "required": Array [
-                    "id",
-                    "k1",
-                  ],
-                  "type": "object",
-                },
-                Object {
-                  "properties": Object {
-                    "id": Object {
-                      "type": "integer",
-                    },
-                    "k2": Object {
-                      "type": "integer",
-                    },
-                  },
-                  "required": Array [
-                    "id",
-                    "k2",
-                  ],
-                  "type": "object",
-                },
-              ],
-            },
-            "type": "array",
-          },
-          "array2": Object {
-            "items": Object {
-              "anyOf": Array [
-                Object {
-                  "properties": Object {
-                    "id": Object {
-                      "type": "integer",
-                    },
-                    "k1": Object {
-                      "type": "integer",
-                    },
-                  },
-                  "required": Array [
-                    "id",
-                    "k1",
-                  ],
-                  "type": "object",
-                },
-                Object {
-                  "properties": Object {
-                    "id": Object {
-                      "type": "integer",
-                    },
-                    "k2": Object {
-                      "type": "integer",
-                    },
-                  },
-                  "required": Array [
-                    "id",
-                    "k2",
-                  ],
-                  "type": "object",
-                },
-              ],
-            },
-            "type": "array",
-          },
-          "array3": Object {
-            "items": Object {
-              "properties": Object {
-                "id": Object {
-                  "type": "integer",
-                },
-                "k1": Object {
-                  "type": "integer",
-                },
-              },
-              "required": Array [
-                "id",
-                "k1",
-              ],
-              "type": "object",
-            },
-            "type": "array",
-          },
-          "array4": Object {
-            "items": Object {},
-            "properties": Object {
-              "id": Object {
-                "type": "integer",
-              },
-              "k1": Object {
-                "type": "integer",
-              },
-              "k2": Object {
-                "type": "integer",
-              },
-            },
-            "required": Array [
-              "id",
-            ],
-            "type": "array",
-          },
-        },
-        "required": Array [
-          "array1",
-          "array2",
-          "array3",
-          "array4",
-        ],
-        "type": "object",
-      },
-      "TestArrayResponse": Object {
-        "type": "object",
+        "type": "object ",
       },
     },
   },
@@ -138,7 +210,125 @@ Object {
           "content": Object {
             "application/json": Object {
               "schema": Object {
-                "$ref": "#/components/schemas/TestArrayRequest",
+                "properties": Object {
+                  "array1": Object {
+                    "items": Object {
+                      "anyOf": Array [
+                        Object {
+                          "properties": Object {
+                            "id": Object {
+                              "type": "integer",
+                            },
+                            "k1": Object {
+                              "type": "integer",
+                            },
+                          },
+                          "required": Array [
+                            "id",
+                            "k1",
+                          ],
+                          "type": "object",
+                        },
+                        Object {
+                          "properties": Object {
+                            "id": Object {
+                              "type": "integer",
+                            },
+                            "k2": Object {
+                              "type": "integer",
+                            },
+                          },
+                          "required": Array [
+                            "id",
+                            "k2",
+                          ],
+                          "type": "object",
+                        },
+                      ],
+                    },
+                    "type": "array",
+                  },
+                  "array2": Object {
+                    "items": Object {
+                      "anyOf": Array [
+                        Object {
+                          "properties": Object {
+                            "id": Object {
+                              "type": "integer",
+                            },
+                            "k1": Object {
+                              "type": "integer",
+                            },
+                          },
+                          "required": Array [
+                            "id",
+                            "k1",
+                          ],
+                          "type": "object",
+                        },
+                        Object {
+                          "properties": Object {
+                            "id": Object {
+                              "type": "integer",
+                            },
+                            "k2": Object {
+                              "type": "integer",
+                            },
+                          },
+                          "required": Array [
+                            "id",
+                            "k2",
+                          ],
+                          "type": "object",
+                        },
+                      ],
+                    },
+                    "type": "array",
+                  },
+                  "array3": Object {
+                    "items": Object {
+                      "properties": Object {
+                        "id": Object {
+                          "type": "integer",
+                        },
+                        "k1": Object {
+                          "type": "integer",
+                        },
+                      },
+                      "required": Array [
+                        "id",
+                        "k1",
+                      ],
+                      "type": "object",
+                    },
+                    "type": "array",
+                  },
+                  "array4": Object {
+                    "items": Object {},
+                    "properties": Object {
+                      "id": Object {
+                        "type": "integer",
+                      },
+                      "k1": Object {
+                        "type": "integer",
+                      },
+                      "k2": Object {
+                        "type": "integer",
+                      },
+                    },
+                    "required": Array [
+                      "id",
+                    ],
+                    "type": "object",
+                  },
+                },
+                "required": Array [
+                  "array1",
+                  "array2",
+                  "array3",
+                  "array4",
+                ],
+                "type": "object",
               },
             },
           },
@@ -149,7 +339,7 @@ Object {
             "content": Object {
               "application/json": Object {
                 "schema": Object {
-                  "$ref": "#/components/schemas/TestArrayResponse",
+                  "$ref": "#/components/schemas/TestArrayRequest",
                 },
               },
             },
@@ -157,6 +347,116 @@ Object {
           },
         },
         "summary": "testArray",
+      },
+    },
+  },
+}
+`;
+
+exports[`genereate: saveSchema and safeSchema 1`] = `
+Object {
+  "components": Object {
+    "parameters": Object {
+      "Id": Object {
+        "in": "path",
+        "name": "id",
+        "required": true,
+        "schema": Object {
+          "format": "int32",
+          "type": "integer",
+        },
+      },
+      "OrgId": Object {
+        "in": "header",
+        "name": "X-ORG-ID",
+        "required": true,
+        "schema": Object {
+          "type": "integer",
+        },
+      },
+      "PageSize": Object {
+        "in": "query",
+        "name": "pageSize",
+        "required": true,
+        "schema": Object {
+          "type": "integer",
+        },
+      },
+    },
+    "schemas": Object {
+      "Foo": Object {
+        "properties": Object {
+          "bar": Object {
+            "type": "integer",
+          },
+        },
+        "required": Array [
+          "bar",
+        ],
+        "type": "object",
+      },
+      "GeneralBody": Object {
+        "properties": Object {
+          "foo": Object {
+            "$ref": "#/components/schemas/Foo",
+          },
+        },
+        "required": Array [
+          "foo",
+        ],
+        "type": "object",
+      },
+      "MyShop": Object {
+        "properties": Object {
+          "foo": Object {
+            "$ref": "#/components/schemas/Foo",
+          },
+        },
+        "required": Array [
+          "foo",
+        ],
+        "type": "object",
+      },
+    },
+  },
+  "paths": Object {
+    "/model/{id}": Object {
+      "get": Object {
+        "operationId": "getModel",
+        "parameters": Array [
+          Object {
+            "$ref": "#/components/parameters/Id",
+          },
+          Object {
+            "$ref": "#/components/parameters/PageSize",
+          },
+          Object {
+            "$ref": "#/components/parameters/OrgId",
+          },
+        ],
+        "requestBody": Object {
+          "content": Object {
+            "application/json": Object {
+              "schema": Object {
+                "$ref": "#/components/schemas/MyShop",
+              },
+            },
+          },
+          "required": true,
+        },
+        "responses": Object {
+          "200": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "$ref": "#/components/schemas/GeneralBody",
+                },
+              },
+            },
+            "description": "SUCCESS",
+          },
+        },
+        "summary": "获取模型",
       },
     },
   },

@@ -1,0 +1,57 @@
+{
+    "getModel": { // summary=获取模型
+        "route": "GET /model/:id",
+        "req": {
+            "query": {
+                "pageSize": 10, // saveSchema=PageSize
+            },
+            "params": {
+                "id": 32234, // type=integer format=int32 saveSchema=Id
+            },
+            "headers": {
+                "X-ORG-ID": 32432, // saveSchema=OrgId
+            },
+            "body": { // saveSchema=MyShop
+                "foo": { // saveSchema=Foo
+                    bar: 2
+                }
+            }
+        },
+        "res": {
+            status: 200,
+            body: { // saveSchema=GeneralBody
+                "foo": {  // useSchema=Foo
+                    bar: 3
+                },
+            }
+        }
+    },
+    "getModel2": { // summary=获取模型2
+        "route": "GET /model/:id",
+        "req": {
+            "query": {
+                "pageSize": 10, // useSchema=PageSize
+            },
+            "params": {
+                "id": 32234, // useSchema=Id
+            },
+            "headers": {
+                "X-ORG-ID": 32432, // useSchema=OrgId
+            },
+            "body": {
+                "foo": { // saveSchema=Foo
+                    bar: 2
+                }
+            }
+        },
+        "res": {
+            status: 200,
+            body: {  // useSchema=GeneralBody
+                "foo": {
+                    bar: 3
+                },
+            }
+        }
+    },
+}
+
