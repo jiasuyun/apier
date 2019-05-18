@@ -1,6 +1,6 @@
 {
   "name": "@jiasuyun/apier-generator-htte",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "apier htte generator",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -29,6 +29,6 @@
     "@jiasuyun/apier-utils": "^0.2.0"
   },
   "devDependencies": {
-    "@jiasuyun/apier-test-utils-generator": "^0.2.0"
+    "@jiasuyun/apier-test-utils-generator": "^0.2.1"
   }
 }
