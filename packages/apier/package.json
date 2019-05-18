@@ -1,6 +1,6 @@
 {
   "name": "@jiasuyun/apier",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "apier core",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -29,7 +29,7 @@
     "@jiasuyun/apier-utils": "^0.2.0"
   },
   "devDependencies": {
-    "@jiasuyun/apier-parser-json5": "^0.2.0",
-    "@jiasuyun/apier-test-utils": "^0.2.0"
+    "@jiasuyun/apier-parser-json5": "^0.2.2",
+    "@jiasuyun/apier-test-utils": "^0.2.2"
   }
 }

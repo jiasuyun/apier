@@ -1,6 +1,6 @@
 {
   "name": "@jiasuyun/apier-parser-json5",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "apier json5 parser",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -32,7 +32,7 @@
     "lodash": "^4.17.11"
   },
   "devDependencies": {
-    "@jiasuyun/apier-test-utils": "^0.2.0",
+    "@jiasuyun/apier-test-utils": "^0.2.2",
     "@types/node": "^12.0.2"
   }
 }
