@@ -1,8 +1,8 @@
 import Generator from "../src";
-import { loadApiers } from "@jiasuyun/apier-test-utils-generator";
+import { factory, toYaml, mergeArray } from "@jiasuyun/apier-test-utils-generator";
+
+const gen = name => toYaml(mergeArray(factory(api => new Generator(api).value)(name)));
 
 test("generate", () => {
-  const apier = loadApiers("general")[0];
-  const generator = new Generator(apier);
-  expect(generator.value).toMatchSnapshot();
+  expect(gen("general")).toMatchSnapshot();
 });

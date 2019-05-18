@@ -1,20 +1,20 @@
 import Generator from "../src";
-import { loadApiers } from "@jiasuyun/apier-test-utils-generator";
+import { factory, mergeArray, toYaml } from "@jiasuyun/apier-test-utils-generator";
+
+const gen = name => toYaml(mergeArray(factory(api => new Generator(api).value)(name)));
 
 test("generate", () => {
-  const apier = loadApiers("general")[0];
-  const generator = new Generator(apier);
-  expect(generator.value).toMatchSnapshot();
+  expect(gen("general")).toMatchSnapshot();
 });
 
-test("generate: array", () => {
-  const apier = loadApiers("array")[0];
-  const generator = new Generator(apier);
-  expect(generator.value).toMatchSnapshot();
+test("expect(generate: array", () => {
+  expect(gen("array")).toMatchSnapshot();
 });
 
-test("genereate: saveSchema and safeSchema", () => {
-  const apier = loadApiers("useSchema")[0];
-  const generator = new Generator(apier);
-  expect(generator.value).toMatchSnapshot();
+test("expect(genereate: useSchema", () => {
+  expect(gen("useSchema")).toMatchSnapshot();
+});
+
+test("expect(generate: real example", () => {
+  expect(gen("user")).toMatchSnapshot();
 });

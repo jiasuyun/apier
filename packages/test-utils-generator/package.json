@@ -26,6 +26,8 @@
   "dependencies": {
     "@jiasuyun/apier": "^0.2.2",
     "@jiasuyun/apier-parser-json5": "^0.2.2",
-    "@jiasuyun/apier-test-utils": "^0.2.2"
+    "@jiasuyun/apier-test-utils": "^0.2.2",
+    "js-yaml": "^3.13.1",
+    "lodash": "^4.17.11"
   }
 }

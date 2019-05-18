@@ -1,8 +1,7 @@
 import * as apier from "@jiasuyun/apier";
 import * as openapi from "openapi3-ts";
-import { ApierKind, colonToCurlybrace } from "@jiasuyun/apier-utils";
+import { ApierKind, colonToCurlybrace, omitEmptyObject, reorder } from "@jiasuyun/apier-utils";
 import { OPERATION_KEYS, PARAMETER_KEYS, SCHEMA_KEYS } from "./constants";
-import { omitEmptyObject } from "./helper";
 export interface GeneratorResult {
   paths: openapi.PathsObject;
   components: openapi.ComponentsObject;
@@ -23,7 +22,8 @@ export default class Generator {
     };
     this.operation = operation as openapi.OperationObject;
     this.generate();
-    this.value = omitEmptyObject(this.value);
+    omitEmptyObject(this.value);
+    reorder(this.value.components, ["parameters", "responses", "schemas"]);
   }
 
   generate() {
@@ -96,6 +96,7 @@ export default class Generator {
     const commentUtil = body.comment.retrive();
     if (!commentUtil.val("optional")) bodySchema.required = true;
     this.dealBody(body, bodySchema, "Request");
+    reorder(bodySchema, ["description", "content", "required"]);
     this.operation.requestBody = bodySchema;
   }
   dealResponses() {
@@ -126,6 +127,7 @@ export default class Generator {
     } else {
       responses[status] = bodySchema;
     }
+    reorder(bodySchema, ["description", "content", "required"]);
   }
   saveSchema(name: string, schema: openapi.SchemaObject): openapi.ReferenceObject {
     this.value.components.schemas[name] = schema;
@@ -168,6 +170,9 @@ export default class Generator {
       return !commentUtil.val("optional", false);
     }
     Object.assign(schema, { type: apierItem.kind() });
+    // trick: promote description props
+    const description = commentUtil.val("description");
+    if (description) schema.description = description;
     if (apierItem.kind() === ApierKind.OBJECT) {
       this.schemaUtilObject(apierItem, context);
     } else if (apierItem.kind() === ApierKind.ARRAY) {

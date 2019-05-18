@@ -1,54 +1,38 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`generate 1`] = `
-Object {
-  "describe": "获取模型",
-  "req": Object {
-    "body": Object {
-      "array": Array [
-        "1",
-        "2",
-      ],
-      "bool": true,
-      "integer": 32,
-      "null": null,
-      "number": 16.23,
-      "object": Object {
-        "foo": 3,
-      },
-    },
-    "headers": Object {
-      "X-ORG-ID": 32432,
-    },
-    "method": "get",
-    "params": Object {
-      "id": 32234,
-    },
-    "query": Object {
-      "pageNo": 1,
-      "pageSize": 10,
-    },
-    "url": "/model/{id}",
-  },
-  "res": Object {
-    "body": Object {
-      "array": Array [
-        Object {
-          "foo": 1,
-        },
-        Object {
-          "bar": 2,
-        },
-      ],
-      "bool": true,
-      "integer": 32,
-      "null": null,
-      "number": 16.23,
-      "object": Object {
-        "password": "a234324",
-      },
-    },
-    "status": 200,
-  },
-}
+"describe: 获取模型
+req:
+  method: get
+  url: '/model/{id}'
+  headers:
+    X-ORG-ID: 32432
+  params:
+    id: 32234
+  query:
+    pageSize: 10
+    pageNo: 1
+  body:
+    integer: 32
+    number: 16.23
+    bool: true
+    'null': null
+    array:
+      - '1'
+      - '2'
+    object:
+      foo: 3
+res:
+  status: 200
+  body:
+    integer: 32
+    number: 16.23
+    bool: true
+    'null': null
+    array:
+      - foo: 1
+      - bar: 2
+    object:
+      password: a234324
+"
 `;

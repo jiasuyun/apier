@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generateYaml 1`] = `
+"signup: true
+loginPasswd: true
+getGcode: true
+loginSms: true
+getScode: true
+updatePasswd: true
+listFavoriates: true
+checkProductFavoriate: true
+createFeedback: true
+getStats: true
+getUserInfo: true
+updateUserInfo: true
+getUserSettings: true
+updateUserSettings: true
+"
+`;

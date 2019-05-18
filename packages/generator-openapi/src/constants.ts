@@ -5,7 +5,6 @@ export const SCHEMA_KEYS = [
   // "externalDocs",
   "deprecated",
   "additionalProperties",
-  "description",
   "format",
   "default",
   "title",

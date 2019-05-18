@@ -1,466 +1,1027 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`expect(generate: array 1`] = `
+"paths:
+  /c/array/test:
+    post:
+      operationId: testArray
+      summary: testArray
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestArrayRequest'
+        required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  schemas:
+    TestArrayRequest:
+      type: object
+      properties:
+        array1:
+          type: array
+          items:
+            anyOf:
+              - type: object
+                properties:
+                  id:
+                    type: integer
+                  k1:
+                    type: integer
+                required:
+                  - id
+                  - k1
+              - type: object
+                properties:
+                  id:
+                    type: integer
+                  k2:
+                    type: integer
+                required:
+                  - id
+                  - k2
+        array2:
+          type: array
+          items:
+            anyOf:
+              - type: object
+                properties:
+                  id:
+                    type: integer
+                  k1:
+                    type: integer
+                required:
+                  - id
+                  - k1
+              - type: object
+                properties:
+                  id:
+                    type: integer
+                  k2:
+                    type: integer
+                required:
+                  - id
+                  - k2
+        array3:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              k1:
+                type: integer
+            required:
+              - id
+              - k1
+        array4:
+          type: object
+          properties:
+            id:
+              type: integer
+            k1:
+              type: integer
+            k2:
+              type: integer
+          required:
+            - id
+      required:
+        - array1
+        - array2
+        - array3
+        - array4
+"
+`;
+
+exports[`expect(generate: real example 1`] = `
+"paths:
+  /c/signup:
+    post:
+      operationId: signup
+      summary: 注册
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
+        required: true
+      responses:
+        '200':
+          description: 返回数据同登录
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignupResponse'
+      security: []
+  /c/login/passwd:
+    post:
+      operationId: loginPasswd
+      summary: 密码登录
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginPasswdRequest'
+        required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Login'
+      security: []
+  /c/gcode:
+    post:
+      operationId: getGcode
+      summary: 获取图形验证码
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetGcodeRequest'
+        required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            image/svg+xml:
+              schema:
+                $ref: '#/components/schemas/GetGcodeResponse'
+      security: []
+  /c/login/sms:
+    post:
+      operationId: loginSms
+      summary: 验证码登录
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginSmsRequest'
+        required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Login'
+      security: []
+  /c/scode:
+    post:
+      operationId: getScode
+      summary: 获取短信验证码
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetScodeRequest'
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/OkResponse'
+      security: []
+  /c/user/passwd:
+    put:
+      operationId: updatePasswd
+      summary: 修改密码
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePasswdRequest'
+        required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/OkResponse'
+  /c/favoriates:
+    get:
+      operationId: listFavoriates
+      summary: 获取我的收藏
+      parameters:
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/PageNo'
+        - name: type
+          in: query
+          description: '类型 1 文字, 2 商品, 3 链接, 4 图片, 5 视频, 6 语音, 7 位置, 8 名片'
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListFavoriatesResponse'
+  '/c/favoriates/product/{id}':
+    get:
+      operationId: checkProductFavoriate
+      summary: 查看商品是否已收藏
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckProductFavoriateResponse'
+  /c/feedbacks:
+    post:
+      operationId: createFeedback
+      summary: 反馈
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFeedbackRequest'
+        required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/OkResponse'
+  /c/stats:
+    get:
+      operationId: getStats
+      summary: 获取统计数据
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetStatsResponse'
+  /c/user/info:
+    get:
+      operationId: getUserInfo
+      summary: 获取我的个人信息
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserInfoResponse'
+    put:
+      operationId: updateUserInfo
+      summary: 修改我的个人信息
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserInfoRequest'
+        required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/OkResponse'
+  /c/user/settings:
+    get:
+      operationId: getUserSettings
+      summary: 获取我的设置
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserSettingsResponse'
+    put:
+      operationId: updateUserSettings
+      summary: updateUserSettings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserSettingsRequest'
+        required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/OkResponse'
+components:
+  schemas:
+    Phonenum:
+      type: string
+    SignupRequest:
+      type: object
+      properties:
+        phonenum:
+          $ref: '#/components/schemas/Phonenum'
+        code:
+          type: string
+          description: 验证码
+        password:
+          type: string
+      required:
+        - phonenum
+        - code
+        - password
+    SignupResponse:
+      type: object
+      description: 返回数据同登录
+      properties:
+        id:
+          type: integer
+        token:
+          type: string
+      required:
+        - id
+        - token
+    LoginPasswdRequest:
+      type: object
+      properties:
+        phonenum:
+          $ref: '#/components/schemas/Phonenum'
+        code:
+          type: string
+          description: 图形验证码，密码输错三次后出现
+        password:
+          type: string
+      required:
+        - phonenum
+        - password
+    Login:
+      type: object
+      properties:
+        id:
+          type: integer
+        token:
+          type: string
+      required:
+        - id
+        - token
+    GetGcodeRequest:
+      type: object
+      properties:
+        phonenum:
+          $ref: '#/components/schemas/Phonenum'
+      required:
+        - phonenum
+    GetGcodeResponse:
+      type: string
+      format: binary
+    LoginSmsRequest:
+      type: object
+      properties:
+        phonenum:
+          $ref: '#/components/schemas/Phonenum'
+        code:
+          type: string
+      required:
+        - phonenum
+        - code
+    GetScodeRequest:
+      type: object
+      properties:
+        phonenum:
+          type: string
+          pattern: FIXME
+      required:
+        - phonenum
+    Ok:
+      type: object
+      properties:
+        msg:
+          type: string
+      required:
+        - msg
+    UpdatePasswdRequest:
+      type: object
+      properties:
+        password:
+          type: string
+      required:
+        - password
+    ListFavoriatesResponse:
+      type: array
+      items:
+        anyOf:
+          - type: object
+            description: 文字
+            properties:
+              type:
+                type: integer
+              id:
+                type: integer
+              authorId:
+                type: integer
+              authorName:
+                type: string
+              data:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  content:
+                    type: string
+                required:
+                  - id
+                  - content
+            required:
+              - type
+              - id
+              - authorId
+              - authorName
+              - data
+          - type: object
+            description: 商品
+            properties:
+              type:
+                type: integer
+              id:
+                type: integer
+              authorId:
+                type: integer
+              authorName:
+                type: string
+              data:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  thumbnail:
+                    type: string
+                  name:
+                    type: string
+                  price:
+                    type: number
+                required:
+                  - id
+                  - thumbnail
+                  - name
+                  - price
+            required:
+              - type
+              - id
+              - authorId
+              - authorName
+              - data
+          - type: object
+            description: 链接
+            properties:
+              type:
+                type: integer
+              id:
+                type: integer
+              authorId:
+                type: integer
+              authorName:
+                type: string
+              data:
+                type: object
+                properties:
+                  link:
+                    type: string
+                    description: 跳转链接
+                required:
+                  - link
+            required:
+              - type
+              - id
+              - authorId
+              - authorName
+              - data
+          - type: object
+            description: 图片
+            properties:
+              type:
+                type: integer
+              id:
+                type: integer
+              authorId:
+                type: integer
+              authorName:
+                type: string
+              data:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    description: 图片链接
+                required:
+                  - url
+            required:
+              - type
+              - id
+              - authorId
+              - authorName
+              - data
+          - type: object
+            description: 视频
+            properties:
+              type:
+                type: integer
+              id:
+                type: integer
+              authorId:
+                type: integer
+              authorName:
+                type: string
+              data:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    description: 视频链接
+                required:
+                  - url
+            required:
+              - type
+              - id
+              - authorId
+              - authorName
+              - data
+          - type: object
+            description: 语音
+            properties:
+              type:
+                type: integer
+              id:
+                type: integer
+              authorId:
+                type: integer
+              authorName:
+                type: string
+              data:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    description: 语音链接
+                required:
+                  - url
+            required:
+              - type
+              - id
+              - authorId
+              - authorName
+              - data
+          - type: object
+            description: 地理位置
+            properties:
+              type:
+                type: integer
+              id:
+                type: integer
+              authorId:
+                type: integer
+              authorName:
+                type: string
+              data:
+                type: object
+                properties:
+                  longitude:
+                    type: number
+                  latitude:
+                    type: number
+                  location:
+                    type: string
+                required:
+                  - longitude
+                  - latitude
+                  - location
+            required:
+              - type
+              - id
+              - authorId
+              - authorName
+              - data
+          - type: object
+            properties:
+              type:
+                type: integer
+              id:
+                type: integer
+              authorId:
+                type: integer
+              authorName:
+                type: string
+              data:
+                type: object
+                properties:
+                  avatarUrl:
+                    type: string
+                required:
+                  - avatarUrl
+            required:
+              - type
+              - id
+              - authorId
+              - authorName
+              - data
+    CheckProductFavoriateResponse:
+      type: object
+      properties:
+        isFavoriated:
+          type: boolean
+      required:
+        - isFavoriated
+    CreateFeedbackRequest:
+      type: object
+      properties:
+        platform:
+          type: string
+        apiVersion:
+          type: string
+        appVersion:
+          type: string
+        note:
+          type: string
+          description: 意见
+      required:
+        - platform
+        - apiVersion
+        - appVersion
+        - note
+    GetStatsResponse:
+      type: object
+      properties:
+        numFollowings:
+          type: integer
+          description: 关注数
+        numFavoriates:
+          type: integer
+          description: 收藏数
+        numQuns:
+          type: integer
+          description: 群数
+        numFriends:
+          type: integer
+          description: 好友数
+      required:
+        - numFollowings
+        - numFavoriates
+        - numQuns
+        - numFriends
+    GetUserInfoResponse:
+      type: object
+      properties:
+        avatarUrl:
+          type: string
+        name:
+          type: string
+        myId:
+          type: string
+          description: 秒音号
+        sex:
+          type: integer
+          description: 性别
+        regionId:
+          type: integer
+        signature:
+          type: string
+          description: 个性签名
+      required:
+        - avatarUrl
+        - name
+        - myId
+        - sex
+        - regionId
+        - signature
+    UpdateUserInfoRequest:
+      type: object
+      properties:
+        avatarUrl:
+          type: string
+        name:
+          type: string
+        sex:
+          type: integer
+          description: 性别
+        regionId:
+          type: integer
+        signature:
+          type: string
+          description: 个性签名
+    GetUserSettingsResponse:
+      type: object
+      properties:
+        notifyNewMessage:
+          type: integer
+          description: 开关，是否开启新消息通知
+        notifyPhoneCall:
+          type: integer
+          description: 开关，是否开启语音视频提醒
+        notifyShowDetail:
+          type: integer
+          description: 开关，是否在通知中显示消息详情
+        notifyDynamic:
+          type: integer
+          description: 开关，是否开启动态消息提醒
+        notifyWithSound:
+          type: integer
+          description: 开关，是否开启声音通知
+        notifyWithVibration:
+          type: integer
+          description: 开关，是否开启声音通知
+        privacyNewFriend:
+          type: integer
+          description: 开关，是否启用添加好友验证
+        privacyPhonenumSearchable:
+          type: integer
+          description: 开关，是否可以通过手机号搜到我
+        privacyIdSearchable:
+          type: integer
+          description: 开关，是否可以通过秒音号搜到我
+        privacyRecommandContacts:
+          type: integer
+          description: 开关，是否推荐通讯录好友
+        commonBackground:
+          type: string
+          description: 北京
+      required:
+        - notifyNewMessage
+        - notifyPhoneCall
+        - notifyShowDetail
+        - notifyDynamic
+        - notifyWithSound
+        - notifyWithVibration
+        - privacyNewFriend
+        - privacyPhonenumSearchable
+        - privacyIdSearchable
+        - privacyRecommandContacts
+        - commonBackground
+    UpdateUserSettingsRequest:
+      type: object
+      properties:
+        notifyNewMessage:
+          type: integer
+          description: 开关，是否开启新消息通知
+        notifyPhoneCall:
+          type: integer
+          description: 开关，是否开启语音视频提醒
+        notifyShowDetail:
+          type: integer
+          description: 开关，是否在通知中显示消息详情
+        notifyDynamic:
+          type: integer
+          description: 开关，是否开启动态消息提醒
+        notifyWithSound:
+          type: integer
+          description: 开关，是否开启声音通知
+        notifyWithVibration:
+          type: integer
+          description: 开关，是否开启声音通知
+        privacyNewFriend:
+          type: integer
+          description: 开关，是否启用添加好友验证
+        privacyPhonenumSearchable:
+          type: integer
+          description: 开关，是否可以通过手机号搜到我
+        privacyIdSearchable:
+          type: integer
+          description: 开关，是否可以通过秒音号搜到我
+        privacyRecommandContacts:
+          type: integer
+          description: 开关，是否推荐通讯录好友
+        commonBackground:
+          type: string
+          description: 北京
+  responses:
+    OkResponse:
+      description: SUCCESS
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Ok'
+  parameters:
+    PageSize:
+      name: pageSize
+      in: query
+      schema:
+        type: integer
+        format: int32
+    PageNo:
+      name: pageNo
+      in: query
+      schema:
+        type: integer
+        format: int32
+"
+`;
+
+exports[`expect(genereate: useSchema 1`] = `
+"paths:
+  '/model/{id}':
+    get:
+      operationId: getModel2
+      summary: 获取模型2
+      parameters:
+        - $ref: '#/components/parameters/Id'
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/OrgId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetModel2Request'
+        required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralBody'
+components:
+  parameters:
+    Id:
+      name: id
+      in: path
+      schema:
+        type: integer
+        format: int32
+      required: true
+    PageSize:
+      name: pageSize
+      in: query
+      schema:
+        type: integer
+      required: true
+    OrgId:
+      name: X-ORG-ID
+      in: header
+      schema:
+        type: integer
+      required: true
+  schemas:
+    Foo:
+      type: object
+      properties:
+        bar:
+          type: integer
+      required:
+        - bar
+    MyShop:
+      type: object
+      properties:
+        foo:
+          $ref: '#/components/schemas/Foo'
+      required:
+        - foo
+    GeneralBody:
+      type: object
+      properties:
+        foo:
+          $ref: '#/components/schemas/Foo'
+      required:
+        - foo
+    GetModel2Request:
+      type: object
+      properties:
+        foo:
+          $ref: '#/components/schemas/Foo'
+      required:
+        - foo
+"
+`;
+
 exports[`generate 1`] = `
-Object {
-  "components": Object {
-    "schemas": Object {
-      "GetModelRequest": Object {
-        "description": "body",
-        "properties": Object {
-          "array": Object {
-            "items": Object {
-              "anyOf": Array [
-                Object {
-                  "type": "string",
-                },
-                Object {
-                  "type": "string",
-                },
-              ],
-            },
-            "type": "array",
-          },
-          "bool": Object {
-            "type": "boolean",
-          },
-          "integer": Object {
-            "format": "int64",
-            "type": "integer",
-          },
-          "null": Object {
-            "type": "null",
-          },
-          "number": Object {
-            "format": "float",
-            "type": "number",
-          },
-          "object": Object {
-            "properties": Object {
-              "foo": Object {
-                "type": "integer",
-              },
-            },
-            "required": Array [
-              "foo",
-            ],
-            "type": "object",
-          },
-        },
-        "required": Array [
-          "integer",
-          "number",
-          "bool",
-          "null",
-          "array",
-          "object",
-        ],
-        "type": "object",
-      },
-      "GetModelResponse": Object {
-        "properties": Object {
-          "array": Object {
-            "items": Object {
-              "anyOf": Array [
-                Object {
-                  "properties": Object {
-                    "foo": Object {
-                      "type": "integer",
-                    },
-                  },
-                  "required": Array [
-                    "foo",
-                  ],
-                  "type": "object",
-                },
-                Object {
-                  "properties": Object {
-                    "bar": Object {
-                      "type": "integer",
-                    },
-                  },
-                  "required": Array [
-                    "bar",
-                  ],
-                  "type": "object",
-                },
-              ],
-            },
-            "type": "array",
-          },
-          "bool": Object {
-            "type": "boolean",
-          },
-          "integer": Object {
-            "format": "int64",
-            "type": "integer",
-          },
-          "null": Object {
-            "type": "null",
-          },
-          "number": Object {
-            "format": "float",
-            "type": "number",
-          },
-          "object": Object {
-            "properties": Object {
-              "password": Object {
-                "minLength": 6,
-                "type": "string",
-              },
-            },
-            "required": Array [
-              "password",
-            ],
-            "type": "object",
-          },
-        },
-        "required": Array [
-          "integer",
-          "number",
-          "bool",
-          "null",
-          "array",
-          "object",
-        ],
-        "type": "object",
-      },
-    },
-  },
-  "paths": Object {
-    "/model/{id}": Object {
-      "get": Object {
-        "operationId": "getModel",
-        "parameters": Array [
-          Object {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": Object {
-              "format": "int32",
-              "type": "integer",
-            },
-          },
-          Object {
-            "in": "query",
-            "name": "pageSize",
-            "required": true,
-            "schema": Object {
-              "maximum": 10,
-              "type": "integer",
-            },
-          },
-          Object {
-            "in": "query",
-            "name": "pageNo",
-            "required": true,
-            "schema": Object {
-              "type": "integer",
-            },
-          },
-          Object {
-            "in": "header",
-            "name": "X-ORG-ID",
-            "required": true,
-            "schema": Object {
-              "type": "integer",
-            },
-          },
-        ],
-        "requestBody": Object {
-          "content": Object {
-            "application/json": Object {
-              "schema": Object {
-                "$ref": "#/components/schemas/GetModelRequest",
-              },
-            },
-          },
-          "description": "body",
-          "required": true,
-        },
-        "responses": Object {
-          "200": Object {
-            "content": Object {
-              "application/json": Object {
-                "schema": Object {
-                  "$ref": "#/components/schemas/GetModelResponse",
-                },
-              },
-            },
-            "description": "SUCCESS",
-          },
-        },
-        "summary": "获取模型",
-      },
-    },
-  },
-}
-`;
-
-exports[`generate: array 1`] = `
-Object {
-  "components": Object {
-    "schemas": Object {
-      "TestArrayRequest": Object {
-        "properties": Object {
-          "array1": Object {
-            "items": Object {
-              "anyOf": Array [
-                Object {
-                  "properties": Object {
-                    "id": Object {
-                      "type": "integer",
-                    },
-                    "k1": Object {
-                      "type": "integer",
-                    },
-                  },
-                  "required": Array [
-                    "id",
-                    "k1",
-                  ],
-                  "type": "object",
-                },
-                Object {
-                  "properties": Object {
-                    "id": Object {
-                      "type": "integer",
-                    },
-                    "k2": Object {
-                      "type": "integer",
-                    },
-                  },
-                  "required": Array [
-                    "id",
-                    "k2",
-                  ],
-                  "type": "object",
-                },
-              ],
-            },
-            "type": "array",
-          },
-          "array2": Object {
-            "items": Object {
-              "anyOf": Array [
-                Object {
-                  "properties": Object {
-                    "id": Object {
-                      "type": "integer",
-                    },
-                    "k1": Object {
-                      "type": "integer",
-                    },
-                  },
-                  "required": Array [
-                    "id",
-                    "k1",
-                  ],
-                  "type": "object",
-                },
-                Object {
-                  "properties": Object {
-                    "id": Object {
-                      "type": "integer",
-                    },
-                    "k2": Object {
-                      "type": "integer",
-                    },
-                  },
-                  "required": Array [
-                    "id",
-                    "k2",
-                  ],
-                  "type": "object",
-                },
-              ],
-            },
-            "type": "array",
-          },
-          "array3": Object {
-            "items": Object {
-              "properties": Object {
-                "id": Object {
-                  "type": "integer",
-                },
-                "k1": Object {
-                  "type": "integer",
-                },
-              },
-              "required": Array [
-                "id",
-                "k1",
-              ],
-              "type": "object",
-            },
-            "type": "array",
-          },
-          "array4": Object {
-            "properties": Object {
-              "id": Object {
-                "type": "integer",
-              },
-              "k1": Object {
-                "type": "integer",
-              },
-              "k2": Object {
-                "type": "integer",
-              },
-            },
-            "required": Array [
-              "id",
-            ],
-            "type": "object",
-          },
-        },
-        "required": Array [
-          "array1",
-          "array2",
-          "array3",
-          "array4",
-        ],
-        "type": "object",
-      },
-    },
-  },
-  "paths": Object {
-    "/c/array/test": Object {
-      "post": Object {
-        "operationId": "testArray",
-        "requestBody": Object {
-          "content": Object {
-            "application/json": Object {
-              "schema": Object {
-                "$ref": "#/components/schemas/TestArrayRequest",
-              },
-            },
-          },
-          "required": true,
-        },
-        "responses": Object {
-          "200": Object {
-            "content": Object {
-              "application/json": Object {
-                "schema": Object {
-                  "type": "object",
-                },
-              },
-            },
-            "description": "SUCCESS",
-          },
-        },
-        "summary": "testArray",
-      },
-    },
-  },
-}
-`;
-
-exports[`genereate: saveSchema and safeSchema 1`] = `
-Object {
-  "components": Object {
-    "parameters": Object {
-      "Id": Object {
-        "in": "path",
-        "name": "id",
-        "required": true,
-        "schema": Object {
-          "format": "int32",
-          "type": "integer",
-        },
-      },
-      "OrgId": Object {
-        "in": "header",
-        "name": "X-ORG-ID",
-        "required": true,
-        "schema": Object {
-          "type": "integer",
-        },
-      },
-      "PageSize": Object {
-        "in": "query",
-        "name": "pageSize",
-        "required": true,
-        "schema": Object {
-          "type": "integer",
-        },
-      },
-    },
-    "schemas": Object {
-      "Foo": Object {
-        "properties": Object {
-          "bar": Object {
-            "type": "integer",
-          },
-        },
-        "required": Array [
-          "bar",
-        ],
-        "type": "object",
-      },
-      "GeneralBody": Object {
-        "properties": Object {
-          "foo": Object {
-            "$ref": "#/components/schemas/Foo",
-          },
-        },
-        "required": Array [
-          "foo",
-        ],
-        "type": "object",
-      },
-      "MyShop": Object {
-        "properties": Object {
-          "foo": Object {
-            "$ref": "#/components/schemas/Foo",
-          },
-        },
-        "required": Array [
-          "foo",
-        ],
-        "type": "object",
-      },
-    },
-  },
-  "paths": Object {
-    "/model/{id}": Object {
-      "get": Object {
-        "operationId": "getModel",
-        "parameters": Array [
-          Object {
-            "$ref": "#/components/parameters/Id",
-          },
-          Object {
-            "$ref": "#/components/parameters/PageSize",
-          },
-          Object {
-            "$ref": "#/components/parameters/OrgId",
-          },
-        ],
-        "requestBody": Object {
-          "content": Object {
-            "application/json": Object {
-              "schema": Object {
-                "$ref": "#/components/schemas/MyShop",
-              },
-            },
-          },
-          "required": true,
-        },
-        "responses": Object {
-          "200": Object {
-            "content": Object {
-              "application/json": Object {
-                "schema": Object {
-                  "$ref": "#/components/schemas/GeneralBody",
-                },
-              },
-            },
-            "description": "SUCCESS",
-          },
-        },
-        "summary": "获取模型",
-      },
-    },
-  },
-}
+"paths:
+  '/model/{id}':
+    get:
+      operationId: getModel
+      summary: 获取模型
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+            format: int32
+          required: true
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            maximum: 10
+          required: true
+        - name: pageNo
+          in: query
+          schema:
+            type: integer
+          required: true
+        - name: X-ORG-ID
+          in: header
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        description: body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetModelRequest'
+        required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetModelResponse'
+components:
+  schemas:
+    GetModelRequest:
+      type: object
+      description: body
+      properties:
+        integer:
+          type: integer
+          format: int64
+        number:
+          type: number
+          format: float
+        bool:
+          type: boolean
+        'null':
+          type: 'null'
+        array:
+          type: array
+          items:
+            anyOf:
+              - type: string
+              - type: string
+        object:
+          type: object
+          properties:
+            foo:
+              type: integer
+          required:
+            - foo
+      required:
+        - integer
+        - number
+        - bool
+        - 'null'
+        - array
+        - object
+    GetModelResponse:
+      type: object
+      properties:
+        integer:
+          type: integer
+          format: int64
+        number:
+          type: number
+          format: float
+        bool:
+          type: boolean
+        'null':
+          type: 'null'
+        array:
+          type: array
+          items:
+            anyOf:
+              - type: object
+                properties:
+                  foo:
+                    type: integer
+                required:
+                  - foo
+              - type: object
+                properties:
+                  bar:
+                    type: integer
+                required:
+                  - bar
+        object:
+          type: object
+          properties:
+            password:
+              type: string
+              minLength: 6
+          required:
+            - password
+      required:
+        - integer
+        - number
+        - bool
+        - 'null'
+        - array
+        - object
+"
 `;

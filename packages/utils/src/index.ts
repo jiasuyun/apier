@@ -37,3 +37,46 @@ export enum ApierKind {
 export function colonToCurlybrace(url: string): string {
   return url.replace(/\/:([A-Za-z0-9_]+)/g, "/{$1}");
 }
+
+// 重新调整对象字段顺序
+export function reorder(value: any, orders: string[]) {
+  if (!isObject(value)) return;
+  const keys = Object.keys(value);
+  const tmp = keys.reduce((a, c) => {
+    a[c] = value[c];
+    delete value[c];
+    return a;
+  }, {});
+  const sortedKeys = keys.sort((a, b) => orders.indexOf(a) - orders.indexOf(b));
+  sortedKeys.forEach(key => (value[key] = tmp[key]));
+}
+
+// 移除空对象
+export function omitEmptyObject(value: any) {
+  if (Array.isArray(value)) {
+    for (let i = 0; i < value.length; i++) {
+      omitEmptyObject(value[i]);
+      if (isEmpty(value[i])) {
+        value.splice(i, 1);
+        i--;
+      }
+    }
+  }
+  if (isObject(value)) {
+    for (const key in value) {
+      omitEmptyObject(value[key]);
+      if (isEmpty(value[key])) {
+        delete value[key];
+      }
+    }
+  }
+}
+
+function isEmpty(value) {
+  if (value === undefined) return true;
+  return isObject(value) && Object.keys(value).length === 0;
+}
+
+function isObject(value) {
+  return typeof value === "object" && !Array.isArray(value);
+}
