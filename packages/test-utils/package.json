@@ -1,6 +1,6 @@
 {
   "name": "@jiasuyun/apier-test-utils",
-  "version": "0.1.7",
+  "version": "0.2.0",
   "description": "apier test utils",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

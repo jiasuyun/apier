@@ -1,6 +1,6 @@
 {
   "name": "@jiasuyun/apier-parser-json5",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "description": "apier json5 parser",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -24,15 +24,15 @@
     "url": "git+https://github.com/jiasuyun/apier"
   },
   "dependencies": {
-    "@jiasuyun/apier-comment": "^0.1.8",
-    "@jiasuyun/apier-parser-base": "^0.1.8",
-    "@jiasuyun/apier-utils": "^0.1.0",
+    "@jiasuyun/apier-comment": "^0.2.0",
+    "@jiasuyun/apier-parser-base": "^0.2.0",
+    "@jiasuyun/apier-utils": "^0.2.0",
     "extract-comments": "^1.1.0",
     "json5": "^2.1.0",
     "lodash": "^4.17.11"
   },
   "devDependencies": {
-    "@jiasuyun/apier-test-utils": "^0.1.7",
+    "@jiasuyun/apier-test-utils": "^0.2.0",
     "@types/node": "^12.0.2"
   }
 }
