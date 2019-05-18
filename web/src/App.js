@@ -27,13 +27,13 @@ class App extends Component {
     };
   }
   componentDidMount() {
-    document.body.addEventListener('paste', e => {
-      let data = (e.clipboardData || window.clipboardData).getData('text');
-      if (window.scrollY === 0 && data.split('\n ').length > 30) {
-        setTimeout(() => {
+    window.addEventListener('paste', e => {
+      let data = e.clipboardData.getData('text');
+      setTimeout(() => {
+        if (this.state.code === data) {
           window.scrollTo(0, 0);
-        }, 10);
-      }
+        }
+      }, 10);
     });
   }
   handlerGenBtnClick = toastManager => {
