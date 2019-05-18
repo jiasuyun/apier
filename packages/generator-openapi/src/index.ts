@@ -54,7 +54,7 @@ export default class Generator {
         const apierParameter: apier.ApierItem = apierParameters.model[name];
         const commentUtil = apierParameter.comment.retrive();
         const useSchema = commentUtil.val("useSchema");
-        if (useSchema) return parameters.push(createRef(useSchema));
+        if (useSchema) return parameters.push(createRef(useSchema, "parameters"));
         const parameter: openapi.ParameterObject = {
           name,
           in: inOfParameter(key)
@@ -168,9 +168,9 @@ export default class Generator {
       return !commentUtil.val("optional", false);
     }
     Object.assign(schema, { type: apierItem.kind() });
-    if (apierItem instanceof apier.ApierObject) {
+    if (apierItem.kind() === ApierKind.OBJECT) {
       this.schemaUtilObject(apierItem, context);
-    } else if (apierItem instanceof apier.ApierArray) {
+    } else if (apierItem.kind() === ApierKind.ARRAY) {
       this.schemaUtilArray(apierItem, context);
     }
     Object.assign(schema, commentUtil.pick(SCHEMA_KEYS));
