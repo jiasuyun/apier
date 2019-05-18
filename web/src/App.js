@@ -26,6 +26,16 @@ class App extends Component {
       openapisText: '',
     };
   }
+  componentDidMount() {
+    document.body.addEventListener('paste', e => {
+      let data = (e.clipboardData || window.clipboardData).getData('text');
+      if (window.scrollY === 0 && data.split('\n ').length > 30) {
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+        }, 10);
+      }
+    });
+  }
   handlerGenBtnClick = toastManager => {
     if (this.state.errorToastId) {
       toastManager.remove(this.state.errorToastId);

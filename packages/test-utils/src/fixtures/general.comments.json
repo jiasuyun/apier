@@ -11,15 +11,16 @@
             },
             "servers": [
               {
-                "url": true
+                "url": "http://localhost:3000/"
               }
             ],
-            "security": {
-              "bearerAuth": []
-            }
+            "security": [
+              {
+                "bearerAuth": []
+              }
+            ]
           }
-        },
-        "http://localhost:3000/": true
+        }
       }
     },
     {
