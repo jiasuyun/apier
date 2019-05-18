@@ -7,8 +7,7 @@
     "start": "lerna bootstrap",
     "test": "node ./scripts/test.js",
     "lint": "node ./scripts/lint.js",
-    "predeploy": "cd web && npm run build",
-    "deploy": "gh-pages -d web/build"
+    "publish": "lerna publish"
   },
   "repository": {
     "type": "git",
@@ -26,7 +25,6 @@
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-prettier": "^3.0.1",
-    "gh-pages": "^2.0.1",
     "jest": "^24.8.0",
     "lerna": "^3.14.1",
     "prettier": "^1.17.1",

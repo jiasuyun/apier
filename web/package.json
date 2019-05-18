@@ -6,7 +6,7 @@
     "@jiasuyun/apier": "^0.1.6",
     "@jiasuyun/apier-generator-handler": "^0.1.0",
     "@jiasuyun/apier-generator-htte": "^0.1.0",
-    "@jiasuyun/apier-generator-openapi": "^0.1.2",
+    "@jiasuyun/apier-generator-openapi": "^0.1.9",
     "@jiasuyun/apier-parser-json5": "^0.1.6",
     "bootstrap": "^4.3.1",
     "js-yaml": "^3.13.1",
@@ -24,10 +24,15 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "devDependencies": {
+    "gh-pages": "^2.0.1"
   },
   "homepage": "https://jiasuyun.github.io/apier",
   "browserslist": {
