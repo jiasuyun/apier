@@ -2,6 +2,7 @@ import * as apier from "@jiasuyun/apier";
 import * as openapi from "openapi3-ts";
 import { ApierKind, colonToCurlybrace } from "@jiasuyun/apier-utils";
 import { OPERATION_KEYS, PARAMETER_KEYS, SCHEMA_KEYS } from "./constants";
+import { omitEmptyObject } from "./helper";
 export interface GeneratorResult {
   paths: openapi.PathsObject;
   components: openapi.ComponentsObject;
@@ -18,10 +19,11 @@ export default class Generator {
     this.apier = apier;
     this.value = {
       paths: { [url]: { [apier.method]: operation } },
-      components: { schemas }
+      components: { parameters: {}, responses: {}, schemas }
     };
     this.operation = operation as openapi.OperationObject;
     this.generate();
+    this.value = omitEmptyObject(this.value);
   }
 
   generate() {

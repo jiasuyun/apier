@@ -295,7 +295,6 @@ Object {
             "type": "array",
           },
           "array4": Object {
-            "items": Object {},
             "properties": Object {
               "id": Object {
                 "type": "integer",
