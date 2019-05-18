@@ -25,14 +25,14 @@ Object {
           },
           "integer": Object {
             "format": "int64",
-            "type": "integer",
+            "type": "string",
           },
           "null": Object {
             "type": "null",
           },
           "number": Object {
             "format": "float",
-            "type": "number",
+            "type": "string",
           },
           "object": Object {
             "properties": Object {
@@ -92,14 +92,14 @@ Object {
           },
           "integer": Object {
             "format": "int64",
-            "type": "integer",
+            "type": "string",
           },
           "null": Object {
             "type": "null",
           },
           "number": Object {
             "format": "float",
-            "type": "number",
+            "type": "string",
           },
           "object": Object {
             "properties": Object {
@@ -137,7 +137,7 @@ Object {
             "required": true,
             "schema": Object {
               "format": "int32",
-              "type": "integer",
+              "type": "string",
             },
           },
           Object {
@@ -366,7 +366,7 @@ Object {
         "required": true,
         "schema": Object {
           "format": "int32",
-          "type": "integer",
+          "type": "string",
         },
       },
       "OrgId": Object {
