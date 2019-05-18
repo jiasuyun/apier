@@ -1,6 +1,6 @@
 import { ApierRaw, ApierRawObject, ApierRawReq, ApierRawRes, Method, Parser } from "@jiasuyun/apier-parser-base";
 import { ApierKind, kindOf } from "@jiasuyun/apier-utils";
-import { ApierComment } from "@jiasuyun/apier-comment";
+import { ApierComment, CommentItem } from "@jiasuyun/apier-comment";
 
 export abstract class ApierItem {
   public readonly comment: ApierComment;
@@ -138,8 +138,8 @@ export interface ApierModel {
 export class Apier extends ApierItem {
   public readonly method: Method;
   public readonly url: string;
-  public readonly model: ApierModel;
   public readonly value: ApierRaw;
+  public readonly model: ApierModel;
   constructor(comment: ApierComment, value: ApierRaw) {
     super(comment, value.name, value);
     this.method = value.method;
@@ -151,11 +151,21 @@ export class Apier extends ApierItem {
   }
 }
 
-export function parse(input: string, parser: Parser): Apier[] {
-  const result = [];
+export interface ParseResult {
+  apis: {
+    [k: string]: ApierRaw;
+  };
+  comments: CommentItem[];
+  apiers: Apier[];
+  metadata: any;
+}
+
+export function parse(input: string, parser: Parser): ParseResult {
+  const apiers = [];
   const { apis, comment } = parser.parse(input);
   for (const name in apis) {
-    result.push(new Apier(comment, apis[name]));
+    apiers.push(new Apier(comment, apis[name]));
   }
-  return result;
+  const metadata = comment.retrive([]).val();
+  return { apis, apiers, comments: comment.comments, metadata };
 }

@@ -1,3 +1,8 @@
+// @@@ openapi.doc.openapi=3.0.0
+// @@@ openapi.doc.info.version=0.0.1
+// @@@ openapi.doc.info.title=model
+// @@@ openapi.doc.servers[0].url = http://localhost:3000/
+// @@@ openapi.doc.security.bearerAuth=[]
 {
     // see
     "getModel": { // summary=获取模型

@@ -2,7 +2,7 @@ export function omitEmptyObject(obj: any) {
   let omit = value => {
     if (Array.isArray(value)) {
       value = value.map(v => omit(v)).filter(v => !isEmpty(v));
-    } 
+    }
     if (isObject(value)) {
       let result = {};
       for (let key of Object.keys(value)) {
@@ -32,5 +32,5 @@ function isEmpty(value) {
 }
 
 function isObject(value) {
-  return typeof(value) === "object" && !Array.isArray(value)
+  return typeof value === "object" && !Array.isArray(value);
 }

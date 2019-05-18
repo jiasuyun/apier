@@ -1,8 +1,11 @@
 import omit from "lodash/omit";
 import pick from "lodash/pick";
+import merge from "lodash/merge";
+import lodashSet from "lodash/set";
+import lodashGet from "lodash/get";
 
-// 注释键值, `optional`, `type=integer`, `description="split with ws"`
-const RG_COMMENT_VALUE = /([A-Za-z_\-]+)(\=("[^"]*"|'[^']*'|[^\s]+))?/g;
+// 注释键值, `optional`, `type=integer`, `description="split with ws"`, `a.b[0].c=3`
+const RG_COMMENT_VALUE = /([^\s=]+)(\=("[^"]*"|'[^']*'|[^\s]+))?/g;
 
 export interface CommentObject {
   [k: string]: any;
@@ -18,8 +21,16 @@ export class ApierComment {
     this.comments = comments;
   }
   public append(paths: string[], commentText: string) {
-    const comment = this.parse(commentText);
-    if (comment) this.comments.push({ paths, comment });
+    let comment = this.parse(commentText);
+    if (!comment) {
+      return;
+    }
+    const existCommentObj = this.find(paths);
+    if (!existCommentObj) {
+      this.comments.push({ paths, comment });
+      return;
+    }
+    merge(existCommentObj.comment, comment);
   }
   public scope(paths: string[]) {
     const comments = this.comments
@@ -28,9 +39,13 @@ export class ApierComment {
     return new ApierComment(comments);
   }
   public retrive(paths: string[] = []): CommentUtil {
-    const commentItem = this.comments.find(c => paths.length === c.paths.length && isPrefixArray(paths, c.paths));
+    const commentItem = this.find(paths);
     return new CommentUtil(commentItem ? commentItem.comment : {});
   }
+  private find(paths: string[]): CommentObject {
+    return this.comments.find(c => paths.length === c.paths.length && isPrefixArray(paths, c.paths));
+  }
+
   /**
    * 获取行注释
    *
@@ -49,7 +64,7 @@ export class ApierComment {
           value = JSON.parse(value);
         } catch (err) {}
       }
-      result[key] = value;
+      lodashSet(result, key, value);
     }
     return result;
   }
@@ -68,10 +83,7 @@ export class CommentUtil {
   }
   val(key?: string, defaultValue?: any) {
     if (key === undefined) return { ...this.comment };
-    if (this.comment.hasOwnProperty(key)) {
-      return this.comment[key];
-    }
-    return defaultValue;
+    return lodashGet(this.comment, key, defaultValue);
   }
 }
 

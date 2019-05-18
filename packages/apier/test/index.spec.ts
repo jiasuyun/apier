@@ -4,9 +4,21 @@ import Parser from "@jiasuyun/apier-parser-json5";
 import { ApierKind } from "@jiasuyun/apier-utils";
 import { ApierComment } from "@jiasuyun/apier-comment";
 
+test("parse", () => {
+  const input = loadFixtureJSON5("general");
+  const parser = new Parser();
+  const result = apier.parse(input, parser);
+  expect(result.apiers).toHaveLength(1);
+  expect(result.apis).toEqual(loadFixtureJSON("general.apis"));
+  const commentsJSON = loadFixtureJSON("general.comments");
+  expect(result.comments).toEqual(commentsJSON);
+  expect(result.metadata).toEqual(commentsJSON[0].comment);
+});
+
 test("Apier", () => {
   const api = getApier();
-  const comment = new ApierComment(loadFixtureJSON("general.comments")).scope(["getModel"]);
+  const commentsJSON = loadFixtureJSON("general.comments");
+  const comment = new ApierComment(commentsJSON).scope(["getModel"]);
   expect(api).toBeInstanceOf(apier.Apier);
   expect(api.name).toEqual("getModel");
   expect(api.kind()).toEqual(ApierKind.OBJECT);
@@ -148,5 +160,5 @@ test("ApierArray", () => {
 function getApier(): apier.Apier {
   const input = loadFixtureJSON5("general");
   const parser = new Parser();
-  return apier.parse(input, parser)[0];
+  return apier.parse(input, parser).apiers[0];
 }

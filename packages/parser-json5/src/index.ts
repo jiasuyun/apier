@@ -8,6 +8,8 @@ import lset from "lodash/set";
 
 // 解析 Route
 const RE_ROUTE = /^(get|post|put|delete)\s[:\/A-Za-z0-9_\-]+/i;
+// 判断根注释, `// @@@`
+const RE_ROOT_COMMENT = /^\s*\/\/\s*@@@/;
 
 export default class Parser implements apier.Parser {
   public parse(input: string): apier.ParseResult {
@@ -39,8 +41,20 @@ export default class Parser implements apier.Parser {
     const lines = input.split("\n");
     const comment = new ApierComment();
     const root = new Visitor(lines, comment, []);
-    root.scopeObject(beignLineNum(lines) + 1);
+    const beginLineIndex = beignLineNum(lines);
+    this.parserRootComment(comment, lines.slice(0, beginLineIndex));
+    root.scopeObject(beginLineIndex + 1);
     return comment;
+  }
+  private parserRootComment(comment: ApierComment, lines: string[]) {
+    const paths = [];
+    for (let line of lines) {
+      const match = RE_ROOT_COMMENT.exec(line);
+      if (!match) {
+        continue;
+      }
+      comment.append(paths, line.slice(match[0].length));
+    }
   }
   private parseRoute(api: apier.ApierRaw, route: string) {
     if (!RE_ROUTE.test(route)) {

@@ -1,25 +1,25 @@
 import { ApierComment } from "../src";
 describe("ApierComment", () => {
-  it("append & retrive", () => {
+  it("append", () => {
     const comment = new ApierComment();
-    comment.append([], 'optional type=integer description="a b =c"');
+    comment.append([], 'bool=true num=3.2 int=4 str="a b =c" nil=null arr=[3] obj={"k":3} a.b[0].c=3');
     const commentUtil = comment.retrive();
     expect(commentUtil.val()).toEqual({
-      optional: true,
-      type: "integer",
-      description: "a b =c"
-    });
-    comment.append(["a"], 'bool=true num=3.2 int=4 str=abc nil=null arr=[3] obj={"k":3}');
-    const commentUtil2 = comment.retrive(["a"]);
-    expect(commentUtil2.val()).toEqual({
       bool: true,
       num: 3.2,
       int: 4,
-      str: "abc",
+      str: "a b =c",
       nil: null,
       arr: [3],
-      obj: { k: 3 }
+      obj: { k: 3 },
+      a: { b: [{ c: 3 }] }
     });
+  });
+  it("append: merge", () => {
+    const comment = new ApierComment();
+    comment.append([], "a=3");
+    comment.append([], "b=4");
+    expect(comment.retrive().val()).toEqual({ a: 3, b: 4 });
   });
   it("scope", () => {
     const comment = new ApierComment();
@@ -38,6 +38,15 @@ describe("ApierComment", () => {
         .retrive()
         .val("k")
     ).toEqual(3);
+  });
+  it("retrive", () => {
+    const comment = new ApierComment();
+    comment.append(["a"], "k=1");
+    comment.append(["b"], "k=2");
+    comment.append(["a", "b"], "k=3");
+    expect(comment.retrive().val()).toEqual({});
+    expect(comment.retrive(["a"]).val()).toEqual({ k: 1 });
+    expect(comment.retrive(["a", "b"]).val()).toEqual({ k: 3 });
   });
 });
 
@@ -62,5 +71,12 @@ describe("CommentUtil", () => {
       obj: { k: 3 }
     });
     expect(commentUtil.pick(["bool", "num"])).toEqual({ bool: true, num: 3.2 });
+  });
+  it("val by jsonpath", () => {
+    const comment = new ApierComment();
+    comment.append([], "a.b[0].c=3");
+    const commentUtil = comment.retrive();
+    expect(commentUtil.val()).toEqual({ a: { b: [{ c: 3 }] } });
+    expect(commentUtil.val("a.b[0].c")).toEqual(3);
   });
 });
