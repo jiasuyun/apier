@@ -174,9 +174,6 @@ export default class Generator {
       this.schemaUtilArray(apierItem, context);
     }
     Object.assign(schema, commentUtil.pick(SCHEMA_KEYS));
-    if (commentUtil.val("format")) {
-      schema.type = "string";
-    }
     if (saveSchema) {
       this.value.components.schemas[saveSchema] = { ...schema };
       Object.keys(schema).forEach(key => delete schema[key]); // clear
