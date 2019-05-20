@@ -813,13 +813,13 @@ components:
       name: pageSize
       in: query
       schema:
-        type: integer
+        type: string
         format: int32
     PageNo:
       name: pageNo
       in: query
       schema:
-        type: integer
+        type: string
         format: int32
 "
 `;
