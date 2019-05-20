@@ -7,7 +7,7 @@ cache:
   - node_modules
 install:
 - npm install
-- lerna bootstrap --no-ci
+- npx lerna bootstrap --no-ci
 script:
 - npm run lint
 - npm test
@@ -22,3 +22,5 @@ deploy:
   keep_history: true
   on:
     branch: master
+    all_branches: true
+    condition: $TRAVIS_TAG =~ ^v[0-9]+\.[0-9]+\.[0-9]+ || $TRAVIS_BRANCH = master
