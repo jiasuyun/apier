@@ -21,7 +21,8 @@ export const SCHEMA_KEYS = [
   "uniqueItems",
   "maxProperties",
   "minProperties",
-  "enum"
+  "enum",
+  "type"
 ];
 export const OPERATION_KEYS = ["tags", "description", "deperacated", "security", "servers"];
 export const PARAMETER_KEYS = ["name", "in", "description", "deprecated", "allowEmptyValue"];
