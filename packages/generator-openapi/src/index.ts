@@ -211,18 +211,22 @@ export default class Generator {
     const { schema } = context;
     let requiredAll = [];
     let properties = {};
+    let count = 0;
     const children = apierItem.model;
     children.forEach(child => {
-      const childSchema: openapi.SchemaObject = {};
+      const childSchema: openapi.SchemaObject | openapi.ReferenceObject = {};
       this.schemaUtil(child, { ...context, schema: childSchema });
       if (child.kind() === ApierKind.OBJECT) {
-        requiredAll = [...requiredAll, ...childSchema.required];
-        properties = { ...properties, ...childSchema.properties };
+        if (childSchema.type) {
+          count++;
+          requiredAll = [...requiredAll, ...childSchema.required];
+          properties = { ...properties, ...childSchema.properties };
+        }
       }
     });
     schema.type = "object";
     schema.properties = properties;
-    const required = filterByCount(requiredAll, children.length);
+    const required = filterByCount(requiredAll, count);
     if (required.length > 0) schema.required = required;
   }
   schemaUtilObject(apierItem: apier.ApierObject, context: SchemaUtilContext) {
