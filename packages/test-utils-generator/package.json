@@ -5,8 +5,8 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "../../node_modules/.bin/tsc",
-    "clean": "../../node_modules/.bin/rimraf dist",
+    "build": "tsc",
+    "clean": "rimraf dist",
     "prepublish": "npm run -s clean && npm run -s build"
   },
   "files": [
@@ -28,6 +28,8 @@
     "@jiasuyun/apier-parser-json5": "^0.2.3",
     "@jiasuyun/apier-test-utils": "^0.2.3",
     "js-yaml": "^3.13.1",
-    "lodash": "^4.17.11"
+    "lodash": "^4.17.11",
+    "rimraf": "^2.6.3",
+    "typescript": "^3.4.5"
   }
 }

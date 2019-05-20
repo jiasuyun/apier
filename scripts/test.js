@@ -8,6 +8,8 @@ const { execSync } = require("child_process");
 const jestConfigFile = path.resolve(__dirname, "../jest.config.js");
 const args = process.argv.slice(2);
 
+let isAllRight = true;
+
 if (args.length) {
   const [pkgName, pathPattern] = args;
   const pkgFolder = resolvePackage(pkgName);
@@ -15,6 +17,10 @@ if (args.length) {
 } else {
   const packages = getPackages();
   packages.forEach(folder => test(folder));
+}
+
+if (!isAllRight) {
+  process.exit(1);
 }
 
 function test(pkgFolder, pathPattern) {
@@ -26,7 +32,9 @@ function test(pkgFolder, pathPattern) {
   process.stdout.write(`Testing ${pkgName}\n\n`);
   try {
     execSync(cmd, { stdio: "inherit" });
-  } catch (err) {}
+  } catch (err) {
+    isAllRight = false;
+  }
   process.stdout.write(`\n`);
 }
 

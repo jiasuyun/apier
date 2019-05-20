@@ -2,9 +2,6 @@ sudo: false
 language: node_js
 node_js:
 - '10'
-branches:
-  only:
-  - master
 cache:
   directories:
   - node_modules
@@ -14,3 +11,14 @@ install:
 script:
 - npm run lint
 - npm test
+before_deploy:
+- cd web && npm install && npm run build
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token:
+    secure: "kS0iejpKdTX2xQ/nEzrBM3bIS2AeBQwKV/vWtr621S36+Z6DidyVKfWsDkkHHfbCUiCurGrf3NJFKneZ4llD0OOTsNeVM1O+Ia/CrDVi3DK/b6sEvrOW6kKXr7VIrGK893BkcqTnD9jooQWTyjAtFqCwuwcT+Yt6fRdfh1JXnGFAKCR2k/PnY3bPoDDelp1N2zAf7PP4bc0nF2tWYiHcjEkqZZdsPaU6B5taod97JvDz5j+9Tv2Noraj7PP0UazUJB51LR+ji50l9JmHgUjs96oQkUrFQF14ybDWEpGxphOTTcvyTWcq3dmyza+sS5S82dqzzuwyWHB7d8NnVb5dEdo9OfnrNO4E+2Plev4jb+vDvYFD8rZXugMn/XVMUoovupQGR0Y44A8/rjg3+6DUjP81DhtlqVww3s33O9WSdPA9Yin4mUO2ggAXFgnE3qzllu54JrAlxvg1P9TTvZFcEXqoFvYdNe0VPuMCJYsaXy+PAgCLIzIked5ZiR4WQAHSqMQ8uH4+a4qnU+CH9xtw2WVX0V5QP7QxTeKOjY+mcVtIuL/0YCPhZr8thR4j2wMk3HCA6BQH6d3QnrescZVPnjJitsb7DPJCSRcjacmylRJDTUobJrrCi0WxQm/8sidtpwyJ4GtX3hoMzOWzkBHv5ooExDqgt/M+GrlC2Ina5R0="
+  local_dir: web/build
+  keep_history: true
+  on:
+    branch: master

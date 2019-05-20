@@ -1,4 +1,4 @@
-import { parse, factory } from "../src";
+import { parse, factory, toYaml, mergeArray } from "../src";
 import { loadFixtureJSON } from "@jiasuyun/apier-test-utils";
 
 test("parse", () => {
@@ -12,5 +12,5 @@ test("parse", () => {
 
 test("generateYaml", () => {
   const fn = apier => ({ [apier.name]: true });
-  expect(factory(fn)("user")).toMatchSnapshot();
+  expect(toYaml(mergeArray(factory(fn)("user")))).toMatchSnapshot();
 });
