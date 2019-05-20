@@ -1,6 +1,6 @@
 {
   "name": "@jiasuyun/apier-generator-handler",
-  "version": "0.2.3",
+  "version": "0.2.5",
   "description": "apier handler generator",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -24,11 +24,11 @@
     "url": "git+https://github.com/jiasuyun/apier"
   },
   "dependencies": {
-    "@jiasuyun/apier": "^0.2.3",
-    "@jiasuyun/apier-utils": "^0.2.3"
+    "@jiasuyun/apier": "^0.2.5",
+    "@jiasuyun/apier-utils": "^0.2.5"
   },
   "devDependencies": {
-    "@jiasuyun/apier-test-utils-generator": "^0.2.3",
+    "@jiasuyun/apier-test-utils-generator": "^0.2.5",
     "rimraf": "^2.6.3",
     "typescript": "^3.4.5"
   }
