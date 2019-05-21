@@ -101,18 +101,19 @@ export default class Generator {
   }
   dealResponses() {
     const resps = this.apier.model.res.map(res => this.dealEachResponse(res));
-    const responses: any = this.operation.responses = {};
+    const responses: any = (this.operation.responses = {});
     for (const { status, resp } of resps) {
       const response = responses[status];
       if (!response) {
         responses[status] = resp;
         continue;
       }
-      if (response['$ref']) {
+      if (response["$ref"]) {
         responses[status] = resp;
         continue;
       }
-      if (resp['$ref']) { // SchemaObject is more important than RefObject
+      if (resp["$ref"]) {
+        // SchemaObject is more important than RefObject
         continue;
       }
       const contentType = Object.keys(resp.content)[0];
@@ -122,12 +123,12 @@ export default class Generator {
         continue;
       }
       let currentSchema = response.content[contentType];
-      if (currentSchema.schema['$ref']) {
+      if (currentSchema.schema["$ref"]) {
         currentSchema.schema = {
           oneOf: [currentSchema.schema, resp.content[contentType].schema]
-        }
+        };
       } else {
-        currentSchema.schema['oneOf'].push(resp.content[contentType].schema);
+        currentSchema.schema["oneOf"].push(resp.content[contentType].schema);
       }
     }
   }
