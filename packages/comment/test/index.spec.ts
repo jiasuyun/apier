@@ -48,6 +48,14 @@ describe("ApierComment", () => {
     expect(comment.retrive(["a"]).val()).toEqual({ k: 1 });
     expect(comment.retrive(["a", "b"]).val()).toEqual({ k: 3 });
   });
+  it("changePaths", () => {
+    const comment = new ApierComment();
+    comment.append(["a", "b"], "k=1");
+    comment.append(["a", "b", "c"], "k=2");
+    comment.changePaths(["a", "b"], ["a", "d"]);
+    expect(comment.retrive(["a", "d"]).val()).toEqual({ k: 1 });
+    expect(comment.retrive(["a", "d", "c"]).val()).toEqual({ k: 2 });
+  });
 });
 
 describe("CommentUtil", () => {

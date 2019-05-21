@@ -5,7 +5,7 @@ export interface ApierRaw {
   url: string;
   method: Method;
   req?: ApierRawReq;
-  res: ApierRawRes;
+  res: ApierRawRes[];
 }
 
 export interface ApierRawObject {

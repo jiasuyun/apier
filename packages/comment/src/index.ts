@@ -42,6 +42,13 @@ export class ApierComment {
     const commentItem = this.find(paths);
     return new CommentUtil(commentItem ? commentItem.comment : {});
   }
+  public changePaths(srcPaths: string[], targetPaths: string[]) {
+    return this.comments
+      .filter(c => isPrefixArray(srcPaths, c.paths))
+      .forEach(c => {
+        c.paths.splice(0, srcPaths.length, ...targetPaths);
+      });
+  }
   private find(paths: string[]): CommentObject {
     return this.comments.find(c => paths.length === c.paths.length && isPrefixArray(paths, c.paths));
   }

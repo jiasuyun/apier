@@ -100,34 +100,65 @@ export default class Generator {
     this.operation.requestBody = bodySchema;
   }
   dealResponses() {
-    const res: apier.ApierRes = this.apier.model.res;
+    const resps = this.apier.model.res.map(res => this.dealEachResponse(res));
+    const responses: any = (this.operation.responses = {});
+    for (const { status, resp } of resps) {
+      const response = responses[status];
+      if (!response) {
+        responses[status] = resp;
+        continue;
+      }
+      if (response["$ref"]) {
+        responses[status] = resp;
+        continue;
+      }
+      if (resp["$ref"]) {
+        // SchemaObject is more important than RefObject
+        continue;
+      }
+      const contentType = Object.keys(resp.content)[0];
+      const contentTypes = Object.keys(response.content);
+      if (contentTypes.indexOf(contentType) === -1) {
+        Object.assign(response.content, resp.content);
+        continue;
+      }
+      let currentSchema = response.content[contentType];
+      if (currentSchema.schema["$ref"]) {
+        currentSchema.schema = {
+          oneOf: [currentSchema.schema, resp.content[contentType].schema]
+        };
+      } else {
+        currentSchema.schema["oneOf"].push(resp.content[contentType].schema);
+      }
+    }
+  }
+  dealEachResponse(res: apier.ApierRes) {
     const commentUtil = res.comment.retrive();
     const { status, body } = res.model;
-    const responses: openapi.ResponsesObject = { [status]: {} };
-    this.operation.responses = responses;
-    const description = (responses[status].description = commentUtil.val("description", "SUCCESS"));
+    const description = commentUtil.val("description", "SUCCESS");
     const contentType = commentUtil.val("contentType", "application/json");
     const useSchema = commentUtil.val("useSchema");
     if (useSchema) {
-      return (responses[status].content = {
-        [contentType]: { schema: createRef(useSchema, "responses") }
-      });
+      return { status, resp: createRef(useSchema, "responses") };
     }
     if (!body) {
-      return (responses[status].content = {
+      const content = {
         [contentType]: { schema: { type: "object" } }
-      });
+      };
+      return { status, resp: { content } };
     }
     const bodySchema: any = {};
     this.dealBody(body, bodySchema, "Response");
     if (!bodySchema.description) bodySchema.description = description;
     const saveSchema = commentUtil.val("saveSchema");
+    let resp: any;
     if (saveSchema) {
-      responses[status] = this.saveResponses(saveSchema, bodySchema);
+      resp = this.saveResponses(saveSchema, bodySchema);
     } else {
-      responses[status] = bodySchema;
+      resp = bodySchema;
     }
     reorder(bodySchema, ["description", "content", "required"]);
+    return { status, resp };
   }
   saveSchema(name: string, schema: openapi.SchemaObject): openapi.ReferenceObject {
     this.value.components.schemas[name] = schema;

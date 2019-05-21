@@ -27,7 +27,7 @@
         }
     },
     "getModel2": { // summary=获取模型2
-        "route": "GET /model/:id",
+        "route": "GET /model2/:id",
         "req": {
             "query": {
                 "pageSize": 10, // useSchema=PageSize

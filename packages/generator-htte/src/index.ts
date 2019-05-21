@@ -24,7 +24,7 @@ export default class Generator {
     this.value = {
       describe: summary,
       req: { method, url: colonToCurlybrace(url), ...req },
-      res
+      res: res[0]
     };
   }
 }
