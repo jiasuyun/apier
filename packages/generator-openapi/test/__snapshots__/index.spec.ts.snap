@@ -14,7 +14,6 @@ exports[`expect(generate: array) 1`] = `
         required: true
       responses:
         '200':
-          description: SUCCESS
           content:
             application/json:
               schema:
@@ -96,6 +95,37 @@ components:
         - array2
         - array3
         - array4
+"
+`;
+
+exports[`expect(generate: mutiple res) 1`] = `
+"paths:
+  /model:
+    get:
+      operationId: getModel
+      summary: 获取模型
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetModelResponse'
+        '400':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetModelResponse'
+components:
+  schemas:
+    GetModelResponse:
+      type: object
+      properties:
+        code:
+          type: string
+      required:
+        - code
 "
 `;
 
@@ -199,11 +229,7 @@ exports[`expect(generate: real example) 1`] = `
         required: true
       responses:
         '200':
-          description: SUCCESS
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/OkResponse'
+          $ref: '#/components/responses/OkResponse'
   /c/favoriates:
     get:
       operationId: listFavoriates
@@ -252,11 +278,7 @@ exports[`expect(generate: real example) 1`] = `
         required: true
       responses:
         '200':
-          description: SUCCESS
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/OkResponse'
+          $ref: '#/components/responses/OkResponse'
   /c/stats:
     get:
       operationId: getStats
@@ -290,11 +312,7 @@ exports[`expect(generate: real example) 1`] = `
         required: true
       responses:
         '200':
-          description: SUCCESS
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/OkResponse'
+          $ref: '#/components/responses/OkResponse'
   /c/user/settings:
     get:
       operationId: getUserSettings
@@ -317,11 +335,7 @@ exports[`expect(generate: real example) 1`] = `
         required: true
       responses:
         '200':
-          description: SUCCESS
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/OkResponse'
+          $ref: '#/components/responses/OkResponse'
 components:
   schemas:
     Phonenum:

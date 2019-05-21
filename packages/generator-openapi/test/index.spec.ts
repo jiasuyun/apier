@@ -18,3 +18,7 @@ test("expect(genereate: useSchema)", () => {
 test("expect(generate: real example)", () => {
   expect(gen("user")).toMatchSnapshot();
 });
+
+test("expect(generate: mutiple res)", () => {
+  expect(gen("multiRes")).toMatchSnapshot();
+});

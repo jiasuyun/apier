@@ -1,0 +1,28 @@
+
+{
+    "getModel": { // summary=获取模型
+        "route": "GET /model",
+        "req": {
+        },
+        "res": [
+          {
+            status: 200,
+            body: {
+              msg: 'OK'
+            }
+          },
+          {
+            status: 400, 
+            body: { // saveSchema=Err1
+              code: 'Err1'
+            }
+          },
+          {
+            status: 400,
+            body: { // saveSchema=Err2
+              code: 'Err2'
+            }
+          }
+        ] 
+    },
+}
