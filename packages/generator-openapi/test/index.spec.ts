@@ -7,14 +7,14 @@ test("generate", () => {
   expect(gen("general")).toMatchSnapshot();
 });
 
-test("expect(generate: array", () => {
+test("expect(generate: array)", () => {
   expect(gen("array")).toMatchSnapshot();
 });
 
-test("expect(genereate: useSchema", () => {
+test("expect(genereate: useSchema)", () => {
   expect(gen("useSchema")).toMatchSnapshot();
 });
 
-test("expect(generate: real example", () => {
+test("expect(generate: real example)", () => {
   expect(gen("user")).toMatchSnapshot();
 });

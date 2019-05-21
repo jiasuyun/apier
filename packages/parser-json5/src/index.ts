@@ -1,4 +1,4 @@
-import * as apier from "@jiasuyun/apier-parser-base";
+import * as parser from "@jiasuyun/apier-parser-base";
 import { ApierComment } from "@jiasuyun/apier-comment";
 import { ApierKind, kindOf } from "@jiasuyun/apier-utils";
 import * as JSON5 from "json5";
@@ -11,31 +11,35 @@ const RE_ROUTE = /^(get|post|put|delete)\s[:\/A-Za-z0-9_\-]+/i;
 // 判断根注释, `// @@@`
 const RE_ROOT_COMMENT = /^\s*\/\/\s*@@@/;
 
-export default class Parser implements apier.Parser {
-  public parse(input: string): apier.ParseResult {
+export default class Parser implements parser.Parser {
+  private markResIsSignle: { [k: string]: boolean } = {};
+  public parse(input: string): parser.ParseResult {
     let parsedObj: any;
     try {
       parsedObj = JSON5.parse(input);
     } catch (err) {
-      throw new apier.ContentParserError(err.lineNumber, err.columnNumber, err);
+      throw new parser.ContentParserError(err.lineNumber, err.columnNumber, err);
     }
+    const comment = this.parseComment(input);
     const apis = {};
     for (const name in parsedObj) {
       apis[name] = this.parseApi(name, parsedObj[name]);
+      if (this.markResIsSignle[name]) {
+        comment.changePaths([name, "res"], [name, "res", "0"]);
+      }
     }
-    const comment = this.parseComment(input);
     return { apis, comment };
   }
-  private parseApi(name: string, data: any): apier.ApierRaw {
+  private parseApi(name: string, data: any): parser.ApierRaw {
     if (kindOf(data) !== ApierKind.OBJECT) {
-      throw new apier.StructParserError([name], "should be object");
+      throw new parser.StructParserError([name], "should be object");
     }
     let api: any = { name };
     const { route, req, res } = data;
     this.parseRoute(api, route);
     this.parseReq(api, req);
-    this.parseRes(api, res);
-    return api as apier.ApierRaw;
+    this.markResIsSignle[name] = this.parseRes(api, res);
+    return api as parser.ApierRaw;
   }
   private parseComment(input: string): ApierComment {
     const lines = input.split("\n");
@@ -56,19 +60,19 @@ export default class Parser implements apier.Parser {
       comment.append(paths, line.slice(match[0].length));
     }
   }
-  private parseRoute(api: apier.ApierRaw, route: string) {
+  private parseRoute(api: parser.ApierRaw, route: string) {
     if (!RE_ROUTE.test(route)) {
-      throw new apier.StructParserError([api.name, "route"], route);
+      throw new parser.StructParserError([api.name, "route"], route);
     }
     const [method, url] = route.split(" ");
-    api.method = method.toLowerCase() as apier.Method;
+    api.method = method.toLowerCase() as parser.Method;
     api.url = url;
   }
 
-  private parseReq(api: apier.ApierRaw, req) {
+  private parseReq(api: parser.ApierRaw, req) {
     if (req === undefined) return;
     if (kindOf(req) !== ApierKind.OBJECT) {
-      throw new apier.StructParserError([api.name, "req"], "must be object");
+      throw new parser.StructParserError([api.name, "req"], "must be object");
     }
     const { headers, params, query, body } = req;
     api.req = {};
@@ -78,41 +82,56 @@ export default class Parser implements apier.Parser {
     if (body) this.parseBody(api, ["req", "body"], body);
   }
 
-  private parseRes(api: apier.ApierRaw, res) {
-    api.res = { status: 200 };
+  private parseRes(api: parser.ApierRaw, res: any) {
+    let isSingleRes = true;
     if (res === undefined) {
-      return;
+      api.res = [{ status: 200 }];
+      return isSingleRes;
     }
-    if (kindOf(res) !== ApierKind.OBJECT) {
-      throw new apier.StructParserError([api.name, "res"], "must be object");
+    const kind = kindOf(res);
+    if (kind === ApierKind.OBJECT) {
+      this.parseSingleRes(api, res, 0);
+    } else if (kind === ApierKind.ARRAY) {
+      res.forEach((v, i) => this.parseSingleRes(api, v, i));
+      isSingleRes = false;
+    } else {
+      throw new parser.StructParserError([api.name, "res"], "must be array or object");
     }
-    const { status, body } = res;
-    if (status) this.parseResStatus(api, status);
-    if (body) this.parseBody(api, ["res", "body"], body);
+    return isSingleRes;
   }
 
-  private parseParameters(api, paths, obj) {
+  private parseSingleRes(api: parser.ApierRaw, res: any, index: number) {
+    let paths = ["res", "" + index];
+    if (kindOf(res) !== ApierKind.OBJECT) {
+      throw new parser.StructParserError(paths, "must be object");
+    }
+    const { status = 200, body } = res;
+    if (status) this.parseResStatus(api, paths.concat("status"), status);
+    if (body) this.parseBody(api, paths.concat("body"), body);
+  }
+
+  private parseParameters(api: parser.ApierRaw, paths: string[], obj: any) {
     if (typeof obj !== "object") {
-      throw new apier.StructParserError([api.name, ...paths], `must be object`);
+      throw new parser.StructParserError([api.name, ...paths], `must be object`);
     }
     for (const key in obj) {
       const value = obj[key];
       const valueKind = kindOf(value);
       if (valueKind === ApierKind.ARRAY || valueKind === ApierKind.OBJECT) {
-        throw new apier.StructParserError([api.name, ...paths, key], `must be scalar value`);
+        throw new parser.StructParserError([api.name, ...paths, key], `must be scalar value`);
       }
     }
     lset(api, paths, obj);
   }
 
-  private parseResStatus(api, status = 200) {
+  private parseResStatus(api: parser.ApierRaw, paths: string[], status = 200) {
     if (typeof status !== "number" && (status < 100 && status >= 600)) {
-      throw new apier.StructParserError([name, "res", "status"], `{status}`);
+      throw new parser.StructParserError([api.name, ...paths], `{status}`);
     }
-    api.res.status = status;
+    lset(api, paths, status);
   }
 
-  private parseBody(api, paths, body) {
+  private parseBody(api: parser.ApierRaw, paths: string[], body: any) {
     lset(api, paths, body);
   }
 }

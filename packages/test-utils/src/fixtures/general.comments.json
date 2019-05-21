@@ -99,6 +99,7 @@
       "paths": [
         "getModel",
         "res",
+        "0",
         "body",
         "integer"
       ],
@@ -110,6 +111,7 @@
       "paths": [
         "getModel",
         "res",
+        "0",
         "body",
         "number"
       ],
@@ -121,6 +123,7 @@
       "paths": [
         "getModel",
         "res",
+        "0",
         "body",
         "array"
       ],
@@ -132,6 +135,7 @@
       "paths": [
         "getModel",
         "res",
+        "0",
         "body",
         "array",
         "0",
@@ -145,6 +149,7 @@
       "paths": [
         "getModel",
         "res",
+        "0",
         "body",
         "object",
         "password"

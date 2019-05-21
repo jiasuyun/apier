@@ -133,7 +133,7 @@ export class ApierObject extends ApierItem {
 
 export interface ApierModel {
   req?: ApierReq;
-  res: ApierRes;
+  res: ApierRes[];
 }
 export class Apier extends ApierItem {
   public readonly method: Method;
@@ -146,7 +146,7 @@ export class Apier extends ApierItem {
     this.url = value.url;
     const model: any = {};
     if (value.req) model.req = new ApierReq(this.comment, "req", value.req);
-    model.res = new ApierRes(this.comment, "res", value.res);
+    model.res = value.res.map((res, i) => new ApierRes(this.comment.scope(["res"]), "" + i, res));
     this.model = model;
   }
 }

@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "lerna bootstrap",
-    "test": "node ./scripts/test.js",
-    "lint": "node ./scripts/lint.js",
+    "test": "node scripts/test.js",
+    "lint": "node scripts/lint.js",
     "publish": "lerna publish"
   },
   "repository": {

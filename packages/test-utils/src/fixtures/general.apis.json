@@ -28,26 +28,28 @@
         }
       }
     },
-    "res": {
-      "status": 200,
-      "body": {
-        "integer": 32,
-        "number": 16.23,
-        "bool": true,
-        "null": null,
-        "array": [
-          {
-            "foo": 1
-          },
-          {
-            "bar": 2
+    "res": [
+      {
+        "status": 200,
+        "body": {
+          "integer": 32,
+          "number": 16.23,
+          "bool": true,
+          "null": null,
+          "array": [
+            {
+              "foo": 1
+            },
+            {
+              "bar": 2
+            }
+          ],
+          "object": {
+            "password": "a234324"
           }
-        ],
-        "object": {
-          "password": "a234324"
         }
       }
-    }
+    ] 
   }
 }
 

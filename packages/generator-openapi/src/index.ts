@@ -100,7 +100,7 @@ export default class Generator {
     this.operation.requestBody = bodySchema;
   }
   dealResponses() {
-    const res: apier.ApierRes = this.apier.model.res;
+    const res: apier.ApierRes = this.apier.model.res[0];
     const commentUtil = res.comment.retrive();
     const { status, body } = res.model;
     const responses: openapi.ResponsesObject = { [status]: {} };

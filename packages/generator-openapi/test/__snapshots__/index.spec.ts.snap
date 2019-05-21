@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`expect(generate: array 1`] = `
+exports[`expect(generate: array) 1`] = `
 "paths:
   /c/array/test:
     post:
@@ -99,7 +99,7 @@ components:
 "
 `;
 
-exports[`expect(generate: real example 1`] = `
+exports[`expect(generate: real example) 1`] = `
 "paths:
   /c/signup:
     post:
@@ -824,7 +824,7 @@ components:
 "
 `;
 
-exports[`expect(genereate: useSchema 1`] = `
+exports[`expect(genereate: useSchema) 1`] = `
 "paths:
   '/model/{id}':
     get:

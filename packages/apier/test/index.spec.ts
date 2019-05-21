@@ -40,11 +40,11 @@ test("ApierReq", () => {
 test("ApierRes", () => {
   const api = getApier();
   const res = api.model.res;
-  expect(res).toBeInstanceOf(apier.ApierRes);
-  expect(res.name).toEqual("res");
-  expect(res.kind()).toEqual(ApierKind.OBJECT);
-  expect(res.value).toEqual(api.value.res);
-  expect(res.comment.comments).toEqual(api.comment.scope(["res"]).comments);
+  expect(res[0]).toBeInstanceOf(apier.ApierRes);
+  expect(res[0].name).toEqual("0");
+  expect(res[0].kind()).toEqual(ApierKind.OBJECT);
+  expect(res[0].value).toEqual(api.value.res[0]);
+  expect(res[0].comment.comments).toEqual(api.comment.scope(["res", "0"]).comments);
 });
 
 test("ApierReq {headers, params, query, body}", () => {
@@ -78,23 +78,23 @@ test("ApierReq {headers, params, query, body}", () => {
 
 test("ApierRes {status, body}", () => {
   const api = getApier();
-  const { status, body } = api.model.res.model;
+  const { status, body } = api.model.res[0].model;
   expect(status).toEqual(200);
   expect(body).toBeInstanceOf(apier.ApierObject);
   expect(body.name).toEqual("body");
   expect(body.kind()).toEqual(ApierKind.OBJECT);
-  expect(body.value).toEqual(api.value.res.body);
-  expect(body.comment.comments).toEqual(api.comment.scope(["res", "body"]).comments);
+  expect(body.value).toEqual(api.value.res[0].body);
+  expect(body.comment.comments).toEqual(api.comment.scope(["res", "0", "body"]).comments);
   expect(body.model["number"]).toBeInstanceOf(apier.ApierNumber);
 });
 
 test("ApierNumber", () => {
   const api = getApier();
   const key = "number";
-  const item: apier.ApierNumber = api.model.res.model.body.model[key];
+  const item: apier.ApierNumber = api.model.res[0].model.body.model[key];
   expect(item).toBeInstanceOf(apier.ApierNumber);
   expect(item.name).toEqual(key);
-  expect(item.value).toEqual(api.value.res.body[key]);
+  expect(item.value).toEqual(api.value.res[0].body[key]);
   expect(item.model).toEqual(null);
   expect(item.comment.retrive().val()).toEqual({ format: "float" });
 });
@@ -102,10 +102,10 @@ test("ApierNumber", () => {
 test("ApierBool", () => {
   const api = getApier();
   const key = "bool";
-  const item: apier.ApierNumber = api.model.res.model.body.model[key];
+  const item: apier.ApierNumber = api.model.res[0].model.body.model[key];
   expect(item).toBeInstanceOf(apier.ApierBoolean);
   expect(item.name).toEqual(key);
-  expect(item.value).toEqual(api.value.res.body[key]);
+  expect(item.value).toEqual(api.value.res[0].body[key]);
   expect(item.model).toEqual(null);
   expect(item.comment.retrive().val()).toEqual({});
 });
@@ -113,10 +113,10 @@ test("ApierBool", () => {
 test("ApierInteger", () => {
   const api = getApier();
   const key = "integer";
-  const item: apier.ApierInteger = api.model.res.model.body.model[key];
+  const item: apier.ApierInteger = api.model.res[0].model.body.model[key];
   expect(item).toBeInstanceOf(apier.ApierInteger);
   expect(item.name).toEqual(key);
-  expect(item.value).toEqual(api.value.res.body[key]);
+  expect(item.value).toEqual(api.value.res[0].body[key]);
   expect(item.model).toEqual(null);
   expect(item.comment.retrive().val()).toEqual({ format: "int64" });
 });
@@ -124,10 +124,10 @@ test("ApierInteger", () => {
 test("ApierString", () => {
   const api = getApier();
   const key = "password";
-  const item: apier.ApierString = api.model.res.model.body.model["object"].model[key];
+  const item: apier.ApierString = api.model.res[0].model.body.model["object"].model[key];
   expect(item).toBeInstanceOf(apier.ApierString);
   expect(item.name).toEqual(key);
-  expect(item.value).toEqual(api.value.res.body["object"][key]);
+  expect(item.value).toEqual(api.value.res[0].body["object"][key]);
   expect(item.model).toEqual(null);
   expect(item.comment.retrive().val()).toEqual({ minLength: 6 });
 });
@@ -135,10 +135,10 @@ test("ApierString", () => {
 test("ApierNull", () => {
   const api = getApier();
   const key = "null";
-  const item: apier.ApierNull = api.model.res.model.body.model[key];
+  const item: apier.ApierNull = api.model.res[0].model.body.model[key];
   expect(item).toBeInstanceOf(apier.ApierNull);
   expect(item.name).toEqual(key);
-  expect(item.value).toEqual(api.value.res.body[key]);
+  expect(item.value).toEqual(api.value.res[0].body[key]);
   expect(item.model).toEqual(null);
   expect(item.comment.retrive().val()).toEqual({});
 });
@@ -146,10 +146,10 @@ test("ApierNull", () => {
 test("ApierArray", () => {
   const api = getApier();
   const key = "array";
-  const item: apier.ApierArray = api.model.res.model.body.model[key];
+  const item: apier.ApierArray = api.model.res[0].model.body.model[key];
   expect(item).toBeInstanceOf(apier.ApierArray);
   expect(item.name).toEqual(key);
-  expect(item.value).toEqual(api.value.res.body[key]);
+  expect(item.value).toEqual(api.value.res[0].body[key]);
   expect(item.comment.retrive().val()).toEqual({ mixItems: 3 });
   expect(item.model.length).toEqual(2);
   expect(item.model[0]).toBeInstanceOf(apier.ApierObject);
