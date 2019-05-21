@@ -116,10 +116,26 @@ exports[`expect(generate: mutiple res) 1`] = `
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetModelResponse'
+                oneOf:
+                  - $ref: '#/components/schemas/Err1'
+                  - $ref: '#/components/schemas/Err2'
 components:
   schemas:
     GetModelResponse:
+      type: object
+      properties:
+        msg:
+          type: string
+      required:
+        - msg
+    Err1:
+      type: object
+      properties:
+        code:
+          type: string
+      required:
+        - code
+    Err2:
       type: object
       properties:
         code:
@@ -841,6 +857,27 @@ components:
 exports[`expect(genereate: useSchema) 1`] = `
 "paths:
   '/model/{id}':
+    get:
+      operationId: getModel
+      summary: 获取模型
+      parameters:
+        - $ref: '#/components/parameters/Id'
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/OrgId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MyShop'
+        required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralBody'
+  '/model2/{id}':
     get:
       operationId: getModel2
       summary: 获取模型2
