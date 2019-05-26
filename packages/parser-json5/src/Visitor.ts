@@ -2,6 +2,8 @@ import { valueOfLine, LineKind, LineValue, getLineComment } from "./helper";
 import { ApierComment } from "@jiasuyun/apier-comment";
 import { CommentParserError } from "@jiasuyun/apier-parser-base";
 
+const RE_META_COMMENT = /^\s*\/\/\s*@/;
+
 export default class Visitor {
   private lines: string[];
   private comment: ApierComment;
@@ -19,7 +21,7 @@ export default class Visitor {
   error(line: string, lineIndex: number) {
     return new CommentParserError(lineIndex + 1, line);
   }
-  scopeArray(lineIndex: number) {
+  scopeArray(lineIndex: number, canCollectMetaComment = false) {
     let lineValue: LineValue;
     let line = this.lines[lineIndex];
     try {
@@ -34,10 +36,13 @@ export default class Visitor {
       case LineKind.EXIT:
         return this.exitScope(lineIndex + 1);
       default:
-        return this.scopeArray(lineIndex + 1);
+        if (canCollectMetaComment) {
+          this.collectMetaComment(this.paths, line);
+        }
+        return this.scopeArray(lineIndex + 1, canCollectMetaComment);
     }
   }
-  scopeObject(lineIndex: number) {
+  scopeObject(lineIndex: number, canCollectMetaComment = false) {
     let lineValue: LineValue;
     let line = this.lines[lineIndex];
     try {
@@ -56,7 +61,10 @@ export default class Visitor {
       case LineKind.EXIT:
         return this.exitScope(lineIndex + 1);
       default:
-        return this.scopeObject(lineIndex + 1);
+        if (canCollectMetaComment) {
+          this.collectMetaComment(this.paths, line);
+        }
+        return this.scopeObject(lineIndex + 1, canCollectMetaComment);
     }
   }
   enterScope(lineValue: LineValue, lineIndex: number) {
@@ -67,14 +75,21 @@ export default class Visitor {
     visitor.lineValue = lineValue;
     visitor.parent = this;
     return visitor.lineValue.kind === LineKind.ARRAY
-      ? visitor.scopeArray(lineIndex + 1)
-      : visitor.scopeObject(lineIndex + 1);
+      ? visitor.scopeArray(lineIndex + 1, true)
+      : visitor.scopeObject(lineIndex + 1, true);
   }
 
   exitScope(lineIndex) {
     const visitor = this.parent;
     if (!this.parent) return;
     return visitor.lineValue.kind === LineKind.ARRAY ? visitor.scopeArray(lineIndex) : visitor.scopeObject(lineIndex);
+  }
+
+  collectMetaComment(paths, line) {
+    const match = RE_META_COMMENT.exec(line);
+    if (match) {
+      this.comment.appendMeta(paths, line.slice(match[0].length));
+    }
   }
 
   collectComment(paths, line) {
