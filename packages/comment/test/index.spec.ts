@@ -21,6 +21,26 @@ describe("ApierComment", () => {
     comment.append([], "b=4");
     expect(comment.retrive().val()).toEqual({ a: 3, b: 4 });
   });
+  it("appendMeta", () => {
+    const comment = new ApierComment();
+    comment.appendMeta([], 'bool=true num=3.2 int=4 str="a b =c" nil=null arr=[3] obj={"k":3} a.b[0].c=3');
+    expect(comment.retriveMeta([])).toEqual({
+      bool: true,
+      num: 3.2,
+      int: 4,
+      str: "a b =c",
+      nil: null,
+      arr: [3],
+      obj: { k: 3 },
+      a: { b: [{ c: 3 }] }
+    });
+  });
+  it("appendMeta: merge", () => {
+    const comment = new ApierComment();
+    comment.appendMeta([], "a=3");
+    comment.appendMeta([], "b=4");
+    expect(comment.retriveMeta()).toEqual({ a: 3, b: 4 });
+  });
   it("scope", () => {
     const comment = new ApierComment();
     comment.append(["a"], "k=1");

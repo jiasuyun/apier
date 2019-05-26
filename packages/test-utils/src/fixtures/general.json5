@@ -6,7 +6,8 @@
 {
     // see
     "getModel": { // summary=获取模型
-
+        // @htte.units[0].describe=获取模型-成功
+        // @htte.units[1].describe=获取模型-失败
         "route": "GET /model/:id", // security=null
         "req": {
             "query": {

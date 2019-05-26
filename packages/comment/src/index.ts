@@ -13,6 +13,7 @@ export interface CommentObject {
 export interface CommentItem {
   paths: string[];
   comment: CommentObject;
+  meta?: CommentObject;
 }
 
 export class ApierComment {
@@ -32,6 +33,22 @@ export class ApierComment {
     }
     merge(existCommentObj.comment, comment);
   }
+  public appendMeta(paths: string[], commentText: string) {
+    let meta = this.parse(commentText);
+    if (!meta) {
+      return;
+    }
+    const existCommentObj = this.find(paths);
+    if (!existCommentObj) {
+      this.comments.push({ paths, comment: {}, meta });
+      return;
+    }
+    if (!existCommentObj.meta) {
+      existCommentObj.meta = meta;
+      return;
+    }
+    merge(existCommentObj.meta, meta);
+  }
   public scope(paths: string[]) {
     const comments = this.comments
       .filter(c => isPrefixArray(paths, c.paths))
@@ -42,6 +59,10 @@ export class ApierComment {
     const commentItem = this.find(paths);
     return new CommentUtil(commentItem ? commentItem.comment : {});
   }
+  public retriveMeta(paths: string[] = []): any {
+    const commentItem = this.find(paths);
+    return commentItem.meta;
+  }
   public changePaths(srcPaths: string[], targetPaths: string[]) {
     return this.comments
       .filter(c => isPrefixArray(srcPaths, c.paths))
@@ -49,7 +70,7 @@ export class ApierComment {
         c.paths.splice(0, srcPaths.length, ...targetPaths);
       });
   }
-  private find(paths: string[]): CommentObject {
+  private find(paths: string[]): CommentItem {
     return this.comments.find(c => paths.length === c.paths.length && isPrefixArray(paths, c.paths));
   }
 

@@ -27,6 +27,18 @@
       "paths": [
         "getModel"
       ],
+      "meta": {
+        "htte": {
+          "units": [
+            {
+              "describe": "获取模型-成功"
+            },
+            {
+              "describe": "获取模型-失败"
+            }
+          ]
+        }
+      },
       "comment": {
         "summary": "获取模型"
       }
