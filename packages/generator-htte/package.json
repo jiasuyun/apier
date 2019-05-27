@@ -26,10 +26,12 @@
   "dependencies": {
     "@jiasuyun/apier": "^0.3.0",
     "@jiasuyun/apier-parser-base": "^0.3.0",
-    "@jiasuyun/apier-utils": "^0.3.0"
+    "@jiasuyun/apier-utils": "^0.3.0",
+    "lodash": "^4.17.11"
   },
   "devDependencies": {
     "@jiasuyun/apier-test-utils-generator": "^0.3.0",
+    "@types/lodash": "^4.14.132",
     "rimraf": "^2.6.3",
     "typescript": "^3.4.5"
   }
