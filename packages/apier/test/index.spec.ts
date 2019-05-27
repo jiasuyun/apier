@@ -5,6 +5,7 @@ import { ApierKind } from "@jiasuyun/apier-utils";
 import { ApierComment } from "@jiasuyun/apier-comment";
 
 test("parse", () => {
+  const metadataJSON = loadFixtureJSON("general.metadata");
   const input = loadFixtureJSON5("general");
   const parser = new Parser();
   const result = apier.parse(input, parser);
@@ -12,15 +13,17 @@ test("parse", () => {
   expect(result.apis).toEqual(loadFixtureJSON("general.apis"));
   const commentsJSON = loadFixtureJSON("general.comments");
   expect(result.comments).toEqual(commentsJSON);
-  expect(result.metadata).toEqual(commentsJSON[0].comment);
+  expect(result.metadata).toEqual(metadataJSON);
 });
 
 test("Apier", () => {
   const api = getApier();
   const commentsJSON = loadFixtureJSON("general.comments");
+  const metadataJSON = loadFixtureJSON("general.metadata");
   const comment = new ApierComment(commentsJSON).scope(["getModel"]);
   expect(api).toBeInstanceOf(apier.Apier);
   expect(api.name).toEqual("getModel");
+  expect(api.metadata).toEqual(metadataJSON);
   expect(api.kind()).toEqual(ApierKind.OBJECT);
   expect(api.method).toEqual("get");
   expect(api.url).toEqual("/model/:id");

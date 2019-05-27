@@ -5,6 +5,7 @@ import * as JSON5 from "json5";
 import Visitor from "./Visitor";
 import { beignLineNum } from "./helper";
 import lset from "lodash/set";
+import merge from "lodash/merge";
 
 // 解析 Route
 const RE_ROUTE = /^(get|post|put|delete)\s[:\/A-Za-z0-9_\-]+/i;
@@ -13,6 +14,7 @@ const RE_ROOT_COMMENT = /^\s*\/\/\s*@@@/;
 
 export default class Parser implements parser.Parser {
   private markResIsSignle: { [k: string]: boolean } = {};
+  private metadata: any = {};
   public parse(input: string): parser.ParseResult {
     let parsedObj: any;
     try {
@@ -28,7 +30,7 @@ export default class Parser implements parser.Parser {
         comment.changePaths([name, "res"], [name, "res", "0"]);
       }
     }
-    return { apis, comment };
+    return { apis, comment, metadata: this.metadata };
   }
   private parseApi(name: string, data: any): parser.ApierRaw {
     if (kindOf(data) !== ApierKind.OBJECT) {
@@ -46,18 +48,17 @@ export default class Parser implements parser.Parser {
     const comment = new ApierComment();
     const root = new Visitor(lines, comment, []);
     const beginLineIndex = beignLineNum(lines);
-    this.parserRootComment(comment, lines.slice(0, beginLineIndex));
+    this.parserMetadata(lines.slice(0, beginLineIndex));
     root.scopeObject(beginLineIndex + 1);
     return comment;
   }
-  private parserRootComment(comment: ApierComment, lines: string[]) {
-    const paths = [];
+  private parserMetadata(lines: string[]) {
     for (let line of lines) {
       const match = RE_ROOT_COMMENT.exec(line);
       if (!match) {
         continue;
       }
-      comment.append(paths, line.slice(match[0].length));
+      merge(this.metadata, ApierComment.parse(line.slice(match[0].length)));
     }
   }
   private parseRoute(api: parser.ApierRaw, route: string) {

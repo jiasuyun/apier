@@ -1,7 +1,8 @@
 import { colonToCurlybrace } from "@jiasuyun/apier-utils";
 import { Apier } from "@jiasuyun/apier";
 import { ApierRawReq, ApierRawRes } from "@jiasuyun/apier-parser-base";
-import * as _ from "lodash";
+import lget from "lodash/get";
+import merge from "lodash/merge";
 
 export type GeneratorResult = TestItem;
 
@@ -46,7 +47,7 @@ export default class Generator {
       describe: summary,
       units: meta.htte.units.map((unit, index) => {
         if (index === 0) {
-          return _.merge({}, defaultUnit, unit);
+          return merge({}, defaultUnit, unit);
         }
         unit.metadata = { skip: true };
         return unit;
@@ -61,7 +62,7 @@ interface UnitObj {
 }
 
 function loadUnits(meta: any): UnitObj[] {
-  let units = _.get(meta, ["htte", "units"]);
+  let units = lget(meta, ["htte", "units"]);
   if (!Array.isArray(units)) {
     return [];
   }

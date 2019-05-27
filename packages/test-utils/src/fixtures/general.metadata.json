@@ -1,0 +1,21 @@
+{
+  "openapi": {
+    "doc": {
+      "openapi": "3.0.0",
+      "info": {
+        "version": "0.0.1",
+        "title": "model"
+      },
+      "servers": [
+        {
+          "url": "http://localhost:3000/"
+        }
+      ],
+      "security": [
+        {
+          "bearerAuth": []
+        }
+      ]
+    }
+  }
+}

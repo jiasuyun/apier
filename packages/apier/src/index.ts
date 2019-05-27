@@ -1,6 +1,16 @@
-import { ApierRaw, ApierRawObject, ApierRawReq, ApierRawRes, Method, Parser } from "@jiasuyun/apier-parser-base";
+import {
+  ApierRaws,
+  ApierRaw,
+  ApierRawObject,
+  ApierRawReq,
+  ApierRawRes,
+  Method,
+  Parser
+} from "@jiasuyun/apier-parser-base";
 import { ApierKind, kindOf } from "@jiasuyun/apier-utils";
 import { ApierComment, CommentItem } from "@jiasuyun/apier-comment";
+import lget from "lodash/get";
+import clone from "lodash/clone";
 
 export abstract class ApierItem {
   public readonly comment: ApierComment;
@@ -140,10 +150,14 @@ export class Apier extends ApierItem {
   public readonly url: string;
   public readonly value: ApierRaw;
   public readonly model: ApierModel;
-  constructor(comment: ApierComment, value: ApierRaw) {
+  public readonly metadata: any;
+  public readonly refs: Refs;
+  constructor(comment: ApierComment, value: ApierRaw, metadata: any, refs: Refs) {
     super(comment, value.name, value);
     this.method = value.method;
     this.url = value.url;
+    this.metadata = metadata;
+    this.refs = refs;
     const model: any = {};
     if (value.req) model.req = new ApierReq(this.comment, "req", value.req);
     model.res = value.res.map((res, i) => new ApierRes(this.comment.scope(["res"]), "" + i, res));
@@ -152,9 +166,7 @@ export class Apier extends ApierItem {
 }
 
 export interface ParseResult {
-  apis: {
-    [k: string]: ApierRaw;
-  };
+  apis: ApierRaws;
   comments: CommentItem[];
   apiers: Apier[];
   metadata: any;
@@ -162,10 +174,31 @@ export interface ParseResult {
 
 export function parse(input: string, parser: Parser): ParseResult {
   const apiers = [];
-  const { apis, comment } = parser.parse(input);
+  const { apis, comment, metadata } = parser.parse(input);
+  const schemas = getRefs(apis, comment);
   for (const name in apis) {
-    apiers.push(new Apier(comment, apis[name]));
+    apiers.push(new Apier(comment, apis[name], metadata, schemas));
   }
-  const metadata = comment.retrive([]).val();
   return { apis, apiers, comments: comment.comments, metadata };
+}
+
+export interface Refs {
+  [k: string]: {
+    value: any;
+    comment: ApierComment;
+  };
+}
+
+function getRefs(apis: ApierRaws, comment: ApierComment) {
+  const refs: Refs = {};
+  comment.comments.forEach(c => {
+    const saveSchema = c.comment["saveSchema"];
+    if (saveSchema) {
+      refs[saveSchema] = {
+        value: clone(lget(apis, c.paths)),
+        comment: comment.scope(c.paths)
+      };
+    }
+  });
+  return refs;
 }

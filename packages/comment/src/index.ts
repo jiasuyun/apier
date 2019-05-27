@@ -21,8 +21,30 @@ export class ApierComment {
   constructor(comments = []) {
     this.comments = comments;
   }
+  /**
+   * 获取行注释
+   *
+   * `optional type=integer format=int32` => { optional: true, type: integer, format: int32 }
+   */
+  public static parse(commentText: string): { [k: string]: any } {
+    const result = {};
+    let matched;
+    while ((matched = RG_COMMENT_VALUE.exec(commentText))) {
+      const key = matched[1];
+      let value = matched[3];
+      if (value === undefined) {
+        value = true;
+      } else {
+        try {
+          value = JSON.parse(value);
+        } catch (err) {}
+      }
+      lodashSet(result, key, value);
+    }
+    return result;
+  }
   public append(paths: string[], commentText: string) {
-    let comment = this.parse(commentText);
+    let comment = ApierComment.parse(commentText);
     if (!comment) {
       return;
     }
@@ -34,7 +56,7 @@ export class ApierComment {
     merge(existCommentObj.comment, comment);
   }
   public appendMeta(paths: string[], commentText: string) {
-    let meta = this.parse(commentText);
+    let meta = ApierComment.parse(commentText);
     if (!meta) {
       return;
     }
@@ -78,29 +100,6 @@ export class ApierComment {
   }
   private find(paths: string[]): CommentItem {
     return this.comments.find(c => paths.length === c.paths.length && isPrefixArray(paths, c.paths));
-  }
-
-  /**
-   * 获取行注释
-   *
-   * `optional type=integer format=int32` => { optional: true, type: integer, format: int32 }
-   */
-  private parse(commentText: string): { [k: string]: any } {
-    const result = {};
-    let matched;
-    while ((matched = RG_COMMENT_VALUE.exec(commentText))) {
-      const key = matched[1];
-      let value = matched[3];
-      if (value === undefined) {
-        value = true;
-      } else {
-        try {
-          value = JSON.parse(value);
-        } catch (err) {}
-      }
-      lodashSet(result, key, value);
-    }
-    return result;
   }
 }
 

@@ -1,5 +1,9 @@
 import { ApierComment } from "@jiasuyun/apier-comment";
 
+export interface ApierRaws {
+  [k: string]: ApierRaw;
+}
+
 export interface ApierRaw {
   name: string;
   url: string;
@@ -29,10 +33,9 @@ export interface ApierRawRes {
 }
 
 export interface ParseResult {
-  apis: {
-    [k: string]: ApierRaw;
-  };
+  apis: ApierRaws;
   comment: ApierComment;
+  metadata?: any;
 }
 
 export interface Parser {
