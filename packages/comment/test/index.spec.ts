@@ -59,6 +59,12 @@ describe("ApierComment", () => {
         .val("k")
     ).toEqual(3);
   });
+  it("scope: perserve meta", () => {
+    const comment = new ApierComment();
+    comment.append(["a"], "k=1");
+    comment.appendMeta(["a"], "m=1");
+    expect(comment.scope(["a"]).retriveMeta()).toEqual({ m: 1 });
+  });
   it("retrive", () => {
     const comment = new ApierComment();
     comment.append(["a"], "k=1");

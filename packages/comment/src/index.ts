@@ -52,7 +52,13 @@ export class ApierComment {
   public scope(paths: string[]) {
     const comments = this.comments
       .filter(c => isPrefixArray(paths, c.paths))
-      .map(c => ({ paths: c.paths.slice(paths.length), comment: c.comment }));
+      .map(c => {
+        const n: CommentItem = { paths: c.paths.slice(paths.length), comment: c.comment };
+        if (c.meta) {
+          n.meta = c.meta;
+        }
+        return n;
+      });
     return new ApierComment(comments);
   }
   public retrive(paths: string[] = []): CommentUtil {
