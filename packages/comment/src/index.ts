@@ -90,7 +90,7 @@ export class ApierComment {
   }
   public retriveMeta(paths: string[] = []): any {
     const commentItem = this.find(paths);
-    return commentItem.meta;
+    return commentItem && commentItem.meta;
   }
   public changePaths(srcPaths: string[], targetPaths: string[]) {
     return this.comments
