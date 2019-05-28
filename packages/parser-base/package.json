@@ -1,6 +1,6 @@
 {
   "name": "@jiasuyun/apier-parser-base",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "apier parser base",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -24,7 +24,7 @@
     "url": "git+https://github.com/jiasuyun/apier"
   },
   "dependencies": {
-    "@jiasuyun/apier-comment": "^0.3.0",
+    "@jiasuyun/apier-comment": "^0.3.1",
     "rimraf": "^2.6.3",
     "typescript": "^3.4.5"
   }
