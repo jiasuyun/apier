@@ -1,3 +1,182 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`generate 1`] = `"export async function getModel(req: Request, res: Response) {}"`;
+exports[`expect(generate: real example) 1`] = `
+"- name: signup
+  method: post
+  url: /c/signup
+  data:
+    mock:
+      id: '@string(\\"number\\", 5)'
+      token: <jwt token>
+  useMock: true
+- name: loginPasswd
+  method: post
+  url: /c/login/passwd
+  data:
+    id: 32342
+    token: <jwt token>
+  useMock: false
+- name: getGcode
+  method: post
+  url: /c/gcode
+  data: <svg data>
+  useMock: false
+- name: loginSms
+  method: post
+  url: /c/login/sms
+  data:
+    id: 32342
+    token: <jwt token>
+  useMock: false
+- name: getScode
+  method: post
+  url: /c/scode
+  data:
+    msg: OK
+  useMock: false
+- name: updatePasswd
+  method: put
+  url: /c/user/passwd
+  data:
+    msg: OK
+  useMock: false
+- name: listFavoriates
+  method: get
+  url: /c/favoriates
+  data:
+    mock|1-10:
+      - type: 1
+        id: 32134
+        authorId: 3212
+        authorName: 子鱼
+        data:
+          id: 33234
+          content: how are you
+      - type: 2
+        id: 32134
+        authorId: 3212
+        authorName: 子鱼
+        data:
+          id: 32347
+          thumbnail: <image url>
+          name: 沙驰 系带舒适牛皮商务正装皮鞋男 21822007Z 黑色 40
+          price: 232.34
+      - type: 3
+        id: 32134
+        authorId: 3212
+        authorName: 子鱼
+        data:
+          link: <href url>
+      - type: 4
+        id: 32134
+        authorId: 3212
+        authorName: 子鱼
+        data:
+          url: <image url>
+      - type: 5
+        id: 32134
+        authorId: 3212
+        authorName: 子鱼
+        data:
+          url: <image url>
+      - type: 6
+        id: 32134
+        authorId: 3212
+        authorName: 子鱼
+        data:
+          url: <image url>
+      - type: 7
+        id: 32134
+        authorId: 3212
+        authorName: 子鱼
+        data:
+          longitude: 22.5894947942
+          latitude: 113.9739117838
+          location: 广东省深圳市南山区桃源街道平山社区
+      - type: 8
+        id: 32134
+        authorId: 3212
+        authorName: 子鱼
+        data:
+          avatarUrl: <url>
+  useMock: true
+- name: checkProductFavoriate
+  method: get
+  url: '/c/favoriates/product/:id'
+  data:
+    isFavoriated: true
+  useMock: false
+- name: createFeedback
+  method: post
+  url: /c/feedbacks
+  data:
+    msg: OK
+  useMock: false
+- name: getStats
+  method: get
+  url: /c/stats
+  data:
+    numFollowings: 322
+    numFavoriates: 100
+    numQuns: 32
+    numFriends: 320
+  useMock: false
+- name: getUserInfo
+  method: get
+  url: /c/user/info
+  data:
+    avatarUrl: <url>
+    name: 子鱼
+    myId: Brsadfng
+    sex: 1
+    regionId: 32423
+    signature: <text>
+  useMock: false
+- name: updateUserInfo
+  method: put
+  url: /c/user/info
+  data:
+    msg: OK
+  useMock: false
+- name: getUserSettings
+  method: get
+  url: /c/user/settings
+  data:
+    notifyNewMessage: 1
+    notifyPhoneCall: 1
+    notifyShowDetail: 1
+    notifyDynamic: 1
+    notifyWithSound: 1
+    notifyWithVibration: 1
+    privacyNewFriend: 1
+    privacyPhonenumSearchable: 1
+    privacyIdSearchable: 1
+    privacyRecommandContacts: 1
+    commonBackground: <url>
+  useMock: false
+- name: updateUserSettings
+  method: put
+  url: /c/user/settings
+  data:
+    msg: OK
+  useMock: false
+"
+`;
+
+exports[`generate 1`] = `
+"- name: getModel
+  method: get
+  url: '/model/:id'
+  data:
+    integer: 32
+    number: 16.23
+    bool: true
+    'null': null
+    array:
+      - foo: 1
+      - bar: 2
+    object:
+      password: a234324
+  useMock: false
+"
+`;

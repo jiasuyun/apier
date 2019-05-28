@@ -18,7 +18,7 @@
     },
     res: {
       body: { // description=返回数据同登录
-        id: 32342,
+        id: 32342, // useMock='@string("number", 5)'
         token: '<jwt token>'
       }
     }
@@ -96,7 +96,7 @@
       }
     },
     res: {
-      body: [
+      body: [ // useMock="|1-10"
         { // description=文字
           type: 1,
           id: 32134,

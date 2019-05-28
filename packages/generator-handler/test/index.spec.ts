@@ -1,9 +1,13 @@
 import * as apier from "@jiasuyun/apier";
 import Generator from "../src";
-import { factory } from "@jiasuyun/apier-test-utils-generator";
+import { toYaml, factory } from "@jiasuyun/apier-test-utils-generator";
 
-const gen = factory((api: apier.Apier) => new Generator(api).value);
+const gen = name => toYaml(factory((api: apier.Apier) => new Generator(api).value)(name));
 
 test("generate", () => {
-  expect(gen("general").join("\n")).toMatchSnapshot();
+  expect(gen("general")).toMatchSnapshot();
+});
+
+test("expect(generate: real example)", () => {
+  expect(gen("user")).toMatchSnapshot();
 });

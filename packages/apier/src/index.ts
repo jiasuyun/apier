@@ -10,7 +10,6 @@ import {
 import { ApierKind, kindOf } from "@jiasuyun/apier-utils";
 import { ApierComment, CommentItem } from "@jiasuyun/apier-comment";
 import lget from "lodash/get";
-import clone from "lodash/clone";
 
 export abstract class ApierItem {
   public readonly comment: ApierComment;
@@ -25,7 +24,7 @@ export abstract class ApierItem {
   public kind(): ApierKind {
     return kindOf(this.value);
   }
-  protected createJSONKind(comment: ApierComment, name: string, value: any): ApierJSONKind {
+  public static createJSONKind(comment: ApierComment, name: string, value: any): ApierJSONKind {
     switch (kindOf(value)) {
       case ApierKind.INTEGER:
         return new ApierInteger(comment, name, value);
@@ -61,7 +60,7 @@ export class ApierReq extends ApierItem {
   constructor(comment: ApierComment, name: string, value: ApierRawReq) {
     super(comment, name, value);
     this.model = Object.keys(value).reduce((model, key) => {
-      model[key] = this.createJSONKind(this.comment, key, value[key]);
+      model[key] = ApierItem.createJSONKind(this.comment, key, value[key]);
       return model;
     }, {});
   }
@@ -77,7 +76,7 @@ export class ApierRes extends ApierItem {
     super(comment, name, value);
     const { status, body } = value;
     this.model = { status };
-    if (body) this.model.body = this.createJSONKind(this.comment, "body", body);
+    if (body) this.model.body = ApierItem.createJSONKind(this.comment, "body", body);
   }
 }
 export class ApierNumber extends ApierItem {
@@ -122,7 +121,7 @@ export class ApierArray extends ApierItem {
   public readonly value: any[];
   constructor(comment: ApierComment, name: string, value: any[]) {
     super(comment, name, value);
-    this.model = value.map((v, i) => this.createJSONKind(this.comment, String(i), v));
+    this.model = value.map((v, i) => ApierItem.createJSONKind(this.comment, String(i), v));
   }
 }
 export interface ApierObjectModel {
@@ -135,7 +134,7 @@ export class ApierObject extends ApierItem {
   constructor(comment: ApierComment, name: string, value: ApierRawObject) {
     super(comment, name, value);
     this.model = Object.keys(value).reduce((model, key) => {
-      model[key] = this.createJSONKind(this.comment, key, value[key]);
+      model[key] = ApierItem.createJSONKind(this.comment, key, value[key]);
       return model;
     }, {});
   }
@@ -183,21 +182,17 @@ export function parse(input: string, parser: Parser): ParseResult {
 }
 
 export interface Refs {
-  [k: string]: {
-    value: any;
-    comment: ApierComment;
-  };
+  [k: string]: ApierJSONKind;
 }
 
-function getRefs(apis: ApierRaws, comment: ApierComment) {
+function getRefs(apis: ApierRaws, rootComment: ApierComment) {
   const refs: Refs = {};
-  comment.comments.forEach(c => {
+  rootComment.comments.forEach(c => {
     const saveSchema = c.comment["saveSchema"];
     if (saveSchema) {
-      refs[saveSchema] = {
-        value: clone(lget(apis, c.paths)),
-        comment: comment.scope(c.paths)
-      };
+      const comment = rootComment.scope(c.paths.slice(0, -1));
+      const tail = c.paths[c.paths.length - 1];
+      refs[saveSchema] = ApierItem.createJSONKind(comment, tail, lget(apis, c.paths));
     }
   });
   return refs;

@@ -39,6 +39,7 @@ export class ApierComment {
           value = JSON.parse(value);
         } catch (err) {}
       }
+      value = removePairQuote(value);
       lodashSet(result, key, value);
     }
     return result;
@@ -122,4 +123,14 @@ export class CommentUtil {
 
 function isPrefixArray<T>(prefixArr: T[], arr: T[]) {
   return prefixArr.every((v, i) => arr[i] === v);
+}
+
+function removePairQuote(value: any): any {
+  const quotes = ['"', "'", "`"];
+  if (typeof value === "string") {
+    if (quotes.indexOf(value[0]) > -1 && value[0] === value[value.length - 1]) {
+      return value.slice(1, -1);
+    }
+  }
+  return value;
 }

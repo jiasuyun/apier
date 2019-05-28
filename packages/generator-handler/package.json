@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@jiasuyun/apier": "^0.3.0",
+    "@jiasuyun/apier-parser-base": "^0.3.0",
     "@jiasuyun/apier-utils": "^0.3.0"
   },
   "devDependencies": {

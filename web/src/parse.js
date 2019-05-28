@@ -20,7 +20,7 @@ export default function parse(input) {
     openapis.push(new OpenapiGenerator(api).value);
   });
 
-  const handlersText = handlers.join('\n\n');
+  const handlersText = JSON.stringify(handlers, null, 2);
   const httesText = yaml.safeDump(httes);
   const openapisText = yaml.safeDump(openapis.reduce((a, c) => merge(a, c), get(metadata, 'openapi.doc', {})))
   return { handlersText, httesText, openapisText };
