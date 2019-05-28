@@ -12,6 +12,7 @@ export interface GeneratorResult {
 export default class Generator {
   private readonly api: apier.Apier;
   public readonly value: GeneratorResult;
+  private circularSchemas: any = {};
   private useMock = false;
   constructor(apier: apier.Apier) {
     this.api = apier;
@@ -42,7 +43,13 @@ export default class Generator {
   private generateUtil(fn: SetValueFn, item: apier.ApierJSONKind) {
     const commentUtil = item.comment.retrive();
     if (commentUtil.val("useSchema")) {
-      this.generateUtil(fn, this.api.refs[commentUtil.val("useSchema")]);
+      const useSchema = commentUtil.val("useSchema");
+      const circularSchemaKey = useSchema + '_' + item.name;
+      const circularSchema = this.circularSchemas[circularSchemaKey];
+      if (!circularSchema) {
+        this.circularSchemas[circularSchemaKey] = true;
+        this.generateUtil(fn, this.api.refs[useSchema]);
+      }
       return;
     }
     const [mockValue, mockKey] = this.parseUseMock(commentUtil.val("useMock"));
