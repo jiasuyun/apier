@@ -23,7 +23,8 @@ class App extends Component {
       errorLineIndex: -1,
       apisText: '',
       mocksText: '',
-      httesText: '',
+      htteDefinesText: '',
+      htteTestsText: '',
       openapisText: '',
     };
   }
@@ -141,8 +142,11 @@ class App extends Component {
                   <Tab eventKey="openapi" title="OPENAPI">
                     {this.renderCode(this.state.openapisText, 'yaml')}
                   </Tab>
-                  <Tab eventKey="htte" title="HTTE">
-                    {this.renderCode(this.state.httesText, 'yaml')}
+                  <Tab eventKey="htteTests" title="HTTE-TESTS">
+                    {this.renderCode(this.state.htteTestsText, 'yaml')}
+                  </Tab>
+                  <Tab eventKey="htteDefines" title="HTTE-DEFINES">
+                    {this.renderCode(this.state.htteDefinesText, 'yaml')}
                   </Tab>
                   <Tab eventKey="api" title="API">
                     {this.renderCode(this.state.apisText, 'javascript')}

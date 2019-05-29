@@ -44,7 +44,7 @@ export default class Generator {
     const commentUtil = item.comment.retrive();
     if (commentUtil.val("useSchema")) {
       const useSchema = commentUtil.val("useSchema");
-      const circularSchemaKey = useSchema + '_' + item.name;
+      const circularSchemaKey = useSchema + "_" + item.name;
       const circularSchema = this.circularSchemas[circularSchemaKey];
       if (!circularSchema) {
         this.circularSchemas[circularSchemaKey] = true;

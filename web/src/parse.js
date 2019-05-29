@@ -16,19 +16,23 @@ export default function parse(input) {
   const parser = new Parser();
   const { apiers, metadata } = apier.parse(input, parser);
   const handlers = [];
-  const httes = [];
+  const htteTests = [];
+  const htteDefines = {};
   const openapis = [];
   apiers.forEach(api => {
     handlers.push(new HandlerGenerator(api).value);
-    httes.push(new HtteGenerator(api).value);
+    const { test, define } = new HtteGenerator(api).value;
+    htteTests.push(test);
+    merge(htteDefines, define);
     openapis.push(new OpenapiGenerator(api).value);
   });
 
-  const httesText = yaml.safeDump(httes);
+  const htteTestsText = yaml.safeDump(htteTests);
+  const htteDefinesText = yaml.safeDump({ defines: htteDefines });
   const openapisText = yaml.safeDump(openapis.reduce((a, c) => merge(a, c), get(metadata, 'openapi.doc', {})))
   const apisText = handlers.map(toApi).join(EOL);
   const mocksText = `export default {${EOL}${handlers.map(toMock).join(EOL)}${EOL}};`
-  return { apisText, mocksText, httesText, openapisText };
+  return { apisText, mocksText, htteTestsText, openapisText, htteDefinesText };
 }
 
 function toApi(handler) {
