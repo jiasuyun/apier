@@ -21,7 +21,8 @@ class App extends Component {
       error: '',
       errorToastId: null,
       errorLineIndex: -1,
-      handlersText: '',
+      apisText: '',
+      mocksText: '',
       httesText: '',
       openapisText: '',
     };
@@ -143,8 +144,11 @@ class App extends Component {
                   <Tab eventKey="htte" title="HTTE">
                     {this.renderCode(this.state.httesText, 'yaml')}
                   </Tab>
-                  <Tab eventKey="handler" title="HANDLER">
-                    {this.renderCode(this.state.handlersText, 'typescript')}
+                  <Tab eventKey="api" title="API">
+                    {this.renderCode(this.state.apisText, 'javascript')}
+                  </Tab>
+                  <Tab eventKey="mock" title="MOCK">
+                    {this.renderCode(this.state.mocksText, 'javascript')}
                   </Tab>
                 </Tabs>
               </Col>

@@ -3,10 +3,14 @@ import Parser from '@jiasuyun/apier-parser-json5';
 import yaml from 'js-yaml';
 import merge from 'lodash/merge';
 import get from 'lodash/get';
+import { stringify } from 'javascript-stringify';
 
 import OpenapiGenerator from '@jiasuyun/apier-generator-openapi';
 import HtteGenerator from '@jiasuyun/apier-generator-htte';
 import HandlerGenerator from '@jiasuyun/apier-generator-handler';
+
+const SPACE = 2;
+const EOL = '\n';
 
 export default function parse(input) {
   const parser = new Parser();
@@ -20,8 +24,32 @@ export default function parse(input) {
     openapis.push(new OpenapiGenerator(api).value);
   });
 
-  const handlersText = JSON.stringify(handlers, null, 2);
   const httesText = yaml.safeDump(httes);
   const openapisText = yaml.safeDump(openapis.reduce((a, c) => merge(a, c), get(metadata, 'openapi.doc', {})))
-  return { handlersText, httesText, openapisText };
+  const apisText = handlers.map(toApi).join(EOL);
+  const mocksText = `export default {${EOL}${handlers.map(toMock).join(EOL)}${EOL}};`
+  return { apisText, mocksText, httesText, openapisText };
+}
+
+function toApi(handler) {
+  return `export const ${handler.name} = makeRequest("${handler.method}", "${handler.url}");`;
+}
+
+function toMock(handler) {
+  let dataText = stringify(handler.data, null, SPACE);
+  dataText = dataText.split('\n').map((line, index) => {
+    if (index === 0) {
+      return line;
+    }
+    return space(SPACE) + line;
+  }).join(EOL);
+  const keyText = `${space(SPACE)}'${handler.method} ${handler.url}'`;
+  if (!handler.useMock) {
+    return `${keyText}: ${dataText},`;
+  }
+  return `${keyText}: createMock(${dataText}),`;
+}
+
+function space(n) {
+  return ' '.repeat(n);
 }
