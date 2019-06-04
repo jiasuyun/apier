@@ -41,6 +41,7 @@ export default class Generator {
     this.generateUtil(setValueFn, body);
   }
   private generateUtil(fn: SetValueFn, item: apier.ApierJSONKind) {
+    if (!item) return; // FIXME: maybe throw error
     const commentUtil = item.comment.retrive();
     if (commentUtil.val("useSchema")) {
       const useSchema = commentUtil.val("useSchema");
