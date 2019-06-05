@@ -20,7 +20,8 @@
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.1",
     "react-simple-code-editor": "^0.9.10",
-    "react-toast-notifications": "^1.4.0"
+    "react-toast-notifications": "^1.4.0",
+    "swagger-ui": "^3.22.2"
   },
   "scripts": {
     "start": "react-scripts start",
