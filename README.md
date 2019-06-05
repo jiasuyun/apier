@@ -1,3 +1,3 @@
 # API 工具
 
-![https://travis-ci.org/jiasuyun/apier](https://travis-ci.org/jiasuyun/apier.svg?branch=master)
+[![Build Status](https://travis-ci.org/jiasuyun/apier.svg?branch=master)](https://travis-ci.org/jiasuyun/apier)
