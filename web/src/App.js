@@ -11,6 +11,7 @@ import 'prismjs/components/prism-typescript';
 import 'prismjs/components/prism-yaml';
 import 'prismjs/themes/prism.css';
 import parse from './parse';
+import Swagger from "./components/Swagger";
 
 import './App.css';
 class App extends Component {
@@ -26,6 +27,7 @@ class App extends Component {
       htteDefinesText: '',
       htteTestsText: '',
       openapisText: '',
+      openapisObj: null,
     };
   }
   componentDidMount() {
@@ -141,6 +143,9 @@ class App extends Component {
                 <Tabs defaultActiveKey="openapi">
                   <Tab eventKey="openapi" title="OPENAPI">
                     {this.renderCode(this.state.openapisText, 'yaml')}
+                  </Tab>
+                  <Tab eventKey="swagger" title="SWAGGER">
+                    <Swagger data={this.state.openapisObj} />
                   </Tab>
                   <Tab eventKey="htteTests" title="HTTE-TESTS">
                     {this.renderCode(this.state.htteTestsText, 'yaml')}
