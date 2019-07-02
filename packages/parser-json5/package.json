@@ -1,6 +1,6 @@
 {
   "name": "@jiasuyun/apier-parser-json5",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "apier json5 parser",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

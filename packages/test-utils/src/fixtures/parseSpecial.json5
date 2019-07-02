@@ -1,0 +1,22 @@
+// @@@ openapi.doc.openapi=3.0.0
+// @@@ openapi.doc.info.version=0.0.1
+// @@@ openapi.doc.info.title=model
+// @@@ openapi.doc.servers[0].url=http://localhost:3000/
+// @@@ openapi.doc.security[0].bearerAuth=[]
+{
+    "getModel": { // summary=获取模型
+        "route": "POST /model/:id", // security=null
+        "req": {
+          body: {
+              "url": "http://example.com",
+          }
+        },
+        "res": {
+            status: 200,
+            body: {
+                "url": "http://example.com",
+            }
+        }
+    }
+}
+

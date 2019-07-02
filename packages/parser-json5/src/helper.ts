@@ -42,7 +42,7 @@ export function valueOfLine(line: string): LineValue {
       return { key, kind: LineKind.OBJECT };
     }
     try {
-      JSON5.parse(`{${line.replace(/\/\/.*$/g, "")}}`); // 检查行合法
+      JSON5.parse(`{${line}\n}`); // 检查行合法
     } catch (err) {
       throw error();
     }

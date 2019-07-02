@@ -9,4 +9,9 @@ describe("Parser", () => {
     expect(apis).toEqual(loadFixtureJSON("general.apis"));
     expect(comment.comments).toEqual(loadFixtureJSON("general.comments"));
   });
+  it("parse special", () => {
+    const input = loadFixtureJSON5("parseSpecial");
+    const parser = new Parser();
+    parser.parse(input);
+  });
 });
