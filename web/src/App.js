@@ -109,7 +109,7 @@ class App extends Component {
         <ToastProvider>
           <Container fluid>
             <Row>
-              <Col>
+              <Col style={{ maxWidth: '50%' }}>
                 <Row>
                   <Col>
                     <Form.Label style={{ paddingTop: '10px' }}>API</Form.Label>
@@ -139,7 +139,7 @@ class App extends Component {
                   }}
                 />
               </Col>
-              <Col>
+              <Col style={{ maxWidth: '50%' }}>
                 <Tabs defaultActiveKey="openapi">
                   <Tab eventKey="openapi" title="OPENAPI">
                     {this.renderCode(this.state.openapisText, 'yaml')}
