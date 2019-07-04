@@ -21,6 +21,9 @@ export default class Generator {
     let body = res.model.body;
     if (commentUtil.val("useSchema")) {
       let ref = apier.refs[commentUtil.val("useSchema")];
+      if (!ref) {
+        throw new Error(`Cannot find saveSchema ${commentUtil.val("useSchema")}`);
+      }
       body = ref.model.body;
     }
     const { name, method, url } = apier;
