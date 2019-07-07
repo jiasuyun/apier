@@ -12,6 +12,7 @@ import 'prismjs/components/prism-yaml';
 import 'prismjs/themes/prism.css';
 import parse from './parse';
 import Swagger from "./components/Swagger";
+import qs from "query-string";
 
 import './App.css';
 class App extends Component {
@@ -29,8 +30,10 @@ class App extends Component {
       openapisText: '',
       openapisObj: null,
     };
+    this.toastManagerProxy = React.createRef();
   }
   componentDidMount() {
+    this.loadApiFromLocationQuery();
     window.addEventListener('paste', e => {
       let data = e.clipboardData.getData('text');
       setTimeout(() => {
@@ -39,6 +42,24 @@ class App extends Component {
         }
       }, 10);
     });
+  }
+  loadApiFromLocationQuery() {
+    const { search } = window.location;
+    if (!search) {
+      return;
+    }
+    const { apier } = qs.parse(search);
+    if (!apier) {
+      return;
+    }
+    fetch(apier).then(res => {
+      return res.text();
+    }).then(text => {
+      this.setState({ code: text })
+      this.toastManagerProxy.current.click();
+    }).catch(err => {
+      window.alert(`Cannot load apier at ${apier}, ${err.message}`);
+    })
   }
   handlerGenBtnClick = toastManager => {
     if (this.state.errorToastId) {
@@ -117,7 +138,7 @@ class App extends Component {
                   <Col sm="auto" style={{ marginLeft: 'auto' }}>
                     <ToastConsumer>
                       {toastManager => (
-                        <Button variant="outline-primary" disabled={!this.state.code} onClick={() => this.handlerGenBtnClick(toastManager)}>生成</Button>
+                        <Button variant="outline-primary" ref={this.toastManagerProxy} disabled={!this.state.code} onClick={() => this.handlerGenBtnClick(toastManager)}>生成</Button>
                       )}
                     </ToastConsumer>
                   </Col>
