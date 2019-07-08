@@ -52,7 +52,7 @@ class App extends Component {
     if (!apier) {
       return;
     }
-    fetch(apier).then(res => {
+    fetch(apier, { cache: 'no-cache' }).then(res => {
       return res.text();
     }).then(text => {
       this.setState({ code: text })
