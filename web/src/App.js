@@ -161,12 +161,12 @@ class App extends Component {
                 />
               </Col>
               <Col style={{ maxWidth: '50%' }}>
-                <Tabs defaultActiveKey="openapi">
-                  <Tab eventKey="openapi" title="OPENAPI">
-                    {this.renderCode(this.state.openapisText, 'yaml')}
-                  </Tab>
+                <Tabs defaultActiveKey="swagger">
                   <Tab eventKey="swagger" title="SWAGGER">
                     <Swagger data={this.state.openapisObj} />
+                  </Tab>
+                  <Tab eventKey="openapi" title="OPENAPI">
+                    {this.renderCode(this.state.openapisText, 'yaml')}
                   </Tab>
                   <Tab eventKey="htteTests" title="HTTE-TESTS">
                     {this.renderCode(this.state.htteTestsText, 'yaml')}

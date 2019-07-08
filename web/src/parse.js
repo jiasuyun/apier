@@ -52,7 +52,7 @@ function toMock(handler) {
   if (!handler.useMock) {
     return `${keyText}: ${dataText},`;
   }
-  return `${keyText}: createMock(${dataText}),`;
+  return `${keyText}: createMockData(${dataText}),`;
 }
 
 function space(n) {
