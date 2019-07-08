@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "b8de4bfb54ce30e46da4b7c04f2dd13c",
+    "revision": "fb4843ef91d2affd172517e5c0641199",
     "url": "/apier/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/apier/static/css/2.1898c15e.chunk.css"
   },
   {
-    "revision": "8f357dbbb5fd57506f4c",
+    "revision": "e0baa3faf30ab99d7a22",
     "url": "/apier/static/css/main.7738cc50.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/apier/static/js/2.467f450b.chunk.js"
   },
   {
-    "revision": "8f357dbbb5fd57506f4c",
-    "url": "/apier/static/js/main.62ce7540.chunk.js"
+    "revision": "e0baa3faf30ab99d7a22",
+    "url": "/apier/static/js/main.b9572ea7.chunk.js"
   },
   {
     "revision": "8a9ef2f068c2300eccca",
