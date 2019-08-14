@@ -42,7 +42,8 @@ exports[`generate 1`] = `
           skip: true
   define:
     getModel:
-      method: get
-      url: '/model/{id}'
+      req:
+        method: get
+        url: '/model/{id}'
 "
 `;

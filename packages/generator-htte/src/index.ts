@@ -13,8 +13,10 @@ export type TestItem = TestGroup | TestUnit;
 
 interface Define {
   [k: string]: {
-    method: Method;
-    url: string;
+    req: {
+      method: Method;
+      url: string;
+    }
   };
 }
 
@@ -47,7 +49,7 @@ export default class Generator {
       req: req,
       res: res[0]
     };
-    const define = { [name]: { method, url: colonToCurlybrace(url) } };
+    const define = { [name]: { req: { method, url: colonToCurlybrace(url) } } };
     let units = loadUnits(meta);
     if (units.length === 0) {
       this.value = { test, define };
