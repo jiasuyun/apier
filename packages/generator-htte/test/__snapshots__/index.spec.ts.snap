@@ -5,7 +5,7 @@ exports[`generate 1`] = `
     describe: 获取模型
     units:
       - describe: 获取模型-成功
-        include: getModel
+        includes: getModel
         req:
           headers:
             X-ORG-ID: 32432
@@ -37,7 +37,7 @@ exports[`generate 1`] = `
             object:
               password: a234324
       - describe: 获取模型-失败
-        include: getModel
+        includes: getModel
         metadata:
           skip: true
   define:

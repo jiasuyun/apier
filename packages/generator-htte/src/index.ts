@@ -27,7 +27,7 @@ interface TestGroup {
 
 interface TestUnit {
   describe: string;
-  include: string;
+  includes: string;
   req: ApierRawReq;
   res: ApierRawRes;
 }
@@ -45,7 +45,7 @@ export default class Generator {
     const summary = apier.comment.retrive().val("summary", name) as string;
     const test = {
       describe: summary,
-      include: name,
+      includes: name,
       req: req,
       res: res[0]
     };
@@ -62,7 +62,7 @@ export default class Generator {
           if (index === 0) {
             return merge(test, unit);
           }
-          unit.include = name;
+          unit.includes = name;
           unit.metadata = { skip: true };
           return unit;
         })
