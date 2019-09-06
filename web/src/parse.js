@@ -28,12 +28,16 @@ export default function parse(input) {
   });
   const openapisObj = openapis.reduce((a, c) => merge(a, c), get(metadata, 'openapi.doc', {}));
 
-  const htteTestsText = yaml.safeDump(htteTests);
-  const htteDefinesText = yaml.safeDump({ defines: htteDefines });
-  const openapisText = yaml.safeDump(openapisObj)
+  const htteTestsText = yamlDump(htteTests);
+  const htteDefinesText = yamlDump({ defines: htteDefines });
+  const openapisText = yamlDump(openapisObj)
   const apisText = handlers.map(toApi).join(EOL);
   const mocksText = `export default {${EOL}${handlers.map(toMock).join(EOL)}${EOL}};`
   return { apisText, mocksText, htteTestsText, openapisText, htteDefinesText, openapisObj };
+}
+
+function yamlDump(data) {
+  return yaml.dump(data)
 }
 
 function toApi(handler) {
