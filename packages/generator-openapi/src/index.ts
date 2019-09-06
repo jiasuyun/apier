@@ -37,12 +37,14 @@ export default class Generator {
     operation.operationId = apier.name;
     const summary = commentUtil.val("summary", apier.name);
     operation.summary = summary;
-    const parameters = this.dealParameters();
-    if (parameters.length > 0) {
-      operation.parameters = parameters;
+    if (req) {
+      const parameters = this.dealParameters();
+      if (parameters.length > 0) {
+        operation.parameters = parameters;
+      }
+      if (req.model.body) this.dealReqeustBody();
+      this.dealResponses();
     }
-    if (req.model.body) this.dealReqeustBody();
-    this.dealResponses();
     Object.assign(operation, commentUtil.pick(OPERATION_KEYS));
   }
   dealParameters(): (openapi.ParameterObject | openapi.ReferenceObject)[] {

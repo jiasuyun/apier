@@ -1,6 +1,6 @@
 {
   "name": "@jiasuyun/apier-generator-openapi",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "apier openapi generator",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
