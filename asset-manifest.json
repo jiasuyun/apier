@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/apier/static/css/main.7738cc50.chunk.css",
-    "main.js": "/apier/static/js/main.94a6aa51.chunk.js",
-    "main.js.map": "/apier/static/js/main.94a6aa51.chunk.js.map",
+    "main.js": "/apier/static/js/main.d08a4cd0.chunk.js",
+    "main.js.map": "/apier/static/js/main.d08a4cd0.chunk.js.map",
     "runtime~main.js": "/apier/static/js/runtime~main.27d84384.js",
     "runtime~main.js.map": "/apier/static/js/runtime~main.27d84384.js.map",
     "static/css/2.cb548b89.chunk.css": "/apier/static/css/2.cb548b89.chunk.css",
-    "static/js/2.41270d10.chunk.js": "/apier/static/js/2.41270d10.chunk.js",
-    "static/js/2.41270d10.chunk.js.map": "/apier/static/js/2.41270d10.chunk.js.map",
+    "static/js/2.6cfd50ed.chunk.js": "/apier/static/js/2.6cfd50ed.chunk.js",
+    "static/js/2.6cfd50ed.chunk.js.map": "/apier/static/js/2.6cfd50ed.chunk.js.map",
     "index.html": "/apier/index.html",
-    "precache-manifest.f445ea7d4a8fdae97273db2b79164380.js": "/apier/precache-manifest.f445ea7d4a8fdae97273db2b79164380.js",
+    "precache-manifest.5f5614356f0f20a27a26bc28af2ed0eb.js": "/apier/precache-manifest.5f5614356f0f20a27a26bc28af2ed0eb.js",
     "service-worker.js": "/apier/service-worker.js",
     "static/css/2.cb548b89.chunk.css.map": "/apier/static/css/2.cb548b89.chunk.css.map",
     "static/css/main.7738cc50.chunk.css.map": "/apier/static/css/main.7738cc50.chunk.css.map"
