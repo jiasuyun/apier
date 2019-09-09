@@ -30,7 +30,7 @@ export default class Generator {
     const { apier } = this;
     const {
       comment,
-      model: { req }
+      model: { req, res }
     } = apier;
     const commentUtil = comment.retrive();
     const operation = this.operation;
@@ -43,6 +43,8 @@ export default class Generator {
         operation.parameters = parameters;
       }
       if (req.model.body) this.dealReqeustBody();
+    }
+    if (res) {
       this.dealResponses();
     }
     Object.assign(operation, commentUtil.pick(OPERATION_KEYS));
