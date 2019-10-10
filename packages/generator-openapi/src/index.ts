@@ -213,7 +213,7 @@ export default class Generator {
     } else if (apierItem.kind() === ApierKind.ARRAY) {
       this.schemaUtilArray(apierItem, context);
     }
-    Object.assign(schema, commentUtil.pick(SCHEMA_KEYS));
+    Object.assign(schema, jsonParseValue(commentUtil.pick(SCHEMA_KEYS)));
     if (saveSchema) {
       this.value.components.schemas[saveSchema] = { ...schema };
       Object.keys(schema).forEach(key => delete schema[key]); // clear
@@ -312,6 +312,16 @@ function filterByCount(arr: string[], count: number): string[] {
     { prev: "", count: 0 }
   );
   return result;
+}
+
+function jsonParseValue(obj: any) {
+  Object.keys(obj).map(key => {
+    try {
+      obj[key] = JSON.parse(obj[key]);
+    } catch(err) {
+    }
+  });
+  return obj;
 }
 
 export interface CreateSchemaOptions {
