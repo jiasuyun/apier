@@ -3,13 +3,13 @@ import { Container, Row, Col, Form, Tabs, Tab, Button } from 'react-bootstrap';
 import Clipboard from 'react-clipboard.js';
 import ClipboardIcon from './clipboard.png';
 import { ToastConsumer, ToastProvider } from 'react-toast-notifications';
-import Editor from 'react-simple-code-editor';
-import { highlight, languages } from 'prismjs/components/prism-core';
-import 'prismjs/components/prism-clike';
-import 'prismjs/components/prism-javascript';
-import 'prismjs/components/prism-typescript';
-import 'prismjs/components/prism-yaml';
-import 'prismjs/themes/prism.css';
+import AceEditor from "react-ace";
+import "ace-builds/src-noconflict/mode-javascript";
+import "ace-builds/src-noconflict/mode-typescript";
+import "ace-builds/src-noconflict/mode-yaml";
+import "ace-builds/src-noconflict/theme-github";
+import "ace-builds/src-min-noconflict/ext-searchbox";
+
 import parse from './parse';
 import Swagger from "./components/Swagger";
 import qs from "query-string";
@@ -22,7 +22,7 @@ class App extends Component {
       code: '',
       error: '',
       errorToastId: null,
-      errorLineIndex: -1,
+      annotations: [],
       apisText: '',
       mocksText: '',
       htteDefinesText: '',
@@ -69,20 +69,20 @@ class App extends Component {
     try {
       result = parse(this.state.code);
     } catch (err) {
-      let errorLineIndex = -1;
+      let annotations = [];
       if (err.lineNumber) {
-        errorLineIndex = err.lineNumber - 1;
+        annotations.push({ row: err.lineNumber - 1, column: 0, type: 'error', text: err.message })
       }
       toastManager.add(
         err.message,
         { appearance: 'error', autoDismiss: false },
-        errorToastId => this.setState({ errorToastId, errorLineIndex })
+        errorToastId => this.setState({ errorToastId, annotations })
       );
       return;
     }
     this.setState({
       error: '',
-      errorLineIndex: -1,
+      annotations: [],
       ...result,
     })
   }
@@ -111,16 +111,15 @@ class App extends Component {
     return (
       <div>
         {this.renderClipboard(text)}
-        <Editor
-          value={text}
-          disabled
-          highlight={code => highlight(code, languages[type])}
-          padding={10}
-          style={{
-            fontFamily: '"Fira code", "Fira Mono", monospace',
-            fontSize: 12,
-          }}
-        />
+        <AceEditor
+            mode={type}
+            theme="github"
+            readOnly={true}
+            value={text}
+            maxLines={Infinity}
+            width="100%"
+            name="codeEditor"
+        />,
       </div>
     )
   }
@@ -143,24 +142,20 @@ class App extends Component {
                     </ToastConsumer>
                   </Col>
                 </Row>
-                <Editor
-                  value={this.state.code}
-                  onValueChange={code => this.setState({ code })}
-                  highlight={code =>
-                    highlight(code, languages.js)
-                      .split('\n')
-                      .map((line, index) => `<span class="${index === this.state.errorLineIndex ? 'line line-error' : 'line'}">${line}</span>`)
-                      .join('\n')
-                  }
-                  padding={10}
-                  style={{
-                    fontFamily: '"Fira code", "Fira Mono", monospace',
-                    fontSize: 12,
-                    border: '1px solid lightgray',
-                  }}
+                <AceEditor
+                    mode="javascript"
+                    theme="github"
+                    minLines={10}
+                    value={this.state.code}
+                    setOptions={{printMargin: false}}
+                    annotations={this.state.annotations}
+                    maxLines={Infinity}
+                    onChange={code => this.setState({ code })}
+                    width="100%"
+                    name="codeEditor"
                 />
               </Col>
-              <Col style={{ maxWidth: '50%' }}>
+              <Col style={{ maxWidth: '50%', borderLeft: '1px solid #ccc' }}>
                 <Tabs defaultActiveKey="swagger">
                   <Tab eventKey="swagger" title="SWAGGER">
                     <Swagger data={this.state.openapisObj} />
