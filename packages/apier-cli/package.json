@@ -1,0 +1,41 @@
+{
+  "name": "@jiasuyun/apier-cli",
+  "version": "0.3.2",
+  "description": "apier cli",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf dist",
+    "prepublish": "npm run -s clean && npm run -s build"
+  },
+  "bin": {
+    "apier": "dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [],
+  "author": "Sigoden Huang <sigoden@gmail.com> (https://sigoden.com/)",
+  "homepage": "https://github.com/jiasuyun/apier",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jiasuyun/apier"
+  },
+  "dependencies": {
+    "@jiasuyun/apier-parser-json5": "^0.3.2",
+    "@jiasuyun/apier-generator-handler": "^0.3.4",
+    "@jiasuyun/apier-generator-openapi": "^0.3.4",
+    "@jiasuyun/apier": "^0.3.1",
+    "commander": "^4.0.1",
+    "lodash": "^4.17.11"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.132",
+    "@types/node": "^12.12.21",
+    "rimraf": "^2.6.3",
+    "typescript": "^3.4.5"
+  }
+}
