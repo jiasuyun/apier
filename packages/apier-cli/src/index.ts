@@ -5,6 +5,7 @@ import * as fs from "fs";
 import * as apier from "@jiasuyun/apier";
 import Parser from "@jiasuyun/apier-parser-json5";
 import yaml from "js-yaml";
+import * as path from "path";
 import merge from "lodash/merge";
 import get from "lodash/get";
 import { EOL } from "os";
@@ -37,8 +38,8 @@ function check() {
   if (!fs.existsSync(srcFile)) {
     exitWithMsg(`Error: option <src> is required, and must be valid json5 file`);
   }
-  if (!fs.existsSync(destFile)) {
-    exitWithMsg(`Error: option <dst> is required`);
+  if (!fs.existsSync(path.dirname(destFile))) {
+    exitWithMsg(`Error: option <dst> is required, and must be valid file path`);
   }
 }
 
@@ -53,7 +54,11 @@ function execute() {
       openapis.push(new OpenapiGenerator(api).value);
     });
     const openapisObj = openapis.reduce((a, c) => merge(a, c), get(metadata, 'openapi.doc', {}));
-    output = yamlDump(openapisObj)
+    if (path.extname(destFile) === ".json") {
+      output = JSON.stringify(openapisObj, null, 2);
+    } else {
+      output = yamlDump(openapisObj)
+    }
   } else if (program.kind === "handler") {
     const handlers = [];
     apiers.forEach(api => {

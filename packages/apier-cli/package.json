@@ -1,6 +1,6 @@
 {
   "name": "@jiasuyun/apier-cli",
-  "version": "0.3.2",
+  "version": "0.3.4",
   "description": "apier cli",
   "scripts": {
     "build": "tsc",
