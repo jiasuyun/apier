@@ -191,6 +191,9 @@ export default class Generator {
   schemaUtil(apierItem: apier.ApierItem, context: SchemaUtilContext): boolean {
     const { schema, isParameter, bodySchemaName } = context;
     const commentUtil = apierItem.comment.retrive();
+    if ("any" === commentUtil.val("type")) {
+      return !commentUtil.val("optional", false);
+    }
     let saveSchema = commentUtil.val("saveSchema");
     if (isParameter) {
       saveSchema = null;
