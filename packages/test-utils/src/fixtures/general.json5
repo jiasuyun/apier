@@ -31,7 +31,8 @@
                 ],
                 "object": {
                     "foo": 3
-                }
+                },
+                "any": "<any data>", // type=any
             }
         },
         "res": {

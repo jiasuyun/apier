@@ -1023,6 +1023,7 @@ components:
               type: integer
           required:
             - foo
+        any: {}
       required:
         - integer
         - number
@@ -1030,6 +1031,7 @@ components:
         - 'null'
         - array
         - object
+        - any
     GetModelResponse:
       type: object
       properties:

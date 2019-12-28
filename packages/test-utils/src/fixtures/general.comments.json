@@ -86,6 +86,17 @@
     {
       "paths": [
         "getModel",
+        "req",
+        "body",
+        "any"
+      ],
+      "comment": {
+        "type": "any"
+      }
+    },
+    {
+      "paths": [
+        "getModel",
         "res",
         "0",
         "body",

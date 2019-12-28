@@ -51,6 +51,8 @@ export function reorder(value: any, orders: string[]) {
   sortedKeys.forEach(key => (value[key] = tmp[key]));
 }
 
+export const KEEP_EMPTY_OBJECT: string = Symbol("any") as any;
+
 // 移除空对象
 export function omitEmptyObject(value: any) {
   if (Array.isArray(value)) {
@@ -65,7 +67,9 @@ export function omitEmptyObject(value: any) {
   if (isObject(value)) {
     for (const key in value) {
       omitEmptyObject(value[key]);
-      if (isEmpty(value[key])) {
+      if (value[key][KEEP_EMPTY_OBJECT] === true) {
+        value[key] = {}
+      } else if (isEmpty(value[key])) {
         delete value[key];
       }
     }

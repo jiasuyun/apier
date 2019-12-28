@@ -1,6 +1,6 @@
 import * as apier from "@jiasuyun/apier";
 import * as openapi from "openapi3-ts";
-import { ApierKind, colonToCurlybrace, omitEmptyObject, reorder } from "@jiasuyun/apier-utils";
+import { ApierKind, colonToCurlybrace, omitEmptyObject, KEEP_EMPTY_OBJECT, reorder } from "@jiasuyun/apier-utils";
 import { OPERATION_KEYS, PARAMETER_KEYS, SCHEMA_KEYS } from "./constants";
 export interface GeneratorResult {
   paths: openapi.PathsObject;
@@ -192,6 +192,8 @@ export default class Generator {
     const { schema, isParameter, bodySchemaName } = context;
     const commentUtil = apierItem.comment.retrive();
     if ("any" === commentUtil.val("type")) {
+      Object.keys(schema).map(k => delete schema[k]);
+      schema[KEEP_EMPTY_OBJECT] = true;
       return !commentUtil.val("optional", false);
     }
     let saveSchema = commentUtil.val("saveSchema");
