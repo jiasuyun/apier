@@ -1,4 +1,4 @@
-import { valueOfLine, LineKind, LineValue, getLineComment } from "./helper";
+import { valueOfLine, LineKind, LineValue, getLineComment, VisitArgs } from "./helper";
 import { ApierComment } from "@jiasuyun/apier-comment";
 import { CommentParserError } from "@jiasuyun/apier-parser-base";
 
@@ -7,21 +7,32 @@ const RE_META_COMMENT = /^\s*\/\/\s*@/;
 export default class Visitor {
   private lines: string[];
   private comment: ApierComment;
-  private paths: string[];
-  private numChild: number;
-  private lineValue?: LineValue;
-  private parent?: Visitor;
-  constructor(lines: string[], comment: ApierComment, paths: string[]) {
+  constructor(lines: string[], comment: ApierComment) {
     this.lines = lines;
     this.comment = comment;
-    this.paths = paths;
-    this.numChild = 0;
-    this.lineValue = { kind: LineKind.OBJECT };
+  }
+  visit(args: VisitArgs) {
+    const { kind } = args;
+    let nextArgs: VisitArgs;
+    if (kind === "scopeArray") {
+      nextArgs = this.scopeArray(args);
+    } else if (kind === "scopeObject") {
+      nextArgs = this.scopeObject(args);
+    } else if (kind === "enterScope") {
+      nextArgs = this.enterScope(args);
+    } else if (kind === "exitScope") {
+      nextArgs = this.exitScope(args);
+    } else {
+      return args;
+    }
+    return this.visit(nextArgs);
   }
   error(line: string, lineIndex: number) {
     return new CommentParserError(lineIndex + 1, line);
   }
-  scopeArray(lineIndex: number, canCollectMetaComment = false) {
+  scopeArray(args: VisitArgs): VisitArgs {
+    const { lineIndex, canCollectMetaComment, root, paths, numChild = 0 } = args;
+    const commonArgs = { root, paths, numChild };
     let lineValue: LineValue;
     let line = this.lines[lineIndex];
     try {
@@ -31,18 +42,20 @@ export default class Visitor {
     }
     switch (lineValue.kind) {
       case LineKind.OBJECT:
-        lineValue.key = String(this.numChild++);
-        return this.enterScope(lineValue, lineIndex);
+        lineValue.key = String(commonArgs.numChild++);
+        return { kind: "enterScope", lineIndex, canCollectMetaComment: false, lineValue, ...commonArgs };
       case LineKind.EXIT:
-        return this.exitScope(lineIndex + 1);
+        return { kind: "exitScope", lineIndex: lineIndex + 1, canCollectMetaComment: false, ...commonArgs };
       default:
         if (canCollectMetaComment) {
-          this.collectMetaComment(this.paths, line);
+          this.collectMetaComment(commonArgs.paths, line);
         }
-        return this.scopeArray(lineIndex + 1, canCollectMetaComment);
+        return { kind: "scopeArray", lineIndex: lineIndex + 1, canCollectMetaComment, ...commonArgs };
     }
   }
-  scopeObject(lineIndex: number, canCollectMetaComment = false) {
+  scopeObject(args: VisitArgs): VisitArgs {
+    const { lineIndex, canCollectMetaComment, root, paths, numChild } = args;
+    const commonArgs = { root, paths, numChild };
     let lineValue: LineValue;
     let line = this.lines[lineIndex];
     try {
@@ -53,36 +66,42 @@ export default class Visitor {
     switch (lineValue.kind) {
       case LineKind.ARRAY:
       case LineKind.OBJECT:
-        return this.enterScope(lineValue, lineIndex);
+        return { kind: "enterScope", lineIndex, canCollectMetaComment: false, lineValue, ...commonArgs };
       case LineKind.KV:
-        const paths = [...this.paths, lineValue.key];
+        const paths = [...commonArgs.paths, lineValue.key];
         this.collectComment(paths, line);
-        return this.scopeObject(lineIndex + 1);
+        return { kind: "scopeObject", lineIndex: lineIndex + 1, canCollectMetaComment: false, ...commonArgs };
       case LineKind.EXIT:
-        return this.exitScope(lineIndex + 1);
+        return { kind: "exitScope", lineIndex: lineIndex + 1, canCollectMetaComment: false, ...commonArgs };
       default:
         if (canCollectMetaComment) {
-          this.collectMetaComment(this.paths, line);
+          this.collectMetaComment(commonArgs.paths, line);
         }
-        return this.scopeObject(lineIndex + 1, canCollectMetaComment);
+        return { kind: "scopeObject", lineIndex: lineIndex + 1, canCollectMetaComment, ...commonArgs };
     }
   }
-  enterScope(lineValue: LineValue, lineIndex: number) {
-    const { lines, comment } = this;
-    const paths = [...this.paths, lineValue.key];
-    this.collectComment(paths, this.lines[lineIndex]);
-    const visitor = new Visitor(lines, comment, paths);
-    visitor.lineValue = lineValue;
-    visitor.parent = this;
-    return visitor.lineValue.kind === LineKind.ARRAY
-      ? visitor.scopeArray(lineIndex + 1, true)
-      : visitor.scopeObject(lineIndex + 1, true);
+  enterScope(args: VisitArgs): VisitArgs {
+    const { lineIndex, lineValue, root, paths, numChild } = args;
+    const commonArgs = { root, paths, numChild };
+    commonArgs.paths = [...commonArgs.paths, lineValue.key];
+    this.collectComment(commonArgs.paths, this.lines[lineIndex]);
+    commonArgs.root = args;
+    return lineValue.kind === LineKind.ARRAY
+      ? { kind: "scopeArray", lineIndex: lineIndex + 1, canCollectMetaComment: true, ...commonArgs }
+      : { kind: "scopeObject", lineIndex: lineIndex + 1, canCollectMetaComment: true, ...commonArgs };
   }
 
-  exitScope(lineIndex) {
-    const visitor = this.parent;
-    if (!this.parent) return;
-    return visitor.lineValue.kind === LineKind.ARRAY ? visitor.scopeArray(lineIndex) : visitor.scopeObject(lineIndex);
+  exitScope(args: VisitArgs): VisitArgs {
+    const { lineIndex, root: parent } = args;
+    if (!parent) {
+      return { kind: "break", lineIndex, canCollectMetaComment: false, root: args.root, paths: args.paths };
+    }
+    const { root, paths, numChild } = parent;
+    const commonArgs = { root, paths, numChild };
+    const kind = root ? root.lineValue.kind : LineKind.OBJECT;
+    return kind === LineKind.ARRAY
+      ? { kind: "scopeArray", lineIndex, canCollectMetaComment: false, ...commonArgs }
+      : { kind: "scopeObject", lineIndex, canCollectMetaComment: false, ...commonArgs };
   }
 
   collectMetaComment(paths, line) {

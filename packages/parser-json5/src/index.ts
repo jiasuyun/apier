@@ -46,10 +46,15 @@ export default class Parser implements parser.Parser {
   private parseComment(input: string): ApierComment {
     const lines = input.split("\n");
     const comment = new ApierComment();
-    const root = new Visitor(lines, comment, []);
+    const root = new Visitor(lines, comment);
     const beginLineIndex = beignLineNum(lines);
     this.parserMetadata(lines.slice(0, beginLineIndex));
-    root.scopeObject(beginLineIndex + 1);
+    root.visit({
+      kind: "scopeObject",
+      lineIndex: beginLineIndex + 1,
+      canCollectMetaComment: false,
+      paths: []
+    });
     return comment;
   }
   private parserMetadata(lines: string[]) {
@@ -126,7 +131,7 @@ export default class Parser implements parser.Parser {
   }
 
   private parseResStatus(api: parser.ApierRaw, paths: string[], status = 200) {
-    if (typeof status !== "number" && (status < 100 && status >= 600)) {
+    if (typeof status !== "number" && status < 100 && status >= 600) {
       throw new parser.StructParserError([api.name, ...paths], `{status}`);
     }
     lset(api, paths, status);
