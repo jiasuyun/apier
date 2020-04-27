@@ -125,13 +125,12 @@ function exitScope(args: VisitArgs): VisitArgs {
   const parnetArgs = args.root;
   const kind = parnetArgs.root ? getLineValue(parnetArgs.root).kind : LineKind.OBJECT;
   if (kind === LineKind.ARRAY) {
-    if (typeof args.numChild !== "number") args.numChild = 0;
+    parnetArgs.numChild++;
     return getNextArgs(parnetArgs, {
       kind: "scopeArray",
       lineIndex: args.lineIndex,
       canCollectMetaComment: true,
-      root: parnetArgs.root,
-      numChild: args.numChild + 1
+      root: parnetArgs.root
     });
   } else {
     return getNextArgs(parnetArgs, {
