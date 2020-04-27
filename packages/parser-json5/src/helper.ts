@@ -14,16 +14,6 @@ export enum LineKind {
   EMPTY = "empty"
 }
 
-export interface VisitArgs {
-  kind: "scopeArray" | "scopeObject" | "enterScope" | "exitScope" | "break";
-  lineIndex: number;
-  canCollectMetaComment: boolean;
-  paths: string[];
-  lineValue?: LineValue;
-  root?: VisitArgs;
-  numChild?: number;
-}
-
 export interface LineValue {
   kind: LineKind;
   key?: string;

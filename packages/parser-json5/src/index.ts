@@ -2,7 +2,7 @@ import * as parser from "@jiasuyun/apier-parser-base";
 import { ApierComment } from "@jiasuyun/apier-comment";
 import { ApierKind, kindOf } from "@jiasuyun/apier-utils";
 import * as JSON5 from "json5";
-import Visitor from "./Visitor";
+import { visit } from "./Visitor";
 import { beignLineNum } from "./helper";
 import lset from "lodash/set";
 import merge from "lodash/merge";
@@ -46,10 +46,11 @@ export default class Parser implements parser.Parser {
   private parseComment(input: string): ApierComment {
     const lines = input.split("\n");
     const comment = new ApierComment();
-    const root = new Visitor(lines, comment);
     const beginLineIndex = beignLineNum(lines);
     this.parserMetadata(lines.slice(0, beginLineIndex));
-    root.visit({
+    visit({
+      lines,
+      comment,
       kind: "scopeObject",
       lineIndex: beginLineIndex + 1,
       canCollectMetaComment: false,
