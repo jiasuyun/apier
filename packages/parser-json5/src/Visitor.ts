@@ -16,20 +16,17 @@ export interface VisitArgs {
 }
 
 export function visit(args: VisitArgs) {
-  const { kind } = args;
-  let nextArgs: VisitArgs;
-  if (kind === "scopeArray") {
-    nextArgs = scopeArray(args);
-  } else if (kind === "scopeObject") {
-    nextArgs = scopeObject(args);
-  } else if (kind === "enterScope") {
-    nextArgs = enterScope(args);
-  } else if (kind === "exitScope") {
-    nextArgs = exitScope(args);
-  } else {
-    return args;
+  while (args.kind !== "break") {
+    if (args.kind === "scopeArray") {
+      args = scopeArray(args);
+    } else if (args.kind === "scopeObject") {
+      args = scopeObject(args);
+    } else if (args.kind === "enterScope") {
+      args = enterScope(args);
+    } else if (args.kind === "exitScope") {
+      args = exitScope(args);
+    }
   }
-  return visit(nextArgs);
 }
 
 function scopeArray(args: VisitArgs): VisitArgs {
